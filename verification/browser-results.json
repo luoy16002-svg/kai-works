@@ -1,0 +1,57 @@
+{
+  "date": "2026-09-08T02:13:06.960Z",
+  "browser": "Microsoft Edge on Windows",
+  "environment": "local Vite development server",
+  "queue": {
+    "jobs": 1000,
+    "interruptedAfterCommits": 403,
+    "abandonedInFlight": 3,
+    "finalUniqueEffects": 1000,
+    "finalAttempts": 1254,
+    "actualTotalCents": 49611301,
+    "referenceTotalCents": 49611301,
+    "allAbandonedJobsRecovered": true
+  },
+  "csv": {
+    "exportedFilteredRows": 8263,
+    "referenceAmountUSD": "4197257.69",
+    "quotedFixtureRows": 3,
+    "quotedFixtureAmountUSD": "100.00",
+    "invalidDateRejected": true,
+    "cancelTerminatedImport": true
+  },
+  "halo": {
+    "savedSpecification": {
+      "project": "HALO independent concept",
+      "finish": "porcelain",
+      "diameter": 60,
+      "temperature": 5000,
+      "brightness": 70
+    },
+    "pngDimensions": [
+      334,
+      430
+    ],
+    "changedPixelsBetweenConfigurations": 18649,
+    "reloadPreservedConfiguration": true,
+    "keyboardBoundaries": true,
+    "cameraButtons": true
+  },
+  "responsive": {
+    "mobileViewport": [
+      390,
+      844
+    ],
+    "homeOverflow": false,
+    "haloOverflow": false,
+    "currentOverflow": false,
+    "relayOverflow": false,
+    "currentRenderedRowsIncludingHeader": 36,
+    "dataTableScrollsHorizontally": true,
+    "horizontalKeyboardScrollVerified": true,
+    "tableScrollLeftPixels": 208.6666717529297,
+    "productionBuildVerified": true,
+    "lastVirtualRowReached": "ORD-100000",
+    "lastWindowDomRowsIncludingHeader": 12
+  }
+}

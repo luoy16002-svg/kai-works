@@ -1,0 +1,22 @@
+{
+  "date": "2026-09-08T01:57:48.006Z",
+  "node": "24.14.0",
+  "platform": "win32 x64 / AMD Ryzen 7 9800X3D 8-Core Processor           ",
+  "csv": {
+    "rows": 100000,
+    "parseMs": 217.35209999999995,
+    "queryMs": 24.26769999999999,
+    "totalCents": 5020018183,
+    "filteredRows": 8263
+  },
+  "queue": {
+    "jobs": 500,
+    "uniqueEffects": 500,
+    "attempts": 656,
+    "expiredLeases": 37,
+    "staleRejected": 37,
+    "total": 24699808,
+    "expected": 24699808,
+    "milliseconds": 676.8972000000001
+  }
+}

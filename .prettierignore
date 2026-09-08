@@ -1,0 +1,6 @@
+dist/
+node_modules/
+verification/
+public/evidence.json
+public/licenses/
+package-lock.json
