@@ -1,0 +1,783 @@
+/* Personal project index: a live experiment first, with direct access to the work. */
+.folio,
+.field-page {
+  background: #eceee9;
+  color: #181b1a;
+}
+.folio {
+  padding: 0 max(28px, calc((100vw - 1360px) / 2));
+}
+.folio-nav {
+  min-height: 94px;
+  border-bottom: 1px solid #bfc4bc;
+  display: flex;
+  align-items: center;
+  gap: 44px;
+}
+.folio-brand {
+  font-size: 38px;
+  letter-spacing: -0.08em;
+  font-weight: 700;
+  line-height: 1;
+}
+.folio-brand span {
+  font-size: 16px;
+  vertical-align: top;
+  margin-left: 10px;
+}
+.folio-location,
+.folio-nav nav,
+.folio-kicker,
+.folio-index,
+.folio-caption-type,
+.folio-section-line > span,
+.folio-project-row > div > span,
+.folio-footer,
+.folio-contact > span {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.035em;
+}
+.folio-location {
+  color: #747a72;
+  line-height: 1.7;
+}
+.folio-nav nav {
+  margin-left: auto;
+  display: flex;
+  gap: 30px;
+}
+.folio-nav nav a {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.folio-intro {
+  position: relative;
+  padding: 28px 0 32px;
+  display: grid;
+  grid-template-columns: 1fr 290px;
+  gap: 20px 45px;
+}
+.folio-kicker {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: space-between;
+  color: #61685f;
+}
+.folio-intro h1 {
+  font-size: clamp(50px, 6.3vw, 94px);
+  font-weight: 600;
+  line-height: 0.99;
+  letter-spacing: -0.072em;
+  padding: 12px 0 10px;
+}
+.folio-intro h1 span {
+  color: #787f74;
+}
+.folio-intro-bottom {
+  align-self: end;
+  padding-bottom: 14px;
+}
+.folio-intro-bottom p {
+  font-size: 13px;
+  line-height: 1.7;
+  color: #586052;
+  max-width: 275px;
+}
+.folio-intro-bottom a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #a7b19f;
+  padding: 17px 0 10px;
+  margin-top: 18px;
+  font-size: 12px;
+  font-weight: 600;
+}
+.field-lab {
+  background: #101411;
+  color: #e0e8d7;
+  border: 1px solid #273028;
+}
+.field-surface {
+  position: relative;
+  height: min(57vw, 620px);
+  min-height: 350px;
+  background: #0b0d10;
+  overflow: hidden;
+}
+.field-surface canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+  cursor: crosshair;
+}
+.field-embedded .field-surface {
+  height: clamp(360px, 40vw, 570px);
+}
+.field-overlay,
+.field-coordinate {
+  position: absolute;
+  left: 25px;
+  right: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  pointer-events: none;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: #f0ffe0;
+  mix-blend-mode: difference;
+}
+.field-overlay {
+  top: 23px;
+}
+.field-coordinate {
+  bottom: 21px;
+}
+.field-coordinate > span:first-child {
+  font-size: 21px;
+  letter-spacing: -0.05em;
+}
+.field-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 63px;
+  border-top: 1px solid #313c2d;
+  padding: 10px 20px;
+  gap: 16px;
+}
+.field-presets,
+.field-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.field-lab button {
+  border-radius: 0;
+  background: transparent;
+  color: inherit;
+  font-size: 11px;
+  min-height: 36px;
+  padding: 9px 14px;
+}
+.field-presets button {
+  text-transform: capitalize;
+  border: 1px solid transparent;
+}
+.field-presets button[aria-pressed='true'] {
+  color: #c6f978;
+  border-color: #576f3a;
+  background: #202a16;
+}
+.field-lab button:hover {
+  background: #30372b;
+}
+.field-actions button,
+.field-actions a {
+  display: inline-grid;
+  place-items: center;
+  width: 38px;
+  height: 36px;
+  padding: 6px;
+}
+.palette-swatch {
+  width: 14px;
+  height: 14px;
+  background: linear-gradient(90deg, #d7edbd 50%, transparent 50%);
+  border: 1px solid #d7edbd;
+  border-radius: 50%;
+  display: block;
+}
+.folio-feature-caption {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 22px 0 0;
+}
+.folio-feature-caption > div {
+  display: flex;
+  align-items: baseline;
+  gap: 24px;
+}
+.folio-index {
+  color: #737a6d;
+}
+.folio-feature-caption h2 {
+  font-size: 34px;
+  font-weight: 600;
+  letter-spacing: -0.05em;
+}
+.folio-caption-type {
+  color: #697362;
+}
+.folio-feature-caption > a {
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  gap: 22px;
+}
+.folio-project-note {
+  color: #68735f;
+  margin: 8px 0 0 38px;
+  max-width: 640px;
+  font-size: 13px;
+}
+.folio-selected {
+  padding-top: 100px;
+}
+.folio-section-line {
+  border-bottom: 1px solid #a4aca0;
+  padding: 0 0 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+.folio-section-line h2 {
+  font-size: 19px;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+}
+.folio-project-row {
+  display: grid;
+  grid-template-columns: 30px 1fr 270px 30px;
+  align-items: center;
+  gap: 20px;
+  min-height: 210px;
+  padding: 26px 0;
+  border-bottom: 1px solid #c1c8ba;
+}
+.folio-project-row h3 {
+  font-size: 47px;
+  font-weight: 500;
+  letter-spacing: -0.06em;
+  line-height: 1.1;
+}
+.folio-project-row p {
+  font-size: 13px;
+  color: #515b4a;
+  margin: 12px 0;
+}
+.folio-project-row > div > span {
+  color: #738069;
+  font-size: 9px;
+}
+.folio-project-row:hover h3,
+.folio-feature-caption > a:hover {
+  color: #557332;
+}
+.folio-project-row:hover .folio-row-arrow {
+  transform: translate(4px, -4px);
+}
+.folio-row-arrow {
+  transition: transform 200ms;
+}
+.folio-data-preview {
+  font:
+    10px 'DM Mono',
+    monospace;
+  max-width: 225px;
+  margin-left: auto;
+  width: 100%;
+}
+.folio-data-preview > span {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 7px;
+  border-bottom: 1px solid #c6cfc0;
+}
+.folio-data-preview > span:nth-child(3) {
+  background: #d2dfc6;
+}
+.folio-data-preview small {
+  display: block;
+  font-size: 7px;
+  margin: 7px 7px 0;
+  color: #788870;
+}
+.folio-queue-preview {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  justify-content: flex-end;
+}
+.folio-queue-preview > span {
+  font-size: 7px !important;
+  padding: 10px 7px;
+  border: 1px solid #b7c4a8;
+}
+.folio-queue-preview i {
+  width: 12px;
+  height: 1px;
+  background: #83926f;
+}
+.folio-queue-preview > .queue-interrupt {
+  color: #984329;
+  border-color: #c59d8c;
+}
+.folio-ring-preview {
+  display: grid;
+  place-items: center;
+  min-height: 100px;
+}
+.folio-ring-preview span {
+  width: 170px;
+  height: 64px;
+  border: 9px solid #676f69;
+  border-top-color: #acb3ac;
+  border-bottom-color: #4b554b;
+  border-radius: 50%;
+  transform: rotate(-15deg);
+  box-shadow:
+    0 5px 0 #8e978e,
+    inset 0 4px 0 #929b92;
+}
+.folio-colophon {
+  padding: 85px 0 95px;
+  display: grid;
+  grid-template-columns: 180px 1fr auto;
+  gap: 25px;
+  border-bottom: 1px solid #b5bdac;
+}
+.folio-colophon h2 {
+  font-size: 36px;
+  font-weight: 500;
+  letter-spacing: -0.05em;
+  margin-bottom: 20px;
+}
+.folio-colophon p {
+  color: #67735b;
+  max-width: 560px;
+  font-size: 14px;
+  line-height: 1.8;
+}
+.folio-colophon a {
+  display: inline-flex;
+  align-items: center;
+  gap: 30px;
+  font-size: 12px;
+  margin-top: 25px;
+}
+.folio-colophon > a {
+  align-self: start;
+  margin-top: 6px;
+}
+.folio-contact {
+  padding: 76px 0 65px;
+}
+.folio-contact > span {
+  color: #727d66;
+}
+.folio-contact > a {
+  font-size: clamp(36px, 7.5vw, 105px);
+  font-weight: 500;
+  letter-spacing: -0.07em;
+  line-height: 1.4;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.folio-contact svg {
+  width: clamp(35px, 6vw, 80px);
+  height: auto;
+  stroke-width: 1;
+}
+.folio-contact p {
+  color: #727d66;
+  font-size: 12px;
+}
+.folio-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  border-top: 1px solid #b5bdac;
+  padding: 26px 0 32px;
+  color: #758168;
+  font-size: 9px;
+}
+.field-page .work-nav {
+  background: #e2e5de;
+}
+.field-page > main {
+  padding: 0 max(24px, calc((100vw - 1240px) / 2));
+}
+.field-page-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding: 32px 0 28px;
+}
+.field-page-heading .mono {
+  font-size: 9px;
+  color: #6c7563;
+}
+.field-page-heading h1 {
+  font-size: clamp(70px, 9vw, 125px);
+  font-weight: 600;
+  letter-spacing: -0.075em;
+  line-height: 1;
+  margin-top: 15px;
+}
+.field-page-heading h1 span {
+  font-size: 0.65em;
+  margin-left: 30px;
+}
+.field-page-heading > p {
+  color: #69735f;
+  font-size: 14px;
+  padding-bottom: 10px;
+}
+.field-settings {
+  border-top: 1px solid #30392b;
+  padding: 24px;
+}
+.field-setting-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+  font-size: 10px;
+}
+.field-setting-row label,
+.field-meter {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.field-setting-row label,
+.field-meter span {
+  color: #98a58d;
+}
+.field-setting-row select {
+  padding: 7px;
+  background: #1d2619;
+  color: #d3e7be;
+  border: 1px solid #46553b;
+  border-radius: 0;
+}
+.field-meter b {
+  font:
+    13px 'DM Mono',
+    monospace;
+}
+.field-test-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  border-top: 1px solid #30392b;
+  margin-top: 25px;
+  padding-top: 18px;
+}
+.field-test-row button {
+  border: 1px solid #46553b;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+.field-settings > p {
+  font:
+    10px/1.6 'DM Mono',
+    monospace;
+  color: #afc39e;
+  margin-top: 20px;
+}
+.field-settings .field-failed {
+  color: #ffa996;
+}
+.field-error {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  text-align: center;
+  gap: 20px;
+  background: #13190feb;
+  padding: 25px;
+}
+.field-error button {
+  border: 1px solid #769459;
+}
+.field-about {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  padding: 42px 0 75px;
+}
+.field-about p {
+  color: #647357;
+  font-size: 12px;
+  line-height: 1.8;
+}
+.field-about > p {
+  font-size: 17px;
+  color: #313c28;
+}
+.field-about a {
+  font-size: 11px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 20px;
+  margin-right: 28px;
+}
+.evidence-intro h1 {
+  font-family: Manrope, sans-serif;
+  font-size: clamp(42px, 5vw, 72px);
+  font-weight: 500;
+  letter-spacing: -0.06em;
+}
+.evidence-intro h1 em {
+  font-family: inherit;
+  font-style: normal;
+}
+@media (max-width: 800px) {
+  .folio {
+    padding: 0 22px;
+  }
+  .folio-nav {
+    min-height: 80px;
+    gap: 25px;
+  }
+  .folio-location {
+    display: none;
+  }
+  .folio-nav nav {
+    gap: 22px;
+    font-size: 9px;
+  }
+  .folio-intro {
+    grid-template-columns: 1fr 210px;
+    gap: 18px;
+  }
+  .folio-intro h1 {
+    font-size: 58px;
+  }
+  .folio-intro-bottom p {
+    font-size: 11px;
+  }
+  .folio-project-row {
+    grid-template-columns: 20px 1fr 175px 20px;
+    gap: 15px;
+  }
+  .folio-queue-preview {
+    flex-direction: column;
+    align-items: flex-end;
+    padding-right: 15px;
+  }
+  .folio-queue-preview i {
+    width: 1px;
+    height: 6px;
+    margin-right: 32px;
+  }
+  .folio-colophon {
+    grid-template-columns: 120px 1fr;
+    gap: 20px;
+  }
+  .folio-colophon > a {
+    grid-column: 2;
+  }
+}
+@media (max-width: 560px) {
+  .folio {
+    padding: 0 17px;
+  }
+  .folio-nav {
+    min-height: 75px;
+  }
+  .folio-brand {
+    font-size: 30px;
+  }
+  .folio-brand span {
+    margin-left: 7px;
+    font-size: 14px;
+  }
+  .folio-nav nav {
+    gap: 18px;
+    font-size: 9px;
+  }
+  .folio-nav nav a {
+    gap: 5px;
+  }
+  .folio-kicker {
+    font-size: 8px;
+  }
+  .folio-intro {
+    display: block;
+    padding: 23px 0 25px;
+  }
+  .folio-intro h1 {
+    font-size: clamp(44px, 11.5vw, 64px);
+    padding-top: 25px;
+    padding-bottom: 20px;
+  }
+  .folio-intro-bottom {
+    display: flex;
+    align-items: flex-end;
+    gap: 25px;
+    padding: 0;
+  }
+  .folio-intro-bottom p {
+    font-size: 11px;
+    max-width: 65%;
+  }
+  .folio-intro-bottom a {
+    padding: 0 0 6px;
+    margin: 0;
+    font-size: 10px;
+    gap: 8px;
+  }
+  .field-embedded .field-surface {
+    height: 350px;
+  }
+  .field-surface {
+    min-height: 350px;
+  }
+  .field-overlay,
+  .field-coordinate {
+    left: 15px;
+    right: 15px;
+    font-size: 8px;
+  }
+  .field-coordinate > span:first-child {
+    font-size: 15px;
+  }
+  .field-toolbar {
+    padding: 10px 8px;
+    gap: 5px;
+    min-height: 59px;
+  }
+  .field-presets {
+    gap: 1px;
+  }
+  .field-presets button {
+    font-size: 10px;
+    padding: 8px;
+  }
+  .field-actions {
+    gap: 0;
+  }
+  .field-actions button,
+  .field-actions a {
+    width: 29px;
+    padding: 5px;
+  }
+  .folio-feature-caption {
+    padding-top: 16px;
+  }
+  .folio-feature-caption > div {
+    gap: 12px;
+  }
+  .folio-feature-caption h2 {
+    font-size: 28px;
+  }
+  .folio-caption-type {
+    display: none;
+  }
+  .folio-feature-caption > a {
+    font-size: 10px;
+    gap: 12px;
+  }
+  .folio-project-note {
+    font-size: 11px;
+    margin-left: 0;
+    line-height: 1.7;
+  }
+  .folio-selected {
+    padding-top: 60px;
+  }
+  .folio-project-row {
+    grid-template-columns: 17px 1fr 19px;
+    min-height: 165px;
+    gap: 12px;
+  }
+  .folio-project-row h3 {
+    font-size: 36px;
+  }
+  .folio-project-row p {
+    font-size: 12px;
+    margin: 10px 0;
+  }
+  .folio-project-row > div > span {
+    font-size: 7px;
+  }
+  .folio-data-preview,
+  .folio-queue-preview,
+  .folio-ring-preview {
+    display: none;
+  }
+  .folio-colophon {
+    grid-template-columns: 1fr;
+    padding: 46px 0;
+    gap: 18px;
+  }
+  .folio-colophon > a {
+    grid-column: 1;
+  }
+  .folio-colophon h2 {
+    font-size: 30px;
+  }
+  .folio-colophon p {
+    font-size: 12px;
+  }
+  .folio-contact {
+    padding: 45px 0;
+  }
+  .folio-contact > a {
+    font-size: 44px;
+    margin: 10px 0;
+  }
+  .folio-contact > span {
+    font-size: 8px;
+  }
+  .folio-footer {
+    flex-wrap: wrap;
+    font-size: 8px;
+    gap: 18px;
+    padding: 22px 0;
+  }
+  .field-page > main {
+    padding: 0 14px;
+  }
+  .field-page-heading {
+    padding: 25px 0;
+  }
+  .field-page-heading h1 {
+    font-size: 76px;
+  }
+  .field-page-heading h1 span {
+    margin-left: 12px;
+  }
+  .field-page-heading > p {
+    font-size: 11px;
+  }
+  .field-settings {
+    padding: 17px;
+  }
+  .field-setting-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 25px;
+  }
+  .field-test-row {
+    gap: 7px;
+  }
+  .field-test-row button {
+    padding: 8px;
+    font-size: 10px;
+  }
+  .field-about {
+    grid-template-columns: 1fr;
+    gap: 25px;
+    padding: 30px 0 45px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .folio *,
+  .field-page * {
+    transition: none !important;
+  }
+}

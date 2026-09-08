@@ -32,11 +32,11 @@ export default function Evidence() {
       <WorkNav name="ENGINEERING EVIDENCE" detail="Reproduce, then inspect" />
       <main id="main-content" className="evidence-main" tabIndex={-1}>
         <section className="evidence-intro">
-          <span className="eyebrow">THE PART YOU CAN VERIFY</span>
+          <span className="eyebrow">TEST RECORDS / SOURCE / LIMITS</span>
           <h1>
-            A good demo works.
+            Checks &
             <br />
-            <em>A useful test disagrees.</em>
+            <em>observations.</em>
           </h1>
           <p>
             These are independent portfolio projects. The source includes failure injection,
@@ -54,8 +54,33 @@ export default function Evidence() {
         </section>
         <div className="evidence-grid">
           <article className="evidence-card">
-            <span className="eyebrow">01 / HALO</span>
-            <h2>State that travels.</h2>
+            <span className="eyebrow">01 / FIELD</span>
+            <h2>GPU versus CPU.</h2>
+            <ul>
+              <li>Gray–Scott reaction–diffusion evolves in two floating-point render targets.</li>
+              <li>
+                The live browser check compares 20 GPU steps against a CPU reference over 8,192
+                concentrations, with a maximum absolute error threshold of 0.0005.
+              </li>
+              <li>
+                Tests check equilibrium, periodic boundaries, seeded reproducibility and numerical
+                stability. Drawing and PNG export use the current field.
+              </li>
+            </ul>
+            <a href="#/field">
+              Run the GPU check <ArrowUpRight size={13} />
+            </a>
+            <a
+              href={`${REPO}/blob/main/verification/field-gpu-validation.json`}
+              target="_blank"
+              rel="noreferrer"
+            >
+              Recorded browser result <ArrowUpRight size={13} />
+            </a>
+          </article>
+          <article className="evidence-card">
+            <span className="eyebrow">04 / HALO</span>
+            <h2>Configuration round trips.</h2>
             <ul>
               <li>Configuration survives URL serialization, including zero brightness.</li>
               <li>
@@ -72,7 +97,7 @@ export default function Evidence() {
           </article>
           <article className="evidence-card">
             <span className="eyebrow">02 / CURRENT</span>
-            <h2>Every cent accounted for.</h2>
+            <h2>CSV parsing and totals.</h2>
             <ul>
               <li>
                 Randomized CSV round trips cross arbitrary chunk boundaries, including quoted
@@ -93,7 +118,7 @@ export default function Evidence() {
           </article>
           <article className="evidence-card">
             <span className="eyebrow">03 / RELAY</span>
-            <h2>Failure is an input.</h2>
+            <h2>Concurrent writes and recovery.</h2>
             <ul>
               <li>Concurrent claims cannot share a lease. Expired tokens cannot commit.</li>
               <li>
