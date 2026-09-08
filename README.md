@@ -1,11 +1,12 @@
 # Kai / Selected work
 
-Six working, independent portfolio projects. React, TypeScript, Canvas 2D, WebGL 2, Web Workers and Three.js. No client commissions, users or revenue are implied.
+Seven working, independent portfolio projects. React, TypeScript, Canvas 2D, WebGL 2, Web Workers and Three.js. No client commissions, users or revenue are implied.
 
 [Open the portfolio](https://luoy16002-svg.github.io/kai-works/) · [Verify the build](https://github.com/luoy16002-svg/kai-works/actions)
 
 | Project  | Try it                                                                                | Engineering focus                                                                                               |
 | -------- | ------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| PROOF    | Compare fulfilment strategies, inspect failures and replay recorded agent trials      | Seeded task environments, final-state grading, bounded action protocols and trace verification                  |
 | Motion   | Transform KAI letterforms into working project entries; scrub and export the sequence | Custom letterforms, continuous vertex transforms, deterministic choreography, visibility-aware Canvas 2D        |
 | Infinite | Explore Lorenz trajectories; change rho, pause, step and export a trace               | Fixed-step RK4, bounded history, inspectable numerical state, responsive 3D rendering                           |
 | Field    | Paint into a reaction–diffusion simulation; compare GPU and CPU; export PNG           | Floating-point ping-pong render targets, periodic finite differences, deterministic seeding, numerical readback |
@@ -17,6 +18,7 @@ Six working, independent portfolio projects. React, TypeScript, Canvas 2D, WebGL
 npm ci
 npm test
 npm run benchmark
+npm run bench:proof
 npm run dev
 ```
 
@@ -24,7 +26,7 @@ Open `http://127.0.0.1:5173/kai-works/`. `npm run build` produces a static `dist
 
 ## Evidence
 
-- 26 tests, including 500 randomized CSV round trips, 900 configuration combinations, reaction–diffusion equilibrium / boundary / stability checks, and Lorenz equilibrium, analytic convergence and trace-history checks.
+- Tests include 500 randomized CSV round trips, 900 configuration combinations, reaction–diffusion equilibrium / boundary / stability checks, and Lorenz equilibrium, analytic convergence and trace-history checks.
 - Field's live GPU check runs 20 steps on a 64 × 64 grid and compares 8,192 concentrations against a CPU implementation. It reports the actual maximum absolute error, with a 0.0005 threshold; the result can be downloaded. This check runs on the visitor's real graphics context, not in the Node harness.
 - Recorded browser checks: [Coral](verification/field-gpu-validation.json), [Maze](verification/field-gpu-maze.json), [Cells](verification/field-gpu-cells.json). Each record includes its parameters, observed error, browser and timestamp.
 - 100,000 records checked against an independent BigInt reference, with filtered totals and sort order verified.
@@ -35,7 +37,26 @@ Open `http://127.0.0.1:5173/kai-works/`. `npm run build` produces a static `dist
 
 `public/evidence.json` records one local benchmark. CI regenerates the deployed artifact with its own environment and timestamp. Timings are observations of that run, not SLAs. Current measures browser import and query latency separately.
 
+## Running PROOF with an agent
+
+`npm run bench:proof` evaluates the reference policies on the 24 public cases and writes `public/proof-evidence.json`. The CLI below exposes the same environment to any agent that can call a local command. A session permits at most 16 accepted world actions; rejected CLI submissions are outside that simulation budget. Pass each action as a flat JSON object; the command returns the task, tool definitions, action-format examples and observed response.
+
+```sh
+npx tsx scripts/proof-session.ts init --session trial.json --scenario ack_lost --seed 701
+npx tsx scripts/proof-session.ts observe --session trial.json
+npx tsx scripts/proof-session.ts act --session trial.json --action-file action.json
+npx tsx scripts/proof-session.ts export --session trial.json --out recorded-trial.json
+```
+
+For example, `action.json` can contain `{"tool":"catalog"}`. Parameters for other tools belong beside `tool`, without an `args` or `arguments` wrapper. The agent selects subsequent actions from the returned observations. Optional `--adapter` and `--model` values identify the caller; these are supplied metadata, not verified identities. Import the exported trace in PROOF to replay and regrade it.
+
+[The recorded agent artifact](public/proof-agent-trials.json) retains all four attempted sessions: three fulfilled orders and one justified handoff, with 11 accepted world actions. It also preserves five rejected submissions caused by unsupported parameter wrappers. The CLI's flat-action examples were added after this recording; no trial was restarted for a better result. Unreported model usage or cost remains unknown. This is a recorded demonstration, not a hidden evaluation set.
+
 ## Boundaries
+
+PROOF is a small, synthetic agent evaluation environment for order fulfilment. Four conditions cover normal execution, a lost acknowledgement after a successful reservation, an inventory conflict, and an order that requires a human handoff. Six seed variants per condition make 24 public cases; these are parameter variations of four scenarios, not 24 independent business tasks. The grader checks the resulting orders and constraints, accepts valid alternative action paths, and reports handoffs separately from autonomous fulfilment. A committed order still counts when its acknowledgement is lost.
+
+The browser runs explicitly labelled reference policies. Recorded agent examples and imported action traces are presented separately. Imports are replayed against the versioned environment and graded again; supplied scores are not trusted. Replaying actions verifies their consequences in this simulator, not the identity of the model that originally chose them. This prototype does not establish a general model ranking, production reliability, customer demand, or measured financial savings. Its evaluation design draws on [Anthropic's agent evaluation guidance](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents) and [Sierra's state-based agent evaluation work](https://sierra.ai/blog/bench-advancing-agent-benchmarking-to-knowledge-and-voice).
 
 Motion is an original, silent KAI identity study. Letterform strokes transform into interface boundaries and real project links. The Canvas 2D sequence uses one absolute playhead, plays once, suspends when hidden, and begins on a finished still for reduced-motion preferences. PNG exports contain the rendered canvas; timeline JSON records the current composition and palette.
 

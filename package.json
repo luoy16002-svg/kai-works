@@ -10,6 +10,8 @@
     "format:check": "prettier --check .",
     "test": "tsx --test tests/*.test.ts",
     "benchmark": "tsx scripts/benchmark.ts",
+    "bench:proof": "tsx scripts/proof-benchmark.ts",
+    "proof:session": "tsx scripts/proof-session.ts",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview --host 127.0.0.1"
   },

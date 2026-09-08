@@ -1,0 +1,1766 @@
+{
+  "version": 1,
+  "kind": "deterministic-reference-suite",
+  "environment": "proof-order-v1",
+  "fixtureVersion": 1,
+  "provenance": {
+    "kind": "reference-policy",
+    "adapter": "Deterministic reference policies",
+    "model": null,
+    "tokens": null,
+    "cost": null
+  },
+  "dataset": {
+    "visibility": "public",
+    "conditionCount": 4,
+    "seedVariantsPerCondition": 6,
+    "caseCount": 24,
+    "referenceRunCount": 72,
+    "seeds": [101, 102, 103, 104, 105, 106],
+    "conditions": [
+      {
+        "id": "clean",
+        "label": "Clean fulfilment",
+        "description": "Catalog and reservation replies arrive normally."
+      },
+      {
+        "id": "ack_lost",
+        "label": "Acknowledgement lost",
+        "description": "The first successful reservation commits, but its reply is lost."
+      },
+      {
+        "id": "stock_conflict",
+        "label": "Stock conflict",
+        "description": "Primary stock disappears before the first reservation; a valid substitute remains."
+      },
+      {
+        "id": "no_stock",
+        "label": "No valid stock",
+        "description": "Compatible stock within the price limit is unavailable; explicit handoff is required."
+      }
+    ]
+  },
+  "limits": {
+    "toolActionsPerRun": 16,
+    "prices": "integer cents in a synthetic world",
+    "timing": "No latency or execution-time score is reported."
+  },
+  "policySummaries": [
+    {
+      "policyId": "single_attempt",
+      "label": "Single attempt",
+      "description": "Reads the catalog and sends one reservation request; stops on an error or unavailable stock.",
+      "cases": 24,
+      "autonomousFulfilment": 12,
+      "justifiedHandoff": 0,
+      "failed": 12,
+      "duplicateReservation": 0,
+      "constraintViolation": 0,
+      "toolActions": 66,
+      "meanToolActions": 2.75
+    },
+    {
+      "policyId": "retry_on_error",
+      "label": "Retry with a new key",
+      "description": "Retries the identical failed reservation once with a new idempotency key. It does not verify unknown outcomes.",
+      "cases": 24,
+      "autonomousFulfilment": 6,
+      "justifiedHandoff": 0,
+      "failed": 18,
+      "duplicateReservation": 6,
+      "constraintViolation": 6,
+      "toolActions": 78,
+      "meanToolActions": 3.25
+    },
+    {
+      "policyId": "verify_recover",
+      "label": "Verify & recover",
+      "description": "Looks up uncertain receipts, refreshes stock after conflicts, and hands off when no valid stock remains.",
+      "cases": 24,
+      "autonomousFulfilment": 18,
+      "justifiedHandoff": 6,
+      "failed": 0,
+      "duplicateReservation": 0,
+      "constraintViolation": 0,
+      "toolActions": 96,
+      "meanToolActions": 4
+    }
+  ],
+  "cases": [
+    {
+      "scenarioId": "clean",
+      "seed": 101,
+      "results": [
+        {
+          "policyId": "single_attempt",
+          "grade": {
+            "outcome": "fulfilled",
+            "autonomousFulfilment": true,
+            "justifiedHandoff": false,
+            "duplicateReservation": false,
+            "constraintViolation": false,
+            "reasons": [
+              "Actual committed quantity and constraints are correct, regardless of acknowledgement or claimed status."
+            ],
+            "summary": "Autonomous fulfilment",
+            "assertions": {
+              "exactQuantity": true,
+              "allowedItems": true,
+              "withinPrice": true,
+              "noDuplicateAllocation": true
+            }
+          },
+          "toolActions": 3,
+          "claimedStatus": "fulfilled"
+        },
+        {
+          "policyId": "retry_on_error",
+          "grade": {
+            "outcome": "fulfilled",
+            "autonomousFulfilment": true,
+            "justifiedHandoff": false,
+            "duplicateReservation": false,
+            "constraintViolation": false,
+            "reasons": [
+              "Actual committed quantity and constraints are correct, regardless of acknowledgement or claimed status."
+            ],
+            "summary": "Autonomous fulfilment",
+            "assertions": {
+              "exactQuantity": true,
+              "allowedItems": true,
+              "withinPrice": true,
+              "noDuplicateAllocation": true
+            }
+          },
+          "toolActions": 3,
+          "claimedStatus": "fulfilled"
+        },
+        {
+          "policyId": "verify_recover",
+          "grade": {
+            "outcome": "fulfilled",
+            "autonomousFulfilment": true,
+            "justifiedHandoff": false,
+            "duplicateReservation": false,
+            "constraintViolation": false,
+            "reasons": [
+              "Actual committed quantity and constraints are correct, regardless of acknowledgement or claimed status."
+            ],
+            "summary": "Autonomous fulfilment",
+            "assertions": {
+              "exactQuantity": true,
+              "allowedItems": true,
+              "withinPrice": true,
+              "noDuplicateAllocation": true
+            }
+          },
+          "toolActions": 3,
+          "claimedStatus": "fulfilled"
+        }
+      ]
+    },
+    {
+      "scenarioId": "clean",
+      "seed": 102,
+      "results": [
+        {
+          "policyId": "single_attempt",
+          "grade": {
+            "outcome": "fulfilled",
+            "autonomousFulfilment": true,
+            "justifiedHandoff": false,
+            "duplicateReservation": false,
+            "constraintViolation": false,
+            "reasons": [
+              "Actual committed quantity and constraints are correct, regardless of acknowledgement or claimed status."
+            ],
+            "summary": "Autonomous fulfilment",
+            "assertions": {
+              "exactQuantity": true,
+              "allowedItems": true,
+              "withinPrice": true,
+              "noDuplicateAllocation": true
+            }
+          },
+          "toolActions": 3,
+          "claimedStatus": "fulfilled"
+        },
+        {
+          "policyId": "retry_on_error",
+          "grade": {
+            "outcome": "fulfilled",
+            "autonomousFulfilment": true,
+            "justifiedHandoff": false,
+            "duplicateReservation": false,
+            "constraintViolation": false,
+            "reasons": [
+              "Actual committed quantity and constraints are correct, regardless of acknowledgement or claimed status."
+            ],
+            "summary": "Autonomous fulfilment",
+            "assertions": {
+              "exactQuantity": true,
+              "allowedItems": true,
+              "withinPrice": true,
+              "noDuplicateAllocation": true
+            }
+          },
+          "toolActions": 3,
+          "claimedStatus": "fulfilled"
+        },
+        {
+          "policyId": "verify_recover",
+          "grade": {
+            "outcome": "fulfilled",
+            "autonomousFulfilment": true,
+            "justifiedHandoff": false,
+            "duplicateReservation": false,
+            "constraintViolation": false,
+            "reasons": [
+              "Actual committed quantity and constraints are correct, regardless of acknowledgement or claimed status."
+            ],
+            "summary": "Autonomous fulfilment",
+            "assertions": {
+              "exactQuantity": true,
+              "allowedItems": true,
+              "withinPrice": true,
+              "noDuplicateAllocation": true
+            }
+          },
+          "toolActions": 3,
+          "claimedStatus": "fulfilled"
+        }
+      ]
+    },
+    {
+      "scenarioId": "clean",
+      "seed": 103,
+      "results": [
+        {
+          "policyId": "single_attempt",
+          "grade": {
+            "outcome": "fulfilled",
+            "autonomousFulfilment": true,
+            "justifiedHandoff": false,
+            "duplicateReservation": false,
+            "constraintViolation": false,
+            "reasons": [
+              "Actual committed quantity and constraints are correct, regardless of acknowledgement or claimed status."
+            ],
+            "summary": "Autonomous fulfilment",
+            "assertions": {
+              "exactQuantity": true,
+              "allowedItems": true,
+              "withinPrice": true,
+              "noDuplicateAllocation": true
+            }
+          },
+          "toolActions": 3,
+          "claimedStatus": "fulfilled"
+        },
+        {
+          "policyId": "retry_on_error",
+          "grade": {
+            "outcome": "fulfilled",
+            "autonomousFulfilment": true,
+            "justifiedHandoff": false,
+            "duplicateReservation": false,
+            "constraintViolation": false,
+            "reasons": [
+              "Actual committed quantity and constraints are correct, regardless of acknowledgement or claimed status."
+            ],
+            "summary": "Autonomous fulfilment",
+            "assertions": {
+              "exactQuantity": true,
+              "allowedItems": true,
+              "withinPrice": true,
+              "noDuplicateAllocation": true
+            }
+          },
+          "toolActions": 3,
+          "claimedStatus": "fulfilled"
+        },
+        {
+          "policyId": "verify_recover",
+          "grade": {
+            "outcome": "fulfilled",
+            "autonomousFulfilment": true,
+            "justifiedHandoff": false,
+            "duplicateReservation": false,
+            "constraintViolation": false,
+            "reasons": [
+              "Actual committed quantity and constraints are correct, regardless of acknowledgement or claimed status."
+            ],
+            "summary": "Autonomous fulfilment",
+            "assertions": {
+              "exactQuantity": true,
+              "allowedItems": true,
+              "withinPrice": true,
+              "noDuplicateAllocation": true
+            }
+          },
+          "toolActions": 3,
+          "claimedStatus": "fulfilled"
+        }
+      ]
+    },
+    {
+      "scenarioId": "clean",
+      "seed": 104,
+      "results": [
+        {
+          "policyId": "single_attempt",
+          "grade": {
+            "outcome": "fulfilled",
+            "autonomousFulfilment": true,
+            "justifiedHandoff": false,
+            "duplicateReservation": false,
+            "constraintViolation": false,
+            "reasons": [
+              "Actual committed quantity and constraints are correct, regardless of acknowledgement or claimed status."
+            ],
+            "summary": "Autonomous fulfilment",
+            "assertions": {
+              "exactQuantity": true,
+              "allowedItems": true,
+              "withinPrice": true,
+              "noDuplicateAllocation": true
+            }
+          },
+          "toolActions": 3,
+          "claimedStatus": "fulfilled"
+        },
+        {
+          "policyId": "retry_on_error",
+          "grade": {
+            "outcome": "fulfilled",
+            "autonomousFulfilment": true,
+            "justifiedHandoff": false,
+            "duplicateReservation": false,
+            "constraintViolation": false,
+            "reasons": [
+              "Actual committed quantity and constraints are correct, regardless of acknowledgement or claimed status."
+            ],
+            "summary": "Autonomous fulfilment",
+            "assertions": {
+              "exactQuantity": true,
+              "allowedItems": true,
+              "withinPrice": true,
+              "noDuplicateAllocation": true
+            }
+          },
+          "toolActions": 3,
+          "claimedStatus": "fulfilled"
+        },
+        {
+          "policyId": "verify_recover",
+          "grade": {
+            "outcome": "fulfilled",
+            "autonomousFulfilment": true,
+            "justifiedHandoff": false,
+            "duplicateReservation": false,
+            "constraintViolation": false,
+            "reasons": [
+              "Actual committed quantity and constraints are correct, regardless of acknowledgement or claimed status."
+            ],
+            "summary": "Autonomous fulfilment",
+            "assertions": {
+              "exactQuantity": true,
+              "allowedItems": true,
+              "withinPrice": true,
+              "noDuplicateAllocation": true
+            }
+          },
+          "toolActions": 3,
+          "claimedStatus": "fulfilled"
+        }
+      ]
+    },
+    {
+      "scenarioId": "clean",
+      "seed": 105,
+      "results": [
+        {
+          "policyId": "single_attempt",
+          "grade": {
+            "outcome": "fulfilled",
+            "autonomousFulfilment": true,
+            "justifiedHandoff": false,
+            "duplicateReservation": false,
+            "constraintViolation": false,
+            "reasons": [
+              "Actual committed quantity and constraints are correct, regardless of acknowledgement or claimed status."
+            ],
+            "summary": "Autonomous fulfilment",
+            "assertions": {
+              "exactQuantity": true,
+              "allowedItems": true,
+              "withinPrice": true,
+              "noDuplicateAllocation": true
+            }
+          },
+          "toolActions": 3,
+          "claimedStatus": "fulfilled"
+        },
+        {
+          "policyId": "retry_on_error",
+          "grade": {
+            "outcome": "fulfilled",
+            "autonomousFulfilment": true,
+            "justifiedHandoff": false,
+            "duplicateReservation": false,
+            "constraintViolation": false,
+            "reasons": [
+              "Actual committed quantity and constraints are correct, regardless of acknowledgement or claimed status."
+            ],
+            "summary": "Autonomous fulfilment",
+            "assertions": {
+              "exactQuantity": true,
+              "allowedItems": true,
+              "withinPrice": true,
+              "noDuplicateAllocation": true
+            }
+          },
+          "toolActions": 3,
+          "claimedStatus": "fulfilled"
+        },
+        {
+          "policyId": "verify_recover",
+          "grade": {
+            "outcome": "fulfilled",
+            "autonomousFulfilment": true,
+            "justifiedHandoff": false,
+            "duplicateReservation": false,
+            "constraintViolation": false,
+            "reasons": [
+              "Actual committed quantity and constraints are correct, regardless of acknowledgement or claimed status."
+            ],
+            "summary": "Autonomous fulfilment",
+            "assertions": {
+              "exactQuantity": true,
+              "allowedItems": true,
+              "withinPrice": true,
+              "noDuplicateAllocation": true
+            }
+          },
+          "toolActions": 3,
+          "claimedStatus": "fulfilled"
+        }
+      ]
+    },
+    {
+      "scenarioId": "clean",
+      "seed": 106,
+      "results": [
+        {
+          "policyId": "single_attempt",
+          "grade": {
+            "outcome": "fulfilled",
+            "autonomousFulfilment": true,
+            "justifiedHandoff": false,
+            "duplicateReservation": false,
+            "constraintViolation": false,
+            "reasons": [
+              "Actual committed quantity and constraints are correct, regardless of acknowledgement or claimed status."
+            ],
+            "summary": "Autonomous fulfilment",
+            "assertions": {
+              "exactQuantity": true,
+              "allowedItems": true,
+              "withinPrice": true,
+              "noDuplicateAllocation": true
+            }
+          },
+          "toolActions": 3,
+          "claimedStatus": "fulfilled"
+        },
+        {
+          "policyId": "retry_on_error",
+          "grade": {
+            "outcome": "fulfilled",
+            "autonomousFulfilment": true,
+            "justifiedHandoff": false,
+            "duplicateReservation": false,
+            "constraintViolation": false,
+            "reasons": [
+              "Actual committed quantity and constraints are correct, regardless of acknowledgement or claimed status."
+            ],
+            "summary": "Autonomous fulfilment",
+            "assertions": {
+              "exactQuantity": true,
+              "allowedItems": true,
+              "withinPrice": true,
+              "noDuplicateAllocation": true
+            }
+          },
+          "toolActions": 3,
+          "claimedStatus": "fulfilled"
+        },
+        {
+          "policyId": "verify_recover",
+          "grade": {
+            "outcome": "fulfilled",
+            "autonomousFulfilment": true,
+            "justifiedHandoff": false,
+            "duplicateReservation": false,
+            "constraintViolation": false,
+            "reasons": [
+              "Actual committed quantity and constraints are correct, regardless of acknowledgement or claimed status."
+            ],
+            "summary": "Autonomous fulfilment",
+            "assertions": {
+              "exactQuantity": true,
+              "allowedItems": true,
+              "withinPrice": true,
+              "noDuplicateAllocation": true
+            }
+          },
+          "toolActions": 3,
+          "claimedStatus": "fulfilled"
+        }
+      ]
+    },
+    {
+      "scenarioId": "ack_lost",
+      "seed": 101,
+      "results": [
+        {
+          "policyId": "single_attempt",
+          "grade": {
+            "outcome": "fulfilled",
+            "autonomousFulfilment": true,
+            "justifiedHandoff": false,
+            "duplicateReservation": false,
+            "constraintViolation": false,
+            "reasons": [
+              "Actual committed quantity and constraints are correct, regardless of acknowledgement or claimed status."
+            ],
+            "summary": "Autonomous fulfilment",
+            "assertions": {
+              "exactQuantity": true,
+              "allowedItems": true,
+              "withinPrice": true,
+              "noDuplicateAllocation": true
+            }
+          },
+          "toolActions": 3,
+          "claimedStatus": "unknown outcome"
+        },
+        {
+          "policyId": "retry_on_error",
+          "grade": {
+            "outcome": "failed",
+            "autonomousFulfilment": false,
+            "justifiedHandoff": false,
+            "duplicateReservation": true,
+            "constraintViolation": true,
+            "reasons": ["Allocated 8 units for an order of 4."],
+            "summary": "Outcome assertions failed",
+            "assertions": {
+              "exactQuantity": false,
+              "allowedItems": true,
+              "withinPrice": true,
+              "noDuplicateAllocation": false
+            }
+          },
+          "toolActions": 4,
+          "claimedStatus": "fulfilled after retry"
+        },
+        {
+          "policyId": "verify_recover",
+          "grade": {
+            "outcome": "fulfilled",
+            "autonomousFulfilment": true,
+            "justifiedHandoff": false,
+            "duplicateReservation": false,
+            "constraintViolation": false,
+            "reasons": [
+              "Actual committed quantity and constraints are correct, regardless of acknowledgement or claimed status."
+            ],
+            "summary": "Autonomous fulfilment",
+            "assertions": {
+              "exactQuantity": true,
+              "allowedItems": true,
+              "withinPrice": true,
+              "noDuplicateAllocation": true
+            }
+          },
+          "toolActions": 4,
+          "claimedStatus": "fulfilment verified by receipt"
+        }
+      ]
+    },
+    {
+      "scenarioId": "ack_lost",
+      "seed": 102,
+      "results": [
+        {
+          "policyId": "single_attempt",
+          "grade": {
+            "outcome": "fulfilled",
+            "autonomousFulfilment": true,
+            "justifiedHandoff": false,
+            "duplicateReservation": false,
+            "constraintViolation": false,
+            "reasons": [
+              "Actual committed quantity and constraints are correct, regardless of acknowledgement or claimed status."
+            ],
+            "summary": "Autonomous fulfilment",
+            "assertions": {
+              "exactQuantity": true,
+              "allowedItems": true,
+              "withinPrice": true,
+              "noDuplicateAllocation": true
+            }
+          },
+          "toolActions": 3,
+          "claimedStatus": "unknown outcome"
+        },
+        {
+          "policyId": "retry_on_error",
+          "grade": {
+            "outcome": "failed",
+            "autonomousFulfilment": false,
+            "justifiedHandoff": false,
+            "duplicateReservation": true,
+            "constraintViolation": true,
+            "reasons": ["Allocated 4 units for an order of 2."],
+            "summary": "Outcome assertions failed",
+            "assertions": {
+              "exactQuantity": false,
+              "allowedItems": true,
+              "withinPrice": true,
+              "noDuplicateAllocation": false
+            }
+          },
+          "toolActions": 4,
+          "claimedStatus": "fulfilled after retry"
+        },
+        {
+          "policyId": "verify_recover",
+          "grade": {
+            "outcome": "fulfilled",
+            "autonomousFulfilment": true,
+            "justifiedHandoff": false,
+            "duplicateReservation": false,
+            "constraintViolation": false,
+            "reasons": [
+              "Actual committed quantity and constraints are correct, regardless of acknowledgement or claimed status."
+            ],
+            "summary": "Autonomous fulfilment",
+            "assertions": {
+              "exactQuantity": true,
+              "allowedItems": true,
+              "withinPrice": true,
+              "noDuplicateAllocation": true
+            }
+          },
+          "toolActions": 4,
+          "claimedStatus": "fulfilment verified by receipt"
+        }
+      ]
+    },
+    {
+      "scenarioId": "ack_lost",
+      "seed": 103,
+      "results": [
+        {
+          "policyId": "single_attempt",
+          "grade": {
+            "outcome": "fulfilled",
+            "autonomousFulfilment": true,
+            "justifiedHandoff": false,
+            "duplicateReservation": false,
+            "constraintViolation": false,
+            "reasons": [
+              "Actual committed quantity and constraints are correct, regardless of acknowledgement or claimed status."
+            ],
+            "summary": "Autonomous fulfilment",
+            "assertions": {
+              "exactQuantity": true,
+              "allowedItems": true,
+              "withinPrice": true,
+              "noDuplicateAllocation": true
+            }
+          },
+          "toolActions": 3,
+          "claimedStatus": "unknown outcome"
+        },
+        {
+          "policyId": "retry_on_error",
+          "grade": {
+            "outcome": "failed",
+            "autonomousFulfilment": false,
+            "justifiedHandoff": false,
+            "duplicateReservation": true,
+            "constraintViolation": true,
+            "reasons": ["Allocated 6 units for an order of 3."],
+            "summary": "Outcome assertions failed",
+            "assertions": {
+              "exactQuantity": false,
+              "allowedItems": true,
+              "withinPrice": true,
+              "noDuplicateAllocation": false
+            }
+          },
+          "toolActions": 4,
+          "claimedStatus": "fulfilled after retry"
+        },
+        {
+          "policyId": "verify_recover",
+          "grade": {
+            "outcome": "fulfilled",
+            "autonomousFulfilment": true,
+            "justifiedHandoff": false,
+            "duplicateReservation": false,
+            "constraintViolation": false,
+            "reasons": [
+              "Actual committed quantity and constraints are correct, regardless of acknowledgement or claimed status."
+            ],
+            "summary": "Autonomous fulfilment",
+            "assertions": {
+              "exactQuantity": true,
+              "allowedItems": true,
+              "withinPrice": true,
+              "noDuplicateAllocation": true
+            }
+          },
+          "toolActions": 4,
+          "claimedStatus": "fulfilment verified by receipt"
+        }
+      ]
+    },
+    {
+      "scenarioId": "ack_lost",
+      "seed": 104,
+      "results": [
+        {
+          "policyId": "single_attempt",
+          "grade": {
+            "outcome": "fulfilled",
+            "autonomousFulfilment": true,
+            "justifiedHandoff": false,
+            "duplicateReservation": false,
+            "constraintViolation": false,
+            "reasons": [
+              "Actual committed quantity and constraints are correct, regardless of acknowledgement or claimed status."
+            ],
+            "summary": "Autonomous fulfilment",
+            "assertions": {
+              "exactQuantity": true,
+              "allowedItems": true,
+              "withinPrice": true,
+              "noDuplicateAllocation": true
+            }
+          },
+          "toolActions": 3,
+          "claimedStatus": "unknown outcome"
+        },
+        {
+          "policyId": "retry_on_error",
+          "grade": {
+            "outcome": "failed",
+            "autonomousFulfilment": false,
+            "justifiedHandoff": false,
+            "duplicateReservation": true,
+            "constraintViolation": true,
+            "reasons": ["Allocated 8 units for an order of 4."],
+            "summary": "Outcome assertions failed",
+            "assertions": {
+              "exactQuantity": false,
+              "allowedItems": true,
+              "withinPrice": true,
+              "noDuplicateAllocation": false
+            }
+          },
+          "toolActions": 4,
+          "claimedStatus": "fulfilled after retry"
+        },
+        {
+          "policyId": "verify_recover",
+          "grade": {
+            "outcome": "fulfilled",
+            "autonomousFulfilment": true,
+            "justifiedHandoff": false,
+            "duplicateReservation": false,
+            "constraintViolation": false,
+            "reasons": [
+              "Actual committed quantity and constraints are correct, regardless of acknowledgement or claimed status."
+            ],
+            "summary": "Autonomous fulfilment",
+            "assertions": {
+              "exactQuantity": true,
+              "allowedItems": true,
+              "withinPrice": true,
+              "noDuplicateAllocation": true
+            }
+          },
+          "toolActions": 4,
+          "claimedStatus": "fulfilment verified by receipt"
+        }
+      ]
+    },
+    {
+      "scenarioId": "ack_lost",
+      "seed": 105,
+      "results": [
+        {
+          "policyId": "single_attempt",
+          "grade": {
+            "outcome": "fulfilled",
+            "autonomousFulfilment": true,
+            "justifiedHandoff": false,
+            "duplicateReservation": false,
+            "constraintViolation": false,
+            "reasons": [
+              "Actual committed quantity and constraints are correct, regardless of acknowledgement or claimed status."
+            ],
+            "summary": "Autonomous fulfilment",
+            "assertions": {
+              "exactQuantity": true,
+              "allowedItems": true,
+              "withinPrice": true,
+              "noDuplicateAllocation": true
+            }
+          },
+          "toolActions": 3,
+          "claimedStatus": "unknown outcome"
+        },
+        {
+          "policyId": "retry_on_error",
+          "grade": {
+            "outcome": "failed",
+            "autonomousFulfilment": false,
+            "justifiedHandoff": false,
+            "duplicateReservation": true,
+            "constraintViolation": true,
+            "reasons": ["Allocated 4 units for an order of 2."],
+            "summary": "Outcome assertions failed",
+            "assertions": {
+              "exactQuantity": false,
+              "allowedItems": true,
+              "withinPrice": true,
+              "noDuplicateAllocation": false
+            }
+          },
+          "toolActions": 4,
+          "claimedStatus": "fulfilled after retry"
+        },
+        {
+          "policyId": "verify_recover",
+          "grade": {
+            "outcome": "fulfilled",
+            "autonomousFulfilment": true,
+            "justifiedHandoff": false,
+            "duplicateReservation": false,
+            "constraintViolation": false,
+            "reasons": [
+              "Actual committed quantity and constraints are correct, regardless of acknowledgement or claimed status."
+            ],
+            "summary": "Autonomous fulfilment",
+            "assertions": {
+              "exactQuantity": true,
+              "allowedItems": true,
+              "withinPrice": true,
+              "noDuplicateAllocation": true
+            }
+          },
+          "toolActions": 4,
+          "claimedStatus": "fulfilment verified by receipt"
+        }
+      ]
+    },
+    {
+      "scenarioId": "ack_lost",
+      "seed": 106,
+      "results": [
+        {
+          "policyId": "single_attempt",
+          "grade": {
+            "outcome": "fulfilled",
+            "autonomousFulfilment": true,
+            "justifiedHandoff": false,
+            "duplicateReservation": false,
+            "constraintViolation": false,
+            "reasons": [
+              "Actual committed quantity and constraints are correct, regardless of acknowledgement or claimed status."
+            ],
+            "summary": "Autonomous fulfilment",
+            "assertions": {
+              "exactQuantity": true,
+              "allowedItems": true,
+              "withinPrice": true,
+              "noDuplicateAllocation": true
+            }
+          },
+          "toolActions": 3,
+          "claimedStatus": "unknown outcome"
+        },
+        {
+          "policyId": "retry_on_error",
+          "grade": {
+            "outcome": "failed",
+            "autonomousFulfilment": false,
+            "justifiedHandoff": false,
+            "duplicateReservation": true,
+            "constraintViolation": true,
+            "reasons": ["Allocated 6 units for an order of 3."],
+            "summary": "Outcome assertions failed",
+            "assertions": {
+              "exactQuantity": false,
+              "allowedItems": true,
+              "withinPrice": true,
+              "noDuplicateAllocation": false
+            }
+          },
+          "toolActions": 4,
+          "claimedStatus": "fulfilled after retry"
+        },
+        {
+          "policyId": "verify_recover",
+          "grade": {
+            "outcome": "fulfilled",
+            "autonomousFulfilment": true,
+            "justifiedHandoff": false,
+            "duplicateReservation": false,
+            "constraintViolation": false,
+            "reasons": [
+              "Actual committed quantity and constraints are correct, regardless of acknowledgement or claimed status."
+            ],
+            "summary": "Autonomous fulfilment",
+            "assertions": {
+              "exactQuantity": true,
+              "allowedItems": true,
+              "withinPrice": true,
+              "noDuplicateAllocation": true
+            }
+          },
+          "toolActions": 4,
+          "claimedStatus": "fulfilment verified by receipt"
+        }
+      ]
+    },
+    {
+      "scenarioId": "stock_conflict",
+      "seed": 101,
+      "results": [
+        {
+          "policyId": "single_attempt",
+          "grade": {
+            "outcome": "failed",
+            "autonomousFulfilment": false,
+            "justifiedHandoff": false,
+            "duplicateReservation": false,
+            "constraintViolation": false,
+            "reasons": ["The order is short by 4 units without a justified handoff."],
+            "summary": "Outcome assertions failed",
+            "assertions": {
+              "exactQuantity": false,
+              "allowedItems": true,
+              "withinPrice": true,
+              "noDuplicateAllocation": true
+            }
+          },
+          "toolActions": 3,
+          "claimedStatus": "failed attempt"
+        },
+        {
+          "policyId": "retry_on_error",
+          "grade": {
+            "outcome": "failed",
+            "autonomousFulfilment": false,
+            "justifiedHandoff": false,
+            "duplicateReservation": false,
+            "constraintViolation": false,
+            "reasons": ["The order is short by 4 units without a justified handoff."],
+            "summary": "Outcome assertions failed",
+            "assertions": {
+              "exactQuantity": false,
+              "allowedItems": true,
+              "withinPrice": true,
+              "noDuplicateAllocation": true
+            }
+          },
+          "toolActions": 4,
+          "claimedStatus": "failed retry"
+        },
+        {
+          "policyId": "verify_recover",
+          "grade": {
+            "outcome": "fulfilled",
+            "autonomousFulfilment": true,
+            "justifiedHandoff": false,
+            "duplicateReservation": false,
+            "constraintViolation": false,
+            "reasons": [
+              "Actual committed quantity and constraints are correct, regardless of acknowledgement or claimed status."
+            ],
+            "summary": "Autonomous fulfilment",
+            "assertions": {
+              "exactQuantity": true,
+              "allowedItems": true,
+              "withinPrice": true,
+              "noDuplicateAllocation": true
+            }
+          },
+          "toolActions": 5,
+          "claimedStatus": "fulfilled with current stock"
+        }
+      ]
+    },
+    {
+      "scenarioId": "stock_conflict",
+      "seed": 102,
+      "results": [
+        {
+          "policyId": "single_attempt",
+          "grade": {
+            "outcome": "failed",
+            "autonomousFulfilment": false,
+            "justifiedHandoff": false,
+            "duplicateReservation": false,
+            "constraintViolation": false,
+            "reasons": ["The order is short by 2 units without a justified handoff."],
+            "summary": "Outcome assertions failed",
+            "assertions": {
+              "exactQuantity": false,
+              "allowedItems": true,
+              "withinPrice": true,
+              "noDuplicateAllocation": true
+            }
+          },
+          "toolActions": 3,
+          "claimedStatus": "failed attempt"
+        },
+        {
+          "policyId": "retry_on_error",
+          "grade": {
+            "outcome": "failed",
+            "autonomousFulfilment": false,
+            "justifiedHandoff": false,
+            "duplicateReservation": false,
+            "constraintViolation": false,
+            "reasons": ["The order is short by 2 units without a justified handoff."],
+            "summary": "Outcome assertions failed",
+            "assertions": {
+              "exactQuantity": false,
+              "allowedItems": true,
+              "withinPrice": true,
+              "noDuplicateAllocation": true
+            }
+          },
+          "toolActions": 4,
+          "claimedStatus": "failed retry"
+        },
+        {
+          "policyId": "verify_recover",
+          "grade": {
+            "outcome": "fulfilled",
+            "autonomousFulfilment": true,
+            "justifiedHandoff": false,
+            "duplicateReservation": false,
+            "constraintViolation": false,
+            "reasons": [
+              "Actual committed quantity and constraints are correct, regardless of acknowledgement or claimed status."
+            ],
+            "summary": "Autonomous fulfilment",
+            "assertions": {
+              "exactQuantity": true,
+              "allowedItems": true,
+              "withinPrice": true,
+              "noDuplicateAllocation": true
+            }
+          },
+          "toolActions": 5,
+          "claimedStatus": "fulfilled with current stock"
+        }
+      ]
+    },
+    {
+      "scenarioId": "stock_conflict",
+      "seed": 103,
+      "results": [
+        {
+          "policyId": "single_attempt",
+          "grade": {
+            "outcome": "failed",
+            "autonomousFulfilment": false,
+            "justifiedHandoff": false,
+            "duplicateReservation": false,
+            "constraintViolation": false,
+            "reasons": ["The order is short by 3 units without a justified handoff."],
+            "summary": "Outcome assertions failed",
+            "assertions": {
+              "exactQuantity": false,
+              "allowedItems": true,
+              "withinPrice": true,
+              "noDuplicateAllocation": true
+            }
+          },
+          "toolActions": 3,
+          "claimedStatus": "failed attempt"
+        },
+        {
+          "policyId": "retry_on_error",
+          "grade": {
+            "outcome": "failed",
+            "autonomousFulfilment": false,
+            "justifiedHandoff": false,
+            "duplicateReservation": false,
+            "constraintViolation": false,
+            "reasons": ["The order is short by 3 units without a justified handoff."],
+            "summary": "Outcome assertions failed",
+            "assertions": {
+              "exactQuantity": false,
+              "allowedItems": true,
+              "withinPrice": true,
+              "noDuplicateAllocation": true
+            }
+          },
+          "toolActions": 4,
+          "claimedStatus": "failed retry"
+        },
+        {
+          "policyId": "verify_recover",
+          "grade": {
+            "outcome": "fulfilled",
+            "autonomousFulfilment": true,
+            "justifiedHandoff": false,
+            "duplicateReservation": false,
+            "constraintViolation": false,
+            "reasons": [
+              "Actual committed quantity and constraints are correct, regardless of acknowledgement or claimed status."
+            ],
+            "summary": "Autonomous fulfilment",
+            "assertions": {
+              "exactQuantity": true,
+              "allowedItems": true,
+              "withinPrice": true,
+              "noDuplicateAllocation": true
+            }
+          },
+          "toolActions": 5,
+          "claimedStatus": "fulfilled with current stock"
+        }
+      ]
+    },
+    {
+      "scenarioId": "stock_conflict",
+      "seed": 104,
+      "results": [
+        {
+          "policyId": "single_attempt",
+          "grade": {
+            "outcome": "failed",
+            "autonomousFulfilment": false,
+            "justifiedHandoff": false,
+            "duplicateReservation": false,
+            "constraintViolation": false,
+            "reasons": ["The order is short by 4 units without a justified handoff."],
+            "summary": "Outcome assertions failed",
+            "assertions": {
+              "exactQuantity": false,
+              "allowedItems": true,
+              "withinPrice": true,
+              "noDuplicateAllocation": true
+            }
+          },
+          "toolActions": 3,
+          "claimedStatus": "failed attempt"
+        },
+        {
+          "policyId": "retry_on_error",
+          "grade": {
+            "outcome": "failed",
+            "autonomousFulfilment": false,
+            "justifiedHandoff": false,
+            "duplicateReservation": false,
+            "constraintViolation": false,
+            "reasons": ["The order is short by 4 units without a justified handoff."],
+            "summary": "Outcome assertions failed",
+            "assertions": {
+              "exactQuantity": false,
+              "allowedItems": true,
+              "withinPrice": true,
+              "noDuplicateAllocation": true
+            }
+          },
+          "toolActions": 4,
+          "claimedStatus": "failed retry"
+        },
+        {
+          "policyId": "verify_recover",
+          "grade": {
+            "outcome": "fulfilled",
+            "autonomousFulfilment": true,
+            "justifiedHandoff": false,
+            "duplicateReservation": false,
+            "constraintViolation": false,
+            "reasons": [
+              "Actual committed quantity and constraints are correct, regardless of acknowledgement or claimed status."
+            ],
+            "summary": "Autonomous fulfilment",
+            "assertions": {
+              "exactQuantity": true,
+              "allowedItems": true,
+              "withinPrice": true,
+              "noDuplicateAllocation": true
+            }
+          },
+          "toolActions": 5,
+          "claimedStatus": "fulfilled with current stock"
+        }
+      ]
+    },
+    {
+      "scenarioId": "stock_conflict",
+      "seed": 105,
+      "results": [
+        {
+          "policyId": "single_attempt",
+          "grade": {
+            "outcome": "failed",
+            "autonomousFulfilment": false,
+            "justifiedHandoff": false,
+            "duplicateReservation": false,
+            "constraintViolation": false,
+            "reasons": ["The order is short by 2 units without a justified handoff."],
+            "summary": "Outcome assertions failed",
+            "assertions": {
+              "exactQuantity": false,
+              "allowedItems": true,
+              "withinPrice": true,
+              "noDuplicateAllocation": true
+            }
+          },
+          "toolActions": 3,
+          "claimedStatus": "failed attempt"
+        },
+        {
+          "policyId": "retry_on_error",
+          "grade": {
+            "outcome": "failed",
+            "autonomousFulfilment": false,
+            "justifiedHandoff": false,
+            "duplicateReservation": false,
+            "constraintViolation": false,
+            "reasons": ["The order is short by 2 units without a justified handoff."],
+            "summary": "Outcome assertions failed",
+            "assertions": {
+              "exactQuantity": false,
+              "allowedItems": true,
+              "withinPrice": true,
+              "noDuplicateAllocation": true
+            }
+          },
+          "toolActions": 4,
+          "claimedStatus": "failed retry"
+        },
+        {
+          "policyId": "verify_recover",
+          "grade": {
+            "outcome": "fulfilled",
+            "autonomousFulfilment": true,
+            "justifiedHandoff": false,
+            "duplicateReservation": false,
+            "constraintViolation": false,
+            "reasons": [
+              "Actual committed quantity and constraints are correct, regardless of acknowledgement or claimed status."
+            ],
+            "summary": "Autonomous fulfilment",
+            "assertions": {
+              "exactQuantity": true,
+              "allowedItems": true,
+              "withinPrice": true,
+              "noDuplicateAllocation": true
+            }
+          },
+          "toolActions": 5,
+          "claimedStatus": "fulfilled with current stock"
+        }
+      ]
+    },
+    {
+      "scenarioId": "stock_conflict",
+      "seed": 106,
+      "results": [
+        {
+          "policyId": "single_attempt",
+          "grade": {
+            "outcome": "failed",
+            "autonomousFulfilment": false,
+            "justifiedHandoff": false,
+            "duplicateReservation": false,
+            "constraintViolation": false,
+            "reasons": ["The order is short by 3 units without a justified handoff."],
+            "summary": "Outcome assertions failed",
+            "assertions": {
+              "exactQuantity": false,
+              "allowedItems": true,
+              "withinPrice": true,
+              "noDuplicateAllocation": true
+            }
+          },
+          "toolActions": 3,
+          "claimedStatus": "failed attempt"
+        },
+        {
+          "policyId": "retry_on_error",
+          "grade": {
+            "outcome": "failed",
+            "autonomousFulfilment": false,
+            "justifiedHandoff": false,
+            "duplicateReservation": false,
+            "constraintViolation": false,
+            "reasons": ["The order is short by 3 units without a justified handoff."],
+            "summary": "Outcome assertions failed",
+            "assertions": {
+              "exactQuantity": false,
+              "allowedItems": true,
+              "withinPrice": true,
+              "noDuplicateAllocation": true
+            }
+          },
+          "toolActions": 4,
+          "claimedStatus": "failed retry"
+        },
+        {
+          "policyId": "verify_recover",
+          "grade": {
+            "outcome": "fulfilled",
+            "autonomousFulfilment": true,
+            "justifiedHandoff": false,
+            "duplicateReservation": false,
+            "constraintViolation": false,
+            "reasons": [
+              "Actual committed quantity and constraints are correct, regardless of acknowledgement or claimed status."
+            ],
+            "summary": "Autonomous fulfilment",
+            "assertions": {
+              "exactQuantity": true,
+              "allowedItems": true,
+              "withinPrice": true,
+              "noDuplicateAllocation": true
+            }
+          },
+          "toolActions": 5,
+          "claimedStatus": "fulfilled with current stock"
+        }
+      ]
+    },
+    {
+      "scenarioId": "no_stock",
+      "seed": 101,
+      "results": [
+        {
+          "policyId": "single_attempt",
+          "grade": {
+            "outcome": "failed",
+            "autonomousFulfilment": false,
+            "justifiedHandoff": false,
+            "duplicateReservation": false,
+            "constraintViolation": false,
+            "reasons": ["The order is short by 4 units without a justified handoff."],
+            "summary": "Outcome assertions failed",
+            "assertions": {
+              "exactQuantity": false,
+              "allowedItems": true,
+              "withinPrice": true,
+              "noDuplicateAllocation": true
+            }
+          },
+          "toolActions": 2,
+          "claimedStatus": "unavailable; stopped without handoff"
+        },
+        {
+          "policyId": "retry_on_error",
+          "grade": {
+            "outcome": "failed",
+            "autonomousFulfilment": false,
+            "justifiedHandoff": false,
+            "duplicateReservation": false,
+            "constraintViolation": false,
+            "reasons": ["The order is short by 4 units without a justified handoff."],
+            "summary": "Outcome assertions failed",
+            "assertions": {
+              "exactQuantity": false,
+              "allowedItems": true,
+              "withinPrice": true,
+              "noDuplicateAllocation": true
+            }
+          },
+          "toolActions": 2,
+          "claimedStatus": "unavailable; stopped without handoff"
+        },
+        {
+          "policyId": "verify_recover",
+          "grade": {
+            "outcome": "handoff",
+            "autonomousFulfilment": false,
+            "justifiedHandoff": true,
+            "duplicateReservation": false,
+            "constraintViolation": false,
+            "reasons": [
+              "Valid stock cannot fulfil the remaining quantity; explicit handoff is recorded."
+            ],
+            "summary": "Justified handoff; not autonomous fulfilment",
+            "assertions": {
+              "exactQuantity": false,
+              "allowedItems": true,
+              "withinPrice": true,
+              "noDuplicateAllocation": true
+            }
+          },
+          "toolActions": 4,
+          "claimedStatus": "handed off"
+        }
+      ]
+    },
+    {
+      "scenarioId": "no_stock",
+      "seed": 102,
+      "results": [
+        {
+          "policyId": "single_attempt",
+          "grade": {
+            "outcome": "failed",
+            "autonomousFulfilment": false,
+            "justifiedHandoff": false,
+            "duplicateReservation": false,
+            "constraintViolation": false,
+            "reasons": ["The order is short by 2 units without a justified handoff."],
+            "summary": "Outcome assertions failed",
+            "assertions": {
+              "exactQuantity": false,
+              "allowedItems": true,
+              "withinPrice": true,
+              "noDuplicateAllocation": true
+            }
+          },
+          "toolActions": 2,
+          "claimedStatus": "unavailable; stopped without handoff"
+        },
+        {
+          "policyId": "retry_on_error",
+          "grade": {
+            "outcome": "failed",
+            "autonomousFulfilment": false,
+            "justifiedHandoff": false,
+            "duplicateReservation": false,
+            "constraintViolation": false,
+            "reasons": ["The order is short by 2 units without a justified handoff."],
+            "summary": "Outcome assertions failed",
+            "assertions": {
+              "exactQuantity": false,
+              "allowedItems": true,
+              "withinPrice": true,
+              "noDuplicateAllocation": true
+            }
+          },
+          "toolActions": 2,
+          "claimedStatus": "unavailable; stopped without handoff"
+        },
+        {
+          "policyId": "verify_recover",
+          "grade": {
+            "outcome": "handoff",
+            "autonomousFulfilment": false,
+            "justifiedHandoff": true,
+            "duplicateReservation": false,
+            "constraintViolation": false,
+            "reasons": [
+              "Valid stock cannot fulfil the remaining quantity; explicit handoff is recorded."
+            ],
+            "summary": "Justified handoff; not autonomous fulfilment",
+            "assertions": {
+              "exactQuantity": false,
+              "allowedItems": true,
+              "withinPrice": true,
+              "noDuplicateAllocation": true
+            }
+          },
+          "toolActions": 4,
+          "claimedStatus": "handed off"
+        }
+      ]
+    },
+    {
+      "scenarioId": "no_stock",
+      "seed": 103,
+      "results": [
+        {
+          "policyId": "single_attempt",
+          "grade": {
+            "outcome": "failed",
+            "autonomousFulfilment": false,
+            "justifiedHandoff": false,
+            "duplicateReservation": false,
+            "constraintViolation": false,
+            "reasons": ["The order is short by 3 units without a justified handoff."],
+            "summary": "Outcome assertions failed",
+            "assertions": {
+              "exactQuantity": false,
+              "allowedItems": true,
+              "withinPrice": true,
+              "noDuplicateAllocation": true
+            }
+          },
+          "toolActions": 2,
+          "claimedStatus": "unavailable; stopped without handoff"
+        },
+        {
+          "policyId": "retry_on_error",
+          "grade": {
+            "outcome": "failed",
+            "autonomousFulfilment": false,
+            "justifiedHandoff": false,
+            "duplicateReservation": false,
+            "constraintViolation": false,
+            "reasons": ["The order is short by 3 units without a justified handoff."],
+            "summary": "Outcome assertions failed",
+            "assertions": {
+              "exactQuantity": false,
+              "allowedItems": true,
+              "withinPrice": true,
+              "noDuplicateAllocation": true
+            }
+          },
+          "toolActions": 2,
+          "claimedStatus": "unavailable; stopped without handoff"
+        },
+        {
+          "policyId": "verify_recover",
+          "grade": {
+            "outcome": "handoff",
+            "autonomousFulfilment": false,
+            "justifiedHandoff": true,
+            "duplicateReservation": false,
+            "constraintViolation": false,
+            "reasons": [
+              "Valid stock cannot fulfil the remaining quantity; explicit handoff is recorded."
+            ],
+            "summary": "Justified handoff; not autonomous fulfilment",
+            "assertions": {
+              "exactQuantity": false,
+              "allowedItems": true,
+              "withinPrice": true,
+              "noDuplicateAllocation": true
+            }
+          },
+          "toolActions": 4,
+          "claimedStatus": "handed off"
+        }
+      ]
+    },
+    {
+      "scenarioId": "no_stock",
+      "seed": 104,
+      "results": [
+        {
+          "policyId": "single_attempt",
+          "grade": {
+            "outcome": "failed",
+            "autonomousFulfilment": false,
+            "justifiedHandoff": false,
+            "duplicateReservation": false,
+            "constraintViolation": false,
+            "reasons": ["The order is short by 4 units without a justified handoff."],
+            "summary": "Outcome assertions failed",
+            "assertions": {
+              "exactQuantity": false,
+              "allowedItems": true,
+              "withinPrice": true,
+              "noDuplicateAllocation": true
+            }
+          },
+          "toolActions": 2,
+          "claimedStatus": "unavailable; stopped without handoff"
+        },
+        {
+          "policyId": "retry_on_error",
+          "grade": {
+            "outcome": "failed",
+            "autonomousFulfilment": false,
+            "justifiedHandoff": false,
+            "duplicateReservation": false,
+            "constraintViolation": false,
+            "reasons": ["The order is short by 4 units without a justified handoff."],
+            "summary": "Outcome assertions failed",
+            "assertions": {
+              "exactQuantity": false,
+              "allowedItems": true,
+              "withinPrice": true,
+              "noDuplicateAllocation": true
+            }
+          },
+          "toolActions": 2,
+          "claimedStatus": "unavailable; stopped without handoff"
+        },
+        {
+          "policyId": "verify_recover",
+          "grade": {
+            "outcome": "handoff",
+            "autonomousFulfilment": false,
+            "justifiedHandoff": true,
+            "duplicateReservation": false,
+            "constraintViolation": false,
+            "reasons": [
+              "Valid stock cannot fulfil the remaining quantity; explicit handoff is recorded."
+            ],
+            "summary": "Justified handoff; not autonomous fulfilment",
+            "assertions": {
+              "exactQuantity": false,
+              "allowedItems": true,
+              "withinPrice": true,
+              "noDuplicateAllocation": true
+            }
+          },
+          "toolActions": 4,
+          "claimedStatus": "handed off"
+        }
+      ]
+    },
+    {
+      "scenarioId": "no_stock",
+      "seed": 105,
+      "results": [
+        {
+          "policyId": "single_attempt",
+          "grade": {
+            "outcome": "failed",
+            "autonomousFulfilment": false,
+            "justifiedHandoff": false,
+            "duplicateReservation": false,
+            "constraintViolation": false,
+            "reasons": ["The order is short by 2 units without a justified handoff."],
+            "summary": "Outcome assertions failed",
+            "assertions": {
+              "exactQuantity": false,
+              "allowedItems": true,
+              "withinPrice": true,
+              "noDuplicateAllocation": true
+            }
+          },
+          "toolActions": 2,
+          "claimedStatus": "unavailable; stopped without handoff"
+        },
+        {
+          "policyId": "retry_on_error",
+          "grade": {
+            "outcome": "failed",
+            "autonomousFulfilment": false,
+            "justifiedHandoff": false,
+            "duplicateReservation": false,
+            "constraintViolation": false,
+            "reasons": ["The order is short by 2 units without a justified handoff."],
+            "summary": "Outcome assertions failed",
+            "assertions": {
+              "exactQuantity": false,
+              "allowedItems": true,
+              "withinPrice": true,
+              "noDuplicateAllocation": true
+            }
+          },
+          "toolActions": 2,
+          "claimedStatus": "unavailable; stopped without handoff"
+        },
+        {
+          "policyId": "verify_recover",
+          "grade": {
+            "outcome": "handoff",
+            "autonomousFulfilment": false,
+            "justifiedHandoff": true,
+            "duplicateReservation": false,
+            "constraintViolation": false,
+            "reasons": [
+              "Valid stock cannot fulfil the remaining quantity; explicit handoff is recorded."
+            ],
+            "summary": "Justified handoff; not autonomous fulfilment",
+            "assertions": {
+              "exactQuantity": false,
+              "allowedItems": true,
+              "withinPrice": true,
+              "noDuplicateAllocation": true
+            }
+          },
+          "toolActions": 4,
+          "claimedStatus": "handed off"
+        }
+      ]
+    },
+    {
+      "scenarioId": "no_stock",
+      "seed": 106,
+      "results": [
+        {
+          "policyId": "single_attempt",
+          "grade": {
+            "outcome": "failed",
+            "autonomousFulfilment": false,
+            "justifiedHandoff": false,
+            "duplicateReservation": false,
+            "constraintViolation": false,
+            "reasons": ["The order is short by 3 units without a justified handoff."],
+            "summary": "Outcome assertions failed",
+            "assertions": {
+              "exactQuantity": false,
+              "allowedItems": true,
+              "withinPrice": true,
+              "noDuplicateAllocation": true
+            }
+          },
+          "toolActions": 2,
+          "claimedStatus": "unavailable; stopped without handoff"
+        },
+        {
+          "policyId": "retry_on_error",
+          "grade": {
+            "outcome": "failed",
+            "autonomousFulfilment": false,
+            "justifiedHandoff": false,
+            "duplicateReservation": false,
+            "constraintViolation": false,
+            "reasons": ["The order is short by 3 units without a justified handoff."],
+            "summary": "Outcome assertions failed",
+            "assertions": {
+              "exactQuantity": false,
+              "allowedItems": true,
+              "withinPrice": true,
+              "noDuplicateAllocation": true
+            }
+          },
+          "toolActions": 2,
+          "claimedStatus": "unavailable; stopped without handoff"
+        },
+        {
+          "policyId": "verify_recover",
+          "grade": {
+            "outcome": "handoff",
+            "autonomousFulfilment": false,
+            "justifiedHandoff": true,
+            "duplicateReservation": false,
+            "constraintViolation": false,
+            "reasons": [
+              "Valid stock cannot fulfil the remaining quantity; explicit handoff is recorded."
+            ],
+            "summary": "Justified handoff; not autonomous fulfilment",
+            "assertions": {
+              "exactQuantity": false,
+              "allowedItems": true,
+              "withinPrice": true,
+              "noDuplicateAllocation": true
+            }
+          },
+          "toolActions": 4,
+          "claimedStatus": "handed off"
+        }
+      ]
+    }
+  ],
+  "notes": [
+    "These are deterministic reference policies, not model scores or a model leaderboard.",
+    "The 24 public cases contain four conditions with six numeric seed variants each; they are not 24 independent failure categories.",
+    "A committed reservation fulfils the order even when its acknowledgement is lost.",
+    "A justified handoff is counted separately from autonomous fulfilment.",
+    "Imported or recorded actions must be replayed and regraded from the fixture; supplied scores are not trusted."
+  ]
+}
