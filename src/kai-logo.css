@@ -1,0 +1,20 @@
+.kai-wordmark {
+  display: block;
+  width: 72px;
+  height: auto;
+  overflow: visible;
+  fill: currentColor;
+  flex: 0 0 auto;
+}
+.screening-brand .kai-wordmark {
+  width: 68px;
+}
+.kai-wordmark[data-colored='true'] [data-letter='k'] {
+  fill: #eeaa82;
+}
+.kai-wordmark[data-colored='true'] [data-letter='a'] {
+  fill: #f7f2e8;
+}
+.kai-wordmark[data-colored='true'] [data-letter='i'] {
+  fill: #c6bad9;
+}

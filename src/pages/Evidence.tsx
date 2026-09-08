@@ -52,6 +52,24 @@ export default function Evidence() {
         </section>
         <div className="evidence-grid">
           <article className="evidence-card">
+            <span className="eyebrow">PIXEL / LITTLE DELIVERIES</span>
+            <h2>Continuous play, bounded state.</h2>
+            <ul>
+              <li>Fixed simulation steps keep movement and collisions repeatable.</li>
+              <li>
+                Checks cover pickup before delivery, parcel accounting, obstacle clearance and
+                bounded retained scene data.
+              </li>
+              <li>Keyboard and touch controls take over the demo; pause stops the simulation.</li>
+            </ul>
+            <a href="#/pixel">
+              Play Little deliveries <ArrowUpRight size={13} />
+            </a>
+            <a href={`${REPO}/blob/main/tests/pixel.test.ts`} target="_blank" rel="noreferrer">
+              Inspect the game checks <ArrowUpRight size={13} />
+            </a>
+          </article>
+          <article className="evidence-card">
             <span className="eyebrow">PROOF / PROTOTYPE</span>
             <h2>Agent failure recovery.</h2>
             <ul>

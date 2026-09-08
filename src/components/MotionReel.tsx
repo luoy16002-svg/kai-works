@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type MouseEvent, type PointerEvent } from 'react';
 import { Play, Pause, RotateCcw, ArrowDownToLine, ArrowUpRight } from 'lucide-react';
 import { download } from '../ui';
+import KaiLogo from './KaiLogo';
 import {
   FILM_DURATION,
   FILM_CHAPTERS,
@@ -112,6 +113,7 @@ export default function MotionReel({
       if (!available()) return;
       const delta = previous ? Math.min(64, now - previous) : 0;
       previous = now;
+      const finishingBridge = bridge && bridge.elapsed + delta >= bridge.duration;
       if (bridge) {
         bridge.elapsed += delta;
         if (bridge.kind === 'chapter')
@@ -121,7 +123,7 @@ export default function MotionReel({
       } else if (intent.current)
         clock.current = Math.min(FILM_DURATION, clock.current + (delta / 1000) * speedRef.current);
       paint();
-      if (now - lastUi > 65 || clock.current >= FILM_DURATION) {
+      if (now - lastUi > 65 || clock.current >= FILM_DURATION || finishingBridge) {
         setTime(clock.current);
         lastUi = now;
       }
@@ -155,6 +157,8 @@ export default function MotionReel({
       pause,
       seek: (value, animate = false) => {
         const target = Math.max(0, Math.min(FILM_DURATION, value));
+        intent.current = false;
+        setPlaying(false);
         if (animate && !window.matchMedia('(prefers-reduced-motion: reduce)').matches)
           bridge = { kind: 'chapter', from: clock.current, to: target, elapsed: 0, duration: 380 };
         else {
@@ -167,6 +171,8 @@ export default function MotionReel({
         sync();
       },
       palette: (value) => {
+        intent.current = false;
+        setPlaying(false);
         if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
           const image = document.createElement('canvas');
           image.width = canvas.width;
@@ -183,6 +189,7 @@ export default function MotionReel({
       },
       sync,
       picture: () => {
+        pause();
         paint();
         return canvas.toDataURL('image/png');
       },
@@ -191,7 +198,7 @@ export default function MotionReel({
       const bounds = canvas.getBoundingClientRect();
       if (!bounds.width || !bounds.height) {
         visible = false;
-        sync();
+        pause();
         return;
       }
       width = bounds.width;
@@ -200,18 +207,28 @@ export default function MotionReel({
       canvas.width = Math.round(width * dpr);
       canvas.height = Math.round(height * dpr);
       setBuffer({ width: canvas.width, height: canvas.height, dpr });
-      visible = bounds.bottom > 0 && bounds.top < window.innerHeight;
+      const nextVisible = bounds.bottom > 0 && bounds.top < window.innerHeight;
+      const leftViewport = visible && !nextVisible;
+      visible = nextVisible;
       paint();
-      sync();
+      if (leftViewport) pause();
+      else sync();
     };
     const observer = new ResizeObserver(resize);
     observer.observe(canvas);
     const intersection = new IntersectionObserver(([entry]) => {
-      visible = entry.isIntersecting && entry.intersectionRatio > 0;
-      sync();
+      const next = entry.isIntersecting && entry.intersectionRatio > 0;
+      if (visible && !next) {
+        visible = next;
+        pause();
+      } else {
+        visible = next;
+        sync();
+      }
     });
     intersection.observe(canvas);
-    document.addEventListener('visibilitychange', sync);
+    const visibilityChange = () => (document.hidden ? pause() : sync());
+    document.addEventListener('visibilitychange', visibilityChange);
     const preference = window.matchMedia('(prefers-reduced-motion: reduce)');
     const reducedChange = () => {
       if (preference.matches) {
@@ -229,19 +246,19 @@ export default function MotionReel({
       cancelAnimationFrame(frame);
       observer.disconnect();
       intersection.disconnect();
-      document.removeEventListener('visibilitychange', sync);
+      document.removeEventListener('visibilitychange', visibilityChange);
       preference.removeEventListener('change', reducedChange);
       bridge = null;
       engine.current = null;
     };
   }, []);
   useEffect(() => {
-    engine.current?.sync();
     if (!active) {
+      engine.current?.pause();
       window.clearTimeout(routeTimer.current);
       setEntering(null);
       drag.current = null;
-    }
+    } else engine.current?.sync();
   }, [active]);
   useEffect(() => {
     const cancel = (event: KeyboardEvent) => {
@@ -250,10 +267,19 @@ export default function MotionReel({
         setEntering(null);
       }
     };
+    const cancelHidden = () => {
+      if (document.hidden) {
+        window.clearTimeout(routeTimer.current);
+        setEntering(null);
+        drag.current = null;
+      }
+    };
     window.addEventListener('keydown', cancel);
+    document.addEventListener('visibilitychange', cancelHidden);
     return () => {
       window.clearTimeout(routeTimer.current);
       window.removeEventListener('keydown', cancel);
+      document.removeEventListener('visibilitychange', cancelHidden);
     };
   }, []);
   const openProject = (event: MouseEvent<HTMLAnchorElement>, id: FilmProject) => {
@@ -305,11 +331,7 @@ export default function MotionReel({
           data-final={!!failure || time >= 7.75}
           aria-hidden="true"
         >
-          <svg className="motion-reel-poster-letters" viewBox="0 0 640 400" fill="none">
-            <path d="M160 124V276M247 124 167 201l85 75" stroke="#eeaa82" strokeWidth="26" />
-            <path d="m283 276 55-152 55 152m-91-49h72" stroke="#f7f2e8" strokeWidth="26" />
-            <path d="M447 124V276" stroke="#c6bad9" strokeWidth="26" />
-          </svg>
+          <KaiLogo className="motion-reel-poster-letters" colored />
           <div className="motion-reel-fallback-boundaries">
             <i />
             <i />
@@ -319,15 +341,17 @@ export default function MotionReel({
           className={`motion-reel-canvas${ready && !failure ? ' is-ready' : ''}`}
           ref={canvasRef}
           role="img"
-          aria-label="Seven recognizable KAI strokes stretch with layered echoes, then continuously become the boundaries of three working project entries."
+          aria-label="Seven flat KAI strokes separate, register and transform into the boundaries of three working project entries."
           onPointerDown={(event) => {
-            if (event.button === 0)
+            if (event.button === 0) {
+              engine.current?.pause();
               drag.current = {
                 x: event.clientX,
                 y: event.clientY,
                 time: clock.current,
                 armed: false,
               };
+            }
           }}
           onPointerMove={dragMove}
           onPointerUp={() => {
@@ -412,6 +436,7 @@ export default function MotionReel({
             aria-label="Film playhead"
             aria-valuetext={`${time.toFixed(1)} seconds of ${FILM_DURATION}`}
             disabled={!ready || !!failure}
+            onPointerDown={() => engine.current?.pause()}
             onChange={(event) => engine.current?.seek(Number(event.target.value))}
             style={{ '--film-progress': `${(time / FILM_DURATION) * 100}%` } as React.CSSProperties}
           />
@@ -433,13 +458,13 @@ export default function MotionReel({
           ))}
         </nav>
       </div>
-      <details className="motion-reel-inspect">
+      <details className="motion-reel-inspect" onToggle={() => engine.current?.pause()}>
         <summary>
           Inspect & adjust<span>+</span>
         </summary>
         <div className="motion-reel-inspect-content">
           <p>
-            Seven original KAI strokes. The same shapes stretch into interface boundaries and lead
+            Seven original KAI strokes. The same flat cuts align into interface boundaries and lead
             to working projects. The opening plays once; scrubbing is reversible.
           </p>
           <div className="motion-reel-options">
@@ -461,7 +486,10 @@ export default function MotionReel({
               <select
                 aria-label="Playback speed"
                 value={speed}
-                onChange={(event) => setSpeed(Number(event.target.value))}
+                onChange={(event) => {
+                  engine.current?.pause();
+                  setSpeed(Number(event.target.value));
+                }}
               >
                 <option value="0.5">0.5×</option>
                 <option value="1">1×</option>
@@ -522,7 +550,8 @@ export default function MotionReel({
               <ArrowDownToLine size={14} />
             </button>
             <button
-              onClick={() =>
+              onClick={() => {
+                engine.current?.pause();
                 download(
                   'kai-type-into-system.json',
                   JSON.stringify(
@@ -530,8 +559,8 @@ export default function MotionReel({
                     null,
                     2,
                   ),
-                )
-              }
+                );
+              }}
             >
               Save timeline
               <ArrowDownToLine size={14} />
