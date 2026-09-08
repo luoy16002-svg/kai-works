@@ -1,13 +1,14 @@
 # Kai / Selected work
 
-Seven working, independent portfolio projects. React, TypeScript, Canvas 2D, WebGL 2, Web Workers and Three.js. No client commissions, users or revenue are implied.
+Eight working, independent portfolio projects. React, TypeScript, Canvas 2D, WebGL 2, Web Workers and Three.js. No client commissions, users or revenue are implied.
 
 [Open the portfolio](https://luoy16002-svg.github.io/kai-works/) · [Verify the build](https://github.com/luoy16002-svg/kai-works/actions)
 
 | Project  | Try it                                                                                | Engineering focus                                                                                               |
 | -------- | ------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| Pixel    | Watch Little deliveries or take control to run and jump                               | A playable Canvas 2D courier scene with keyboard and touch controls                                             |
 | PROOF    | Compare fulfilment strategies, inspect failures and replay recorded agent trials      | Seeded task environments, final-state grading, bounded action protocols and trace verification                  |
-| Motion   | Transform KAI letterforms into working project entries; scrub and export the sequence | Custom letterforms, continuous vertex transforms, deterministic choreography, visibility-aware Canvas 2D        |
+| Type     | Transform KAI letterforms into working project entries; scrub and export the sequence | Shared geometric identity, flat vertex transforms, deterministic choreography, visibility-aware Canvas 2D       |
 | Infinite | Explore Lorenz trajectories; change rho, pause, step and export a trace               | Fixed-step RK4, bounded history, inspectable numerical state, responsive 3D rendering                           |
 | Field    | Paint into a reaction–diffusion simulation; compare GPU and CPU; export PNG           | Floating-point ping-pong render targets, periodic finite differences, deterministic seeding, numerical readback |
 | HALO     | Change the pendant, share its URL, export PNG and JSON                                | Procedural geometry, real material updates, bounded serializable state, responsive WebGL                        |
@@ -22,7 +23,7 @@ npm run bench:proof
 npm run dev
 ```
 
-Open `http://127.0.0.1:5173/kai-works/`. `npm run build` produces a static `dist/`. Hash routes support direct links on GitHub Pages. The motion player and Infinite Field load separately; Three.js is shared by Infinite and HALO. Node 24 is used in CI.
+Open `http://127.0.0.1:5173/kai-works/`. `npm run build` produces a static `dist/`. Hash routes support direct links on GitHub Pages. The home screening room has Type, Pixel, Agents, Infinite and Ribbon tabs. Pixel, the recorded agent replay and Infinite load when first opened; Three.js is shared by Infinite and HALO. Node 24 is used in CI.
 
 ## Evidence
 
@@ -58,7 +59,9 @@ PROOF is a small, synthetic agent evaluation environment for order fulfilment. F
 
 The browser runs explicitly labelled reference policies. Recorded agent examples and imported action traces are presented separately. Imports are replayed against the versioned environment and graded again; supplied scores are not trusted. Replaying actions verifies their consequences in this simulator, not the identity of the model that originally chose them. This prototype does not establish a general model ranking, production reliability, customer demand, or measured financial savings. Its evaluation design draws on [Anthropic's agent evaluation guidance](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents) and [Sierra's state-based agent evaluation work](https://sierra.ai/blog/bench-advancing-agent-benchmarking-to-knowledge-and-voice).
 
-Motion is an original, silent KAI identity study. Letterform strokes transform into interface boundaries and real project links. The Canvas 2D sequence uses one absolute playhead, plays once, suspends when hidden, and begins on a finished still for reduced-motion preferences. PNG exports contain the rendered canvas; timeline JSON records the current composition and palette.
+Type is an original, silent KAI identity study. The header mark and film share seven flat letter strokes, which register and transform into interface boundaries and real project links. The Canvas 2D sequence uses one absolute playhead and plays once. Manual adjustments and hiding the film pause playback until Play; reduced-motion preferences begin on a finished still. PNG exports contain the rendered canvas; timeline JSON records the current composition and palette.
+
+Pixel is an original small courier game, Little deliveries. Demo shows the delivery route; Take control lets visitors run and jump. The home Agents tab presents a recorded replay of the published PROOF trials. It does not call a live AI model.
 
 Infinite is a numerical illustration of the [Lorenz system](https://journals.ametsoc.org/view/journals/atsc/20/2/1520-0469_1963_020_0130_dnf_2_0_co_2.xml), with sigma 10, beta 8/3 and adjustable rho from 18 to 40. Seven known initial states advance using CPU RK4 at a fixed 0.005 simulation time step. Each trace retains 1,600 segments; the initial field includes 4,000 warmup steps and 1,600 recorded steps. Exported JSON identifies this preparation, the selected state, parameters, simulation time and Float32 visualization samples. It is a mathematical visualization, not a weather model or a claim of long-range prediction accuracy.
 

@@ -30,8 +30,9 @@
 }
 .motion-reel .motion-reel-poster svg {
   display: block;
-  width: 100%;
-  height: 100%;
+  width: 79%;
+  height: 60%;
+  object-fit: contain;
 }
 .motion-reel .motion-reel-canvas {
   display: block;

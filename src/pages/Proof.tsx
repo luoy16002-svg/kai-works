@@ -10,6 +10,8 @@ import {
   Download,
 } from 'lucide-react';
 import { WorkNav, REPO, download } from '../ui';
+import { AgentMap, useProofPlayback } from '../components/AgentTheater';
+import { boundedText, readRecorded, type RecordedLoad } from '../core/proof-recordings';
 import {
   PROOF_SCENARIOS,
   PROOF_POLICIES,
@@ -28,15 +30,6 @@ import {
 import '../proof.css';
 
 type TrialView = { trial: ProofTrial; label: string; description: string };
-type RecordingMetadata = { acceptedActions: number; rejectedSubmissions: number; notes: string };
-type RecordedLoad = {
-  state: 'loading' | 'unavailable' | 'ready' | 'error';
-  trials: ProofTrial[];
-  rejected: string[];
-  message: string;
-  total: number;
-  recording?: RecordingMetadata;
-};
 const scenarioLabel = (id: string) =>
   PROOF_SCENARIOS.find((scenario) => scenario.id === id)?.label ?? id;
 const policyView = (trial: ProofTrial): TrialView => {
@@ -118,95 +111,70 @@ function TracePlayer({
   runKey,
   autoplay = false,
   active = true,
+  pauseKey = 0,
   onSelect,
 }: {
   views: TrialView[];
   runKey: string;
   autoplay?: boolean;
   active?: boolean;
+  pauseKey?: number;
   onSelect?: (trial: ProofTrial) => void;
 }) {
-  const lastStep = Math.max(1, ...views.map(({ trial }) => trial.events.length)) + 1;
-  const [head, setHead] = useState(lastStep),
-    [playing, setPlaying] = useState(false);
+  const [display, setDisplay] = useState<'map' | 'trace'>('map');
+  const [mapRun, setMapRun] = useState(Math.min(2, views.length - 1));
+  const [tour, setTour] = useState(views.length > 1);
   const [selected, setSelected] = useState<{ run: number; event: number } | null>(null);
-  const stageRef = useRef<HTMLElement>(null);
-  const playback = useRef({ head, playing, active, lastStep });
-  playback.current = { head, playing, active, lastStep };
-  const syncRef = useRef<(() => void) | null>(null);
+  const mapView = views[mapRun] ?? views[0];
   useEffect(() => {
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    setHead(autoplay && !reduced ? 0 : lastStep);
-    setPlaying(autoplay && !reduced);
-    setSelected(null);
-  }, [runKey, lastStep]);
+    onSelect?.(mapView.trial);
+  }, [mapView.trial, onSelect]);
+  const eventCount =
+    display === 'map'
+      ? mapView.trial.events.length
+      : Math.max(0, ...views.map(({ trial }) => trial.events.length));
+  const lastStep = eventCount + 1;
+  const player = useProofPlayback({
+    eventCount,
+    active,
+    autoplay,
+    onCycle: () => {
+      if (tour && display === 'map') {
+        const next = (mapRun + 1) % views.length;
+        setMapRun(next);
+        onSelect?.(views[next].trial);
+      }
+    },
+  });
+  const { head, playing } = player;
+  const manual = () => {
+    setTour(false);
+    player.pause();
+  };
+  const previousRunKey = useRef(runKey);
   useEffect(() => {
-    const stage = stageRef.current!;
-    let frame = 0,
-      last = 0,
-      sample = 0;
-    const rect = stage.getBoundingClientRect();
-    let visible = rect.bottom > 0 && rect.top < window.innerHeight;
-    const canPlay = () =>
-      playback.current.playing && playback.current.active && visible && !document.hidden;
-    const tick = (now: number) => {
-      frame = 0;
-      if (!canPlay()) return;
-      const dt = last ? Math.min(80, now - last) : 0;
-      last = now;
-      playback.current.head = Math.min(
-        playback.current.lastStep,
-        playback.current.head + (dt / 5000) * playback.current.lastStep,
-      );
-      if (now - sample > 55 || playback.current.head >= playback.current.lastStep) {
-        setHead(playback.current.head);
-        sample = now;
-      }
-      if (playback.current.head >= playback.current.lastStep) {
-        playback.current.playing = false;
-        setPlaying(false);
-        return;
-      }
-      frame = requestAnimationFrame(tick);
-    };
-    const sync = () => {
-      cancelAnimationFrame(frame);
-      frame = 0;
-      last = 0;
-      if (canPlay()) frame = requestAnimationFrame(tick);
-    };
-    syncRef.current = sync;
-    const intersection = new IntersectionObserver(([entry]) => {
-      visible = entry.isIntersecting;
-      sync();
-    });
-    intersection.observe(stage);
-    document.addEventListener('visibilitychange', sync);
-    const preference = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const reduce = () => {
-      if (preference.matches) {
-        playback.current.playing = false;
-        setPlaying(false);
-        setHead(playback.current.lastStep);
-        sync();
-      }
-    };
-    preference.addEventListener('change', reduce);
-    sync();
-    return () => {
-      cancelAnimationFrame(frame);
-      intersection.disconnect();
-      document.removeEventListener('visibilitychange', sync);
-      preference.removeEventListener('change', reduce);
-      syncRef.current = null;
-    };
-  }, []);
+    if (previousRunKey.current !== runKey) {
+      previousRunKey.current = runKey;
+      setSelected(null);
+      setMapRun(Math.min(2, views.length - 1));
+      setTour(false);
+      player.reset(autoplay && !window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+    }
+  }, [runKey]);
   useEffect(() => {
-    syncRef.current?.();
-  }, [playing, active, lastStep, runKey]);
+    if (!active) manual();
+  }, [active]);
+  const previousPause = useRef(pauseKey);
+  useEffect(() => {
+    if (previousPause.current !== pauseKey) {
+      previousPause.current = pauseKey;
+      manual();
+    }
+  }, [pauseKey]);
   const inspect = (run: number, event: number) => {
-    setPlaying(false);
-    setHead((value) => Math.max(value, event + 1));
+    manual();
+    setMapRun(run);
+    player.seek(event + 1, views[run].trial.events.length);
     setSelected({ run, event });
     onSelect?.(views[run].trial);
   };
@@ -215,86 +183,166 @@ function TracePlayer({
     .find(({ event }) => !event.observation.ok);
   const inspected = selected ? views[selected.run]?.trial.events[selected.event] : null;
   const inspectedRun = selected ? views[selected.run] : null;
-  const slots = Math.min(8, lastStep - 1);
+  const slots = Math.max(1, Math.min(8, lastStep - 1));
   return (
-    <section className="proof-stage" ref={stageRef} aria-label="Execution trace comparison">
+    <section
+      className="proof-stage"
+      ref={player.stageRef}
+      aria-label="Execution trace comparison"
+      data-view={display}
+      data-playing={playing}
+      data-cycles={player.cycles}
+    >
       <div className="proof-stage-heading">
         <span className="proof-eyebrow">ACTUAL TOOL EVENTS</span>
         <p>Step-aligned trace playback · not elapsed execution time</p>
+        <div className="proof-map-switch" role="group" aria-label="Execution view">
+          {(['map', 'trace'] as const).map((value) => (
+            <button
+              key={value}
+              type="button"
+              aria-pressed={display === value}
+              onClick={() => {
+                manual();
+                setSelected(null);
+                setDisplay(value);
+                const count =
+                  value === 'map'
+                    ? mapView.trial.events.length
+                    : Math.max(...views.map(({ trial }) => trial.events.length));
+                player.seek(value === 'trace' ? count : Math.min(head, count), count);
+              }}
+            >
+              {value === 'map' ? 'Map' : 'Trace'}
+            </button>
+          ))}
+        </div>
+      </div>
+      <div className="proof-final-metrics-label">
+        <span>Final outcomes</span>
+        <span>
+          Independent grades across all {views.length} {views.length === 1 ? 'run' : 'runs'}
+        </span>
       </div>
       <Metrics trials={views.map(({ trial }) => trial)} />
-      <div className="proof-lanes">
-        {views.map(({ trial, label, description }, run) => (
-          <div className="proof-lane" key={`${trial.policyId}-${run}`}>
-            <div className="proof-lane-label">
-              <span>0{run + 1}</span>
-              <h3>{label}</h3>
-              <p>{description}</p>
-            </div>
-            <ol
-              className="proof-events"
-              style={{ '--proof-slots': slots } as CSSProperties}
-              aria-label={`${label} accepted tool actions`}
-            >
-              {trial.events.map((event, index) => {
-                const shown = head >= index + 1;
-                const isCommitted = committed(event);
-                return (
-                  <li
-                    key={index}
-                    data-shown={shown}
-                    data-error={!event.observation.ok}
-                    data-commit={isCommitted}
-                    data-row-end={(index + 1) % slots === 0 || index === trial.events.length - 1}
-                  >
-                    <button
-                      type="button"
-                      disabled={!shown}
-                      aria-label={`Inspect ${label}, step ${index + 1}: ${toolLabels[event.action.tool]}, ${event.observation.code}`}
-                      aria-pressed={selected?.run === run && selected?.event === index}
-                      onClick={() => inspect(run, index)}
-                    >
-                      <span className="proof-event-face">
-                        {!event.observation.ok ? (
-                          <AlertTriangle size={16} />
-                        ) : isCommitted ? (
-                          <Check size={17} />
-                        ) : (
-                          <span>{index + 1}</span>
-                        )}
-                      </span>
-                      <span className="proof-event-label">{toolLabels[event.action.tool]}</span>
-                      {!event.observation.ok && (
-                        <span className="proof-event-code">
-                          {isCommitted
-                            ? 'Committed · reply lost'
-                            : event.observation.code.toLowerCase().replaceAll('_', ' ')}
-                        </span>
-                      )}
-                    </button>
-                  </li>
-                );
-              })}
-            </ol>
-            <div className="proof-lane-outcome" data-shown={head >= trial.events.length + 1}>
-              <Outcome trial={trial} />
-              <p>
-                {trial.grade.outcome === 'failed' ? trial.grade.reasons[0] : trial.grade.summary}
-              </p>
-              {trial.claimedStatus !== null && (
-                <small className="proof-reported">Reported: {trial.claimedStatus}</small>
-              )}
-            </div>
+      {display === 'map' ? (
+        <div className="proof-map-view">
+          <div className="proof-map-policies" role="group" aria-label="Policy shown on map">
+            <span>{views.length > 1 ? 'COMPARE' : 'SESSION'}</span>
+            {views.map((view, run) => (
+              <button
+                type="button"
+                key={run}
+                aria-label={`Show ${view.label} on map`}
+                aria-pressed={mapRun === run}
+                data-outcome={view.trial.grade.outcome}
+                onClick={() => {
+                  manual();
+                  setSelected(null);
+                  setMapRun(run);
+                  player.reset();
+                  onSelect?.(view.trial);
+                }}
+              >
+                <i aria-hidden="true" />
+                {view.label}
+              </button>
+            ))}
+            {views.length > 1 && (
+              <button
+                type="button"
+                className="proof-map-tour"
+                aria-pressed={tour}
+                onClick={() => {
+                  if (tour) manual();
+                  else {
+                    setTour(true);
+                    setSelected(null);
+                    player.reset(true);
+                  }
+                }}
+              >
+                {tour ? 'Tour policies · on' : 'Tour policies · off'}
+              </button>
+            )}
           </div>
-        ))}
-      </div>
+          <AgentMap trial={mapView.trial} head={head} label={mapView.label} />
+        </div>
+      ) : (
+        <div className="proof-lanes">
+          {views.map(({ trial, label, description }, run) => (
+            <div className="proof-lane" key={`${trial.policyId}-${run}`}>
+              <div className="proof-lane-label">
+                <span>0{run + 1}</span>
+                <h3>{label}</h3>
+                <p>{description}</p>
+              </div>
+              <ol
+                className="proof-events"
+                style={{ '--proof-slots': slots } as CSSProperties}
+                aria-label={`${label} accepted tool actions`}
+              >
+                {trial.events.map((event, index) => {
+                  const shown = head >= index + 1;
+                  const isCommitted = committed(event);
+                  return (
+                    <li
+                      key={index}
+                      data-shown={shown}
+                      data-error={!event.observation.ok}
+                      data-commit={isCommitted}
+                      data-row-end={(index + 1) % slots === 0 || index === trial.events.length - 1}
+                    >
+                      <button
+                        type="button"
+                        disabled={!shown}
+                        aria-label={`Inspect ${label}, step ${index + 1}: ${toolLabels[event.action.tool]}, ${event.observation.code}`}
+                        aria-pressed={selected?.run === run && selected?.event === index}
+                        onClick={() => inspect(run, index)}
+                      >
+                        <span className="proof-event-face">
+                          {!event.observation.ok ? (
+                            <AlertTriangle size={16} />
+                          ) : isCommitted ? (
+                            <Check size={17} />
+                          ) : (
+                            <span>{index + 1}</span>
+                          )}
+                        </span>
+                        <span className="proof-event-label">{toolLabels[event.action.tool]}</span>
+                        {!event.observation.ok && (
+                          <span className="proof-event-code">
+                            {isCommitted
+                              ? 'Committed · reply lost'
+                              : event.observation.code.toLowerCase().replaceAll('_', ' ')}
+                          </span>
+                        )}
+                      </button>
+                    </li>
+                  );
+                })}
+              </ol>
+              <div className="proof-lane-outcome" data-shown={head >= trial.events.length}>
+                <Outcome trial={trial} />
+                <p>
+                  {trial.grade.outcome === 'failed' ? trial.grade.reasons[0] : trial.grade.summary}
+                </p>
+                {trial.claimedStatus !== null && (
+                  <small className="proof-reported">Reported: {trial.claimedStatus}</small>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
       <div className="proof-transport">
         <button
           type="button"
           className="proof-play"
           onClick={() => {
-            if (head >= lastStep) setHead(0);
-            setPlaying((value) => !value);
+            setSelected(null);
+            if (playing) manual();
+            else player.play();
           }}
           aria-label={playing ? 'Pause trace playback' : 'Play trace playback'}
         >
@@ -303,39 +351,80 @@ function TracePlayer({
         <button
           type="button"
           onClick={() => {
-            setHead(0);
-            setPlaying(true);
+            manual();
+            setSelected(null);
+            player.reset();
           }}
-          aria-label="Replay trace from the beginning"
+          aria-label="Reset trace to beginning"
         >
           <RotateCcw size={16} />
         </button>
         <button
           type="button"
           onClick={() => {
-            setPlaying(false);
-            setHead(Math.min(lastStep, Math.floor(head) + 1));
+            manual();
+            setSelected(null);
+            player.seek(Math.min(eventCount, Math.floor(head) + 1));
           }}
           aria-label="Advance one trace step"
         >
           <SkipForward size={16} />
         </button>
+        <select
+          aria-label="Trace playback speed"
+          value={player.speed}
+          onChange={(event) => {
+            manual();
+            player.setSpeed(Number(event.target.value));
+          }}
+        >
+          {[0.5, 1, 1.5, 2].map((speed) => (
+            <option key={speed} value={speed}>
+              {speed}×
+            </option>
+          ))}
+        </select>
+        <button
+          type="button"
+          className="proof-loop"
+          aria-pressed={player.loop}
+          onClick={() => {
+            manual();
+            player.setLoop(!player.loop);
+          }}
+        >
+          Loop {player.loop ? 'on' : 'off'}
+        </button>
         <input
           type="range"
           min="0"
-          max={lastStep}
+          max={eventCount}
           step="0.01"
-          value={head}
+          value={Math.min(head, eventCount)}
           aria-label="Trace step"
-          aria-valuetext={`Step ${Math.floor(head)} of ${lastStep}`}
+          aria-valuetext={`Step ${Math.min(eventCount, Math.ceil(head))} of ${eventCount}`}
           onChange={(event) => {
-            setPlaying(false);
-            setHead(Number(event.target.value));
+            manual();
+            setSelected(null);
+            player.seek(Number(event.target.value));
           }}
         />
         <output>
-          STEP {Math.floor(head)} / {lastStep}
+          STEP {Math.min(eventCount, Math.ceil(head))} / {eventCount}
         </output>
+        {display === 'map' && mapView.trial.events.length > 0 && (
+          <button
+            type="button"
+            onClick={() =>
+              inspect(
+                mapRun,
+                Math.min(mapView.trial.events.length - 1, Math.max(0, Math.ceil(head) - 1)),
+              )
+            }
+          >
+            Inspect event
+          </button>
+        )}
         {firstError && (
           <button
             type="button"
@@ -407,87 +496,6 @@ function TracePlayer({
     </section>
   );
 }
-async function boundedText(response: Response) {
-  const limit = PROOF_IMPORT_LIMIT * 8;
-  if (!response.body) {
-    const text = await response.text();
-    if (text.length > limit) throw new Error('Recording exceeds the size limit.');
-    return text;
-  }
-  const reader = response.body.getReader(),
-    chunks: Uint8Array[] = [];
-  let size = 0;
-  while (true) {
-    const item = await reader.read();
-    if (item.done) break;
-    size += item.value.length;
-    if (size > limit) {
-      await reader.cancel();
-      throw new Error('Recording exceeds the size limit.');
-    }
-    chunks.push(item.value);
-  }
-  const bytes = new Uint8Array(size);
-  let offset = 0;
-  for (const chunk of chunks) {
-    bytes.set(chunk, offset);
-    offset += chunk.length;
-  }
-  return new TextDecoder().decode(bytes);
-}
-function readRecorded(text: string): RecordedLoad {
-  const parsed: unknown = JSON.parse(text);
-  const items = Array.isArray(parsed)
-    ? parsed
-    : parsed && typeof parsed === 'object' && 'trials' in parsed
-      ? (parsed as { trials: unknown }).trials
-      : null;
-  if (!Array.isArray(items) || items.length < 1 || items.length > 24)
-    throw new Error('Recording must contain 1–24 exported trials.');
-  const trials: ProofTrial[] = [],
-    rejected: string[] = [];
-  items.forEach((value, index) => {
-    try {
-      trials.push(importProof(typeof value === 'string' ? value : json(value)));
-    } catch (error) {
-      rejected.push(
-        `Trial ${index + 1}: ${error instanceof Error ? error.message : 'Invalid trace.'}`,
-      );
-    }
-  });
-  let recording: RecordingMetadata | undefined;
-  const metadata =
-    parsed && typeof parsed === 'object' && 'recording' in parsed
-      ? (parsed as { recording: unknown }).recording
-      : null;
-  if (
-    metadata &&
-    typeof metadata === 'object' &&
-    'acceptedActions' in metadata &&
-    'rejectedSubmissions' in metadata
-  ) {
-    const values = metadata as {
-      acceptedActions: unknown;
-      rejectedSubmissions: unknown;
-      notes?: unknown;
-    };
-    if (
-      Number.isSafeInteger(values.acceptedActions) &&
-      Number(values.acceptedActions) >= 0 &&
-      Number(values.acceptedActions) <= 384 &&
-      Number.isSafeInteger(values.rejectedSubmissions) &&
-      Number(values.rejectedSubmissions) >= 0 &&
-      Number(values.rejectedSubmissions) <= 10000
-    ) {
-      recording = {
-        acceptedActions: Number(values.acceptedActions),
-        rejectedSubmissions: Number(values.rejectedSubmissions),
-        notes: typeof values.notes === 'string' ? values.notes.slice(0, 1000) : '',
-      };
-    }
-  }
-  return { state: 'ready', trials, rejected, total: items.length, message: '', recording };
-}
 function SuiteResults({ trials }: { trials: ProofTrial[] }) {
   const totals = summarize(trials);
   return (
@@ -551,6 +559,8 @@ function SuiteResults({ trials }: { trials: ProofTrial[] }) {
 }
 export default function Proof() {
   const [mode, setMode] = useState<'reference' | 'recorded'>('reference');
+  const [pauseRevision, setPauseRevision] = useState(0);
+  const stopReplay = () => setPauseRevision((value) => value + 1);
   const [scenario, setScenario] = useState<ProofScenarioId>('ack_lost');
   const [seed, setSeed] = useState<number>(PROOF_SEEDS[0]);
   const [trials, setTrials] = useState(() => comparison('ack_lost', PROOF_SEEDS[0]));
@@ -620,6 +630,7 @@ export default function Proof() {
     else if (event.key === 'End') next = 1;
     else return;
     event.preventDefault();
+    stopReplay();
     setMode(next === 0 ? 'reference' : 'recorded');
     tabRefs.current[next]?.focus();
   };
@@ -669,7 +680,10 @@ export default function Proof() {
               ref={(node) => {
                 tabRefs.current[index] = node;
               }}
-              onClick={() => setMode(value)}
+              onClick={() => {
+                stopReplay();
+                setMode(value);
+              }}
               onKeyDown={(event) => keyboardTab(event, index)}
             >
               {value === 'reference' ? 'Reference policies' : 'Recorded agent'}
@@ -699,7 +713,10 @@ export default function Proof() {
               Condition
               <select
                 value={scenario}
-                onChange={(event) => setScenario(event.target.value as ProofScenarioId)}
+                onChange={(event) => {
+                  stopReplay();
+                  setScenario(event.target.value as ProofScenarioId);
+                }}
               >
                 {PROOF_SCENARIOS.map((item) => (
                   <option key={item.id} value={item.id}>
@@ -710,7 +727,13 @@ export default function Proof() {
             </label>
             <label>
               Fixture seed
-              <select value={seed} onChange={(event) => setSeed(Number(event.target.value))}>
+              <select
+                value={seed}
+                onChange={(event) => {
+                  stopReplay();
+                  setSeed(Number(event.target.value));
+                }}
+              >
                 {PROOF_SEEDS.map((value) => (
                   <option key={value} value={value}>
                     {value}
@@ -725,7 +748,10 @@ export default function Proof() {
             <button
               type="button"
               className="proof-suite-run"
-              onClick={() => setSuite(runProofSuite())}
+              onClick={() => {
+                stopReplay();
+                setSuite(runProofSuite());
+              }}
             >
               Run all 24 cases <ArrowUpRight size={14} />
             </button>
@@ -742,8 +768,9 @@ export default function Proof() {
           <TracePlayer
             views={trials.map(policyView)}
             runKey={`reference-${runVersion}`}
-            autoplay={runVersion > 0}
+            autoplay
             active={mode === 'reference'}
+            pauseKey={pauseRevision}
             onSelect={setReferenceExport}
           />
           <p className="proof-stage-note">
@@ -810,7 +837,10 @@ export default function Proof() {
                     type="button"
                     key={`${trial.scenarioId}-${trial.seed}-${index}`}
                     aria-pressed={selectedRecording === String(index)}
-                    onClick={() => setSelectedRecording(String(index))}
+                    onClick={() => {
+                      stopReplay();
+                      setSelectedRecording(String(index));
+                    }}
                   >
                     <span>
                       {scenarioLabel(trial.scenarioId)}
@@ -851,7 +881,10 @@ export default function Proof() {
               type="button"
               className="proof-imported-select"
               aria-pressed={selectedRecording === 'imported'}
-              onClick={() => setSelectedRecording('imported')}
+              onClick={() => {
+                stopReplay();
+                setSelectedRecording('imported');
+              }}
             >
               Imported trace · {scenarioLabel(imported.scenarioId)} · seed {imported.seed}
               <Outcome trial={imported} />
@@ -893,6 +926,7 @@ export default function Proof() {
                 views={[policyView(currentRecording)]}
                 runKey={`recorded-${selectedRecording}-${reload}-${importRevision}`}
                 active={mode === 'recorded'}
+                pauseKey={pauseRevision}
               />
             </>
           )}

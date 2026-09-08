@@ -1,7 +1,15 @@
+import {
+  KAI_STROKES,
+  KAI_WIDTH,
+  KAI_HEIGHT,
+  type IdentityPoint,
+  type IdentityStroke,
+} from './kai-identity';
+
 export const FILM_DURATION = 11;
 export const FILM_CHAPTERS = [
   { time: 0, name: 'Letters' },
-  { time: 2.4, name: 'Tension' },
+  { time: 2.4, name: 'Register' },
   { time: 5.2, name: 'Structure' },
   { time: 8.8, name: 'Enter work' },
 ] as const;
@@ -45,61 +53,16 @@ export const filmChapter = (time: number) =>
     FILM_CHAPTERS.findLastIndex((chapter) => time >= chapter.time),
   );
 export const filmEntryProgress = (time: number) => filmEase((time - 7.75) / 1.1);
-type Point = readonly [number, number];
-type Quad = readonly [Point, Point, Point, Point];
-// These seven letter strokes remain the same seven shapes through the entire film.
-const STROKES: readonly Quad[] = [
-  [
-    [0, 0],
-    [47, 0],
-    [47, 240],
-    [0, 240],
-  ],
-  [
-    [38, 120],
-    [125, 0],
-    [185, 0],
-    [98, 125],
-  ],
-  [
-    [39, 117],
-    [94, 105],
-    [196, 240],
-    [136, 240],
-  ],
-  [
-    [224, 240],
-    [299, 0],
-    [345, 0],
-    [279, 240],
-  ],
-  [
-    [304, 0],
-    [350, 0],
-    [429, 240],
-    [373, 240],
-  ],
-  [
-    [269, 151],
-    [378, 151],
-    [391, 193],
-    [256, 193],
-  ],
-  [
-    [465, 0],
-    [513, 0],
-    [513, 240],
-    [465, 240],
-  ],
-];
+type Point = IdentityPoint;
+type Quad = IdentityStroke;
 const PULL: readonly Point[] = [
-  [-13, 0],
-  [29, -21],
-  [35, 20],
-  [-15, 12],
-  [18, 12],
-  [0, 17],
-  [30, -8],
+  [-20, 0],
+  [14, -16],
+  [20, 16],
+  [-15, 9],
+  [15, 9],
+  [0, 22],
+  [28, 0],
 ];
 const rect = (x: number, y: number, width: number, height: number): Quad => [
   [x, y],
@@ -124,21 +87,10 @@ function finalBoundaries(width: number, height: number): Quad[] {
     rect(x + w - rule, y, rule, h),
   ];
 }
-function outline(context: CanvasRenderingContext2D, points: readonly Point[], bend = 0) {
+function outline(context: CanvasRenderingContext2D, points: readonly Point[]) {
   context.beginPath();
   context.moveTo(points[0][0], points[0][1]);
-  for (let i = 0; i < 4; i++) {
-    const a = points[i],
-      b = points[(i + 1) % 4];
-    const length = Math.max(1, Math.hypot(b[0] - a[0], b[1] - a[1]));
-    const bow = bend * (i % 2 ? -0.28 : 1);
-    context.quadraticCurveTo(
-      (a[0] + b[0]) / 2 - ((b[1] - a[1]) / length) * bow,
-      (a[1] + b[1]) / 2 + ((b[0] - a[0]) / length) * bow,
-      b[0],
-      b[1],
-    );
-  }
+  for (let i = 1; i < points.length; i++) context.lineTo(points[i][0], points[i][1]);
   context.closePath();
 }
 // Absolute-time geometry makes backward scrubbing and interrupted chapter changes deterministic.
@@ -155,49 +107,45 @@ export function drawFilm(
     companion = FILM_PALETTES[palette].companion;
   context.fillStyle = INK;
   context.fillRect(0, 0, width, height);
-  const sx = Math.min((width * 0.8) / 513, ((height * 0.7) / 240) * 1.05);
-  const sy = Math.min((height * 0.7) / 240, sx * 1.7);
-  const x = (width - 513 * sx) / 2,
-    y = (height - 240 * sy) / 2;
-  const tension = filmEase((time - 1.1) / 1.5) * (1 - filmEase((time - 4.7) / 3.2));
-  const settle = filmEase((time - 4.55) / 3.6);
+  // Uniform scale keeps the same readable letter geometry from the header to every screen.
+  const scale = Math.min((width * 0.79) / KAI_WIDTH, (height * 0.6) / KAI_HEIGHT);
+  const x = (width - KAI_WIDTH * scale) / 2,
+    y = (height - KAI_HEIGHT * scale) / 2;
+  const registration = filmEase((time - 2.4) / 1.05);
+  const settle = filmEase((time - 4.65) / 3.5);
   const targets = finalBoundaries(width, height);
-  const colors = [PAPER, accent, accent, companion, PAPER, accent, PAPER];
-  const shapes = STROKES.map((stroke, index) => {
-    const progress = filmEase((time - 4.55 - index * 0.055) / (3.6 - index * 0.055));
+  const colors = [accent, accent, accent, PAPER, PAPER, PAPER, companion];
+  const shapes = KAI_STROKES.map((stroke, index) => {
+    const start = 4.65 + index * 0.095;
+    const progress = filmEase((time - start) / (8.15 - start));
+    // A small inward preparation precedes the outward registration of each cut.
+    const anticipation = Math.sin(Math.PI * clamp((time - 1.75 - index * 0.035) / 0.7)) * -0.15;
+    const offset = (registration + anticipation) * (1 - progress);
     return stroke.map(([px, py], corner): Point => {
       const pull = PULL[index];
-      const hinge = index === 1 || index === 2 ? Math.abs(py - 120) / 120 : 0.75;
-      const a = x + (px + pull[0] * tension * (0.4 + hinge)) * sx;
-      const b = y + (py + pull[1] * tension * (0.4 + hinge)) * sy;
+      const a = x + (px + pull[0] * offset) * scale;
+      const b = y + (py + pull[1] * offset) * scale;
       return [
         a + (targets[index][corner][0] - a) * progress,
         b + (targets[index][corner][1] - b) * progress,
       ];
     });
   });
-  // Broad color echoes make the first frame complete; fine echoes open under tension.
-  for (let layer = 4; layer >= 1; layer--) {
-    shapes.forEach((points, index) => {
-      const direction = index < 3 ? -1 : 1;
-      const distance = (3.1 + tension * 6.5) * layer * (1 - settle);
-      const shifted = points.map(([px, py]): Point => [
-        px + distance * direction,
-        py - distance * 0.44,
-      ]);
-      outline(context, shifted, tension * sy * 10 * (1 - settle));
-      context.globalAlpha = (0.12 + layer * 0.035) * (1 - settle);
-      context.fillStyle = layer % 2 ? companion : accent;
-      if (layer === 2 || layer === 4) context.fill();
-      context.globalAlpha = (0.23 + layer * 0.055) * (1 - settle);
-      context.strokeStyle = layer % 2 ? PAPER : companion;
-      context.lineWidth = 0.9;
-      context.stroke();
-    });
+  // Quiet printing guides establish a baseline; there are no dimensional echoes or shadows.
+  const guides = filmEase((time - 0.55) / 0.8) * (1 - settle);
+  context.globalAlpha = guides * 0.32;
+  context.strokeStyle = companion;
+  context.lineWidth = 1;
+  const reach = ((KAI_WIDTH * scale + 42) * filmEase((time - 0.55) / 1.2)) / 2;
+  for (const baseline of [y - 19, y + KAI_HEIGHT * scale + 19]) {
+    context.beginPath();
+    context.moveTo(width / 2 - reach, baseline);
+    context.lineTo(width / 2 + reach, baseline);
+    context.stroke();
   }
   context.globalAlpha = 1;
   shapes.forEach((points, index) => {
-    outline(context, points, tension * sy * 9 * (1 - settle));
+    outline(context, points);
     context.fillStyle = colors[index];
     context.fill();
   });
@@ -232,8 +180,8 @@ export function filmState(time: number, palette: FilmPalette, speed: number) {
     chapters: FILM_CHAPTERS,
     rendering: 'Canvas 2D',
     background: INK,
-    conservedStrokes: STROKES.length,
-    transformation: 'KAI strokes → tension and echoes → interface boundaries → real project links',
+    conservedStrokes: KAI_STROKES.length,
+    transformation: 'Flat KAI strokes → registration → interface boundaries → real project links',
     projects: FILM_PROJECTS.map(({ id, name }) => ({ name, route: `#/${id}` })),
     artwork: 'Original geometric KAI letterforms; no fabricated product preview',
   };
