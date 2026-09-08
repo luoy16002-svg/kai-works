@@ -1,14 +1,15 @@
 # Kai / Selected work
 
-Three working, independent portfolio projects. React, TypeScript, Web Workers and Three.js. No client commissions, users or revenue are implied.
+Four working, independent portfolio projects. React, TypeScript, WebGL 2, Web Workers and Three.js. No client commissions, users or revenue are implied.
 
 [Open the portfolio](https://luoy16002-svg.github.io/kai-works/) · [Verify the build](https://github.com/luoy16002-svg/kai-works/actions)
 
-| Project | Try it                                                 | Engineering focus                                                                               |
-| ------- | ------------------------------------------------------ | ----------------------------------------------------------------------------------------------- |
-| HALO    | Change the pendant, share its URL, export PNG and JSON | Procedural geometry, real material updates, bounded serializable state, responsive WebGL        |
-| Current | Import CSV or generate 100,000 rows; filter and export | Streaming CSV parser, independent worker, exact integer sums, virtual table, cancellation       |
-| Relay   | Run 1,000 jobs, crash the worker, reload and restart   | Atomic claims, expiring leases, stale-token rejection, idempotency, transactional local effects |
+| Project | Try it                                                                      | Engineering focus                                                                                               |
+| ------- | --------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| Field   | Paint into a reaction–diffusion simulation; compare GPU and CPU; export PNG | Floating-point ping-pong render targets, periodic finite differences, deterministic seeding, numerical readback |
+| HALO    | Change the pendant, share its URL, export PNG and JSON                      | Procedural geometry, real material updates, bounded serializable state, responsive WebGL                        |
+| Current | Import CSV or generate 100,000 rows; filter and export                      | Streaming CSV parser, independent worker, exact integer sums, virtual table, cancellation                       |
+| Relay   | Run 1,000 jobs, crash the worker, reload and restart                        | Atomic claims, expiring leases, stale-token rejection, idempotency, transactional local effects                 |
 
 ```sh
 npm ci
@@ -21,7 +22,9 @@ Open `http://127.0.0.1:5173/kai-works/`. `npm run build` produces a static `dist
 
 ## Evidence
 
-- 19 tests, including 500 randomized CSV round trips and 900 configuration combinations.
+- 23 tests, including 500 randomized CSV round trips, 900 configuration combinations, and reaction–diffusion equilibrium / boundary / stability checks.
+- Field's live GPU check runs 20 steps on a 64 × 64 grid and compares 8,192 concentrations against a CPU implementation. It reports the actual maximum absolute error, with a 0.0005 threshold; the result can be downloaded. This check runs on the visitor's real graphics context, not in the Node harness.
+- Recorded browser checks: [Coral](verification/field-gpu-validation.json), [Maze](verification/field-gpu-maze.json), [Cells](verification/field-gpu-cells.json). Each record includes its parameters, observed error, browser and timestamp.
 - 100,000 records checked against an independent BigInt reference, with filtered totals and sort order verified.
 - Seven competing IndexedDB connections claim jobs concurrently. Tests inject an effect write failure to verify complete transaction rollback.
 - A 500-job deterministic chaos run abandons 37 leases, reopens storage, retries failures and validates every final effect. The Node harness uses `fake-indexeddb`; it is a logical transaction test, not a disk or backend benchmark.
@@ -31,6 +34,8 @@ Open `http://127.0.0.1:5173/kai-works/`. `npm run build` produces a static `dist
 `public/evidence.json` records one local benchmark. CI regenerates the deployed artifact with its own environment and timestamp. Timings are observations of that run, not SLAs. Current measures browser import and query latency separately.
 
 ## Boundaries
+
+Field is a dimensionless Gray–Scott visual simulation with unit time step, diffusion coefficients 1 and 0.5, a nine-point Laplacian and periodic boundaries. It is not a calibrated chemical model. The model is described by [MIT's Gray–Scott project](https://groups.csail.mit.edu/mac/projects/amorphous/GrayScott/). The home preview is live, not a video. Animation pauses when hidden or scrolled off screen, and starts paused for reduced-motion preferences. WebGL 2 and floating-point render targets are required. The field uses bilinear display sampling without requiring floating-point linear-filtering extensions. Actual device performance and long-run patterns vary.
 
 Current accepts UTF-8 order CSVs with header `id,date,region,channel,amount` in that order. Amounts must have exactly two decimal places; duplicate IDs, malformed CSV and invalid dates stop the import. Limit: 25 MB / 500,000 rows. Data stays in memory, is never transmitted by the app, and disappears when leaving the project. Text that could become a spreadsheet formula is prefixed on export; this intentionally changes such text for spreadsheet safety.
 

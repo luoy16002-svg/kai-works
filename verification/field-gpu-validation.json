@@ -1,0 +1,14 @@
+{
+  "pass": true,
+  "maxError": 2.980232238769531e-7,
+  "values": 8192,
+  "size": 64,
+  "steps": 20,
+  "parameters": {
+    "feed": 0.0545,
+    "kill": 0.062
+  },
+  "timestamp": "2026-09-08T04:26:06.738Z",
+  "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36 Edg/152.0.0.0",
+  "tolerance": 0.0005
+}
