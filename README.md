@@ -1,15 +1,16 @@
 # Kai / Selected work
 
-Four working, independent portfolio projects. React, TypeScript, WebGL 2, Web Workers and Three.js. No client commissions, users or revenue are implied.
+Five working, independent portfolio projects. React, TypeScript, WebGL 2, Web Workers and Three.js. No client commissions, users or revenue are implied.
 
 [Open the portfolio](https://luoy16002-svg.github.io/kai-works/) · [Verify the build](https://github.com/luoy16002-svg/kai-works/actions)
 
-| Project | Try it                                                                      | Engineering focus                                                                                               |
-| ------- | --------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
-| Field   | Paint into a reaction–diffusion simulation; compare GPU and CPU; export PNG | Floating-point ping-pong render targets, periodic finite differences, deterministic seeding, numerical readback |
-| HALO    | Change the pendant, share its URL, export PNG and JSON                      | Procedural geometry, real material updates, bounded serializable state, responsive WebGL                        |
-| Current | Import CSV or generate 100,000 rows; filter and export                      | Streaming CSV parser, independent worker, exact integer sums, virtual table, cancellation                       |
-| Relay   | Run 1,000 jobs, crash the worker, reload and restart                        | Atomic claims, expiring leases, stale-token rejection, idempotency, transactional local effects                 |
+| Project | Try it                                                                        | Engineering focus                                                                                               |
+| ------- | ----------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| Motion  | Play a 24-second 3D film; seek, change materials, export a frame and timeline | Instanced geometry, deterministic choreography, camera sequencing, visibility-aware rendering                   |
+| Field   | Paint into a reaction–diffusion simulation; compare GPU and CPU; export PNG   | Floating-point ping-pong render targets, periodic finite differences, deterministic seeding, numerical readback |
+| HALO    | Change the pendant, share its URL, export PNG and JSON                        | Procedural geometry, real material updates, bounded serializable state, responsive WebGL                        |
+| Current | Import CSV or generate 100,000 rows; filter and export                        | Streaming CSV parser, independent worker, exact integer sums, virtual table, cancellation                       |
+| Relay   | Run 1,000 jobs, crash the worker, reload and restart                          | Atomic claims, expiring leases, stale-token rejection, idempotency, transactional local effects                 |
 
 ```sh
 npm ci
@@ -18,7 +19,7 @@ npm run benchmark
 npm run dev
 ```
 
-Open `http://127.0.0.1:5173/kai-works/`. `npm run build` produces a static `dist/`. Hash routes support direct links on GitHub Pages. Three.js loads only when opening HALO. Node 24 is used in CI.
+Open `http://127.0.0.1:5173/kai-works/`. `npm run build` produces a static `dist/`. Hash routes support direct links on GitHub Pages. The motion player and HALO load through separate lazy imports and share Three.js. Node 24 is used in CI.
 
 ## Evidence
 
@@ -35,7 +36,9 @@ Open `http://127.0.0.1:5173/kai-works/`. `npm run build` produces a static `dist
 
 ## Boundaries
 
-Field is a dimensionless Gray–Scott visual simulation with unit time step, diffusion coefficients 1 and 0.5, a nine-point Laplacian and periodic boundaries. It is not a calibrated chemical model. The model is described by [MIT's Gray–Scott project](https://groups.csail.mit.edu/mac/projects/amorphous/GrayScott/). The home preview is live, not a video. Animation pauses when hidden or scrolled off screen, and starts paused for reduced-motion preferences. WebGL 2 and floating-point render targets are required. The field uses bilinear display sampling without requiring floating-point linear-filtering extensions. Actual device performance and long-run patterns vary.
+Motion is an original, silent, browser-rendered study with four compositions and 84 instanced ribs. Playback runs once, suspends when hidden, and begins on a finished still for reduced-motion preferences. Render counters describe the current device; they are not a frame-rate guarantee. PNG exports contain the rendered canvas, and timeline JSON records the current choreography and material.
+
+Field is a dimensionless Gray–Scott visual simulation with unit time step, diffusion coefficients 1 and 0.5, a nine-point Laplacian and periodic boundaries. It is not a calibrated chemical model. The model is described by [MIT's Gray–Scott project](https://groups.csail.mit.edu/mac/projects/amorphous/GrayScott/). Animation pauses when hidden or scrolled off screen, and starts paused for reduced-motion preferences. WebGL 2 and floating-point render targets are required. The field uses bilinear display sampling without requiring floating-point linear-filtering extensions. Actual device performance and long-run patterns vary.
 
 Current accepts UTF-8 order CSVs with header `id,date,region,channel,amount` in that order. Amounts must have exactly two decimal places; duplicate IDs, malformed CSV and invalid dates stop the import. Limit: 25 MB / 500,000 rows. Data stays in memory, is never transmitted by the app, and disappears when leaving the project. Text that could become a spreadsheet formula is prefixed on export; this intentionally changes such text for spreadsheet safety.
 

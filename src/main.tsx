@@ -15,6 +15,7 @@ const Relay = lazy(() => import('./pages/Relay'));
 const Evidence = lazy(() => import('./pages/Evidence'));
 const Home = lazy(() => import('./pages/Home'));
 const Field = lazy(() => import('./pages/Field'));
+const Motion = lazy(() => import('./pages/Motion'));
 class WorkspaceBoundary extends React.Component<
   { children: React.ReactNode },
   { failed: boolean }
@@ -50,7 +51,8 @@ function App() {
     document.title =
       (
         {
-          '#/': 'Kai — Selected work',
+          '#/': 'Kai — Work screening room',
+          '#/motion': 'Motion — A real-time 3D film',
           '#/halo': 'HALO — Product configurator',
           '#/field': 'FIELD — Reaction diffusion studio',
           '#/current': 'Current — Local data workbench',
@@ -79,7 +81,9 @@ function App() {
           </div>
         }
       >
-        {route === '#/field' ? (
+        {route === '#/motion' ? (
+          <Motion />
+        ) : route === '#/field' ? (
           <Field />
         ) : route === '#/halo' ? (
           <Halo />
