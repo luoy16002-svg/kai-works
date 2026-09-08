@@ -1,0 +1,1818 @@
+{
+  "version": 1,
+  "kind": "recorded-agent-examples",
+  "environment": "proof-order-v1",
+  "fixtureVersion": 1,
+  "adapter": "Codex tool session",
+  "model": null,
+  "recordedAt": "2026-09-08T12:07:54.5377736Z",
+  "generatedAt": "2026-09-08T12:12:50.8554525Z",
+  "taskInstruction": "Fulfil this order using the public tools. Reserve the exact total quantity of compatible items within the maximum unit price. If no valid stock can fulfil the remaining order, explicitly hand it off with a reason.",
+  "recording": {
+    "acceptedActions": 11.0,
+    "rejectedSubmissions": 5,
+    "notes": "Five CLI submissions used unsupported arguments/args wrappers and were rejected before execution. They were corrected without restarting any trial. The CLI now includes an explicit flat-action example; these recordings precede that clarification.",
+    "rejectedSubmissionError": "Unknown action or trace field.",
+    "modelUsage": null,
+    "modelCost": null,
+    "allAttemptedTrialsRetained": true,
+    "scope": "One fresh acting agent, four synthetic sessions with seed 701, one attempt per condition. Public task observations only; no reference-code inspection. A recorded demonstration, not a held-out capability evaluation or an independently attested model ranking."
+  },
+  "trialRecords": [
+    {
+      "session": "trial-01",
+      "acceptedActions": 2,
+      "rejectedSubmissions": 2,
+      "rejectedActions": [
+        {
+          "tool": "catalog",
+          "arguments": {}
+        },
+        {
+          "tool": "catalog",
+          "args": {}
+        }
+      ]
+    },
+    {
+      "session": "trial-02",
+      "acceptedActions": 3,
+      "rejectedSubmissions": 1,
+      "rejectedActions": [
+        {
+          "tool": "catalog",
+          "arguments": {}
+        }
+      ]
+    },
+    {
+      "session": "trial-03",
+      "acceptedActions": 4,
+      "rejectedSubmissions": 1,
+      "rejectedActions": [
+        {
+          "tool": "catalog",
+          "arguments": {}
+        }
+      ]
+    },
+    {
+      "session": "trial-04",
+      "acceptedActions": 2,
+      "rejectedSubmissions": 1,
+      "rejectedActions": [
+        {
+          "tool": "catalog",
+          "arguments": {}
+        }
+      ]
+    }
+  ],
+  "trials": [
+    {
+      "version": 1,
+      "environment": "proof-order-v1",
+      "fixtureVersion": 1,
+      "scenarioId": "clean",
+      "seed": 701,
+      "policyId": "recorded_agent",
+      "provenance": {
+        "kind": "recorded-agent",
+        "adapter": "Codex tool session",
+        "model": null,
+        "tokens": null,
+        "cost": null
+      },
+      "task": {
+        "instruction": "Fulfil this order using the public tools. Reserve the exact total quantity of compatible items within the maximum unit price. If no valid stock can fulfil the remaining order, explicitly hand it off with a reason.",
+        "order": {
+          "id": "order-701",
+          "quantity": 4,
+          "maxUnitPriceCents": 2500,
+          "allowedSkus": ["KIT-A", "KIT-B", "KIT-P"]
+        },
+        "successCriteria": [
+          "Exact total quantity, with no duplicate allocation.",
+          "Every reserved SKU is allowed and every unit price is within the limit.",
+          "A handoff is justified only when valid available stock cannot fulfil the remaining quantity."
+        ],
+        "actionLimit": 16
+      },
+      "actions": [
+        {
+          "tool": "catalog"
+        },
+        {
+          "tool": "reserve",
+          "sku": "KIT-A",
+          "quantity": 4,
+          "idempotencyKey": "trial-01-order-701-a-1"
+        }
+      ],
+      "events": [
+        {
+          "index": 1,
+          "action": {
+            "tool": "catalog"
+          },
+          "observation": {
+            "ok": true,
+            "code": "CATALOG",
+            "message": "Current inventory snapshot. Stock may change before a reservation.",
+            "data": {
+              "items": [
+                {
+                  "sku": "KIT-A",
+                  "label": "Standard studio kit",
+                  "stock": 14,
+                  "unitPriceCents": 2200
+                },
+                {
+                  "sku": "KIT-B",
+                  "label": "Compatible studio kit",
+                  "stock": 6,
+                  "unitPriceCents": 2400
+                },
+                {
+                  "sku": "KIT-P",
+                  "label": "Premium studio kit",
+                  "stock": 7,
+                  "unitPriceCents": 3000
+                },
+                {
+                  "sku": "SPARE-X",
+                  "label": "Incompatible spare pack",
+                  "stock": 20,
+                  "unitPriceCents": 500
+                }
+              ]
+            }
+          },
+          "before": {
+            "order": {
+              "id": "order-701",
+              "quantity": 4,
+              "maxUnitPriceCents": 2500,
+              "allowedSkus": ["KIT-A", "KIT-B", "KIT-P"]
+            },
+            "inventory": [
+              {
+                "sku": "KIT-A",
+                "label": "Standard studio kit",
+                "stock": 14,
+                "unitPriceCents": 2200
+              },
+              {
+                "sku": "KIT-B",
+                "label": "Compatible studio kit",
+                "stock": 6,
+                "unitPriceCents": 2400
+              },
+              {
+                "sku": "KIT-P",
+                "label": "Premium studio kit",
+                "stock": 7,
+                "unitPriceCents": 3000
+              },
+              {
+                "sku": "SPARE-X",
+                "label": "Incompatible spare pack",
+                "stock": 20,
+                "unitPriceCents": 500
+              }
+            ],
+            "receipts": [],
+            "handoff": null
+          },
+          "after": {
+            "order": {
+              "id": "order-701",
+              "quantity": 4,
+              "maxUnitPriceCents": 2500,
+              "allowedSkus": ["KIT-A", "KIT-B", "KIT-P"]
+            },
+            "inventory": [
+              {
+                "sku": "KIT-A",
+                "label": "Standard studio kit",
+                "stock": 14,
+                "unitPriceCents": 2200
+              },
+              {
+                "sku": "KIT-B",
+                "label": "Compatible studio kit",
+                "stock": 6,
+                "unitPriceCents": 2400
+              },
+              {
+                "sku": "KIT-P",
+                "label": "Premium studio kit",
+                "stock": 7,
+                "unitPriceCents": 3000
+              },
+              {
+                "sku": "SPARE-X",
+                "label": "Incompatible spare pack",
+                "stock": 20,
+                "unitPriceCents": 500
+              }
+            ],
+            "receipts": [],
+            "handoff": null
+          },
+          "changes": ["No world-state change."]
+        },
+        {
+          "index": 2,
+          "action": {
+            "tool": "reserve",
+            "sku": "KIT-A",
+            "quantity": 4,
+            "idempotencyKey": "trial-01-order-701-a-1"
+          },
+          "observation": {
+            "ok": true,
+            "code": "RESERVED",
+            "message": "Reservation committed.",
+            "data": {
+              "receipt": {
+                "id": "receipt-order-701-1",
+                "orderId": "order-701",
+                "sku": "KIT-A",
+                "quantity": 4,
+                "unitPriceCents": 2200,
+                "idempotencyKey": "trial-01-order-701-a-1"
+              }
+            }
+          },
+          "before": {
+            "order": {
+              "id": "order-701",
+              "quantity": 4,
+              "maxUnitPriceCents": 2500,
+              "allowedSkus": ["KIT-A", "KIT-B", "KIT-P"]
+            },
+            "inventory": [
+              {
+                "sku": "KIT-A",
+                "label": "Standard studio kit",
+                "stock": 14,
+                "unitPriceCents": 2200
+              },
+              {
+                "sku": "KIT-B",
+                "label": "Compatible studio kit",
+                "stock": 6,
+                "unitPriceCents": 2400
+              },
+              {
+                "sku": "KIT-P",
+                "label": "Premium studio kit",
+                "stock": 7,
+                "unitPriceCents": 3000
+              },
+              {
+                "sku": "SPARE-X",
+                "label": "Incompatible spare pack",
+                "stock": 20,
+                "unitPriceCents": 500
+              }
+            ],
+            "receipts": [],
+            "handoff": null
+          },
+          "after": {
+            "order": {
+              "id": "order-701",
+              "quantity": 4,
+              "maxUnitPriceCents": 2500,
+              "allowedSkus": ["KIT-A", "KIT-B", "KIT-P"]
+            },
+            "inventory": [
+              {
+                "sku": "KIT-A",
+                "label": "Standard studio kit",
+                "stock": 10,
+                "unitPriceCents": 2200
+              },
+              {
+                "sku": "KIT-B",
+                "label": "Compatible studio kit",
+                "stock": 6,
+                "unitPriceCents": 2400
+              },
+              {
+                "sku": "KIT-P",
+                "label": "Premium studio kit",
+                "stock": 7,
+                "unitPriceCents": 3000
+              },
+              {
+                "sku": "SPARE-X",
+                "label": "Incompatible spare pack",
+                "stock": 20,
+                "unitPriceCents": 500
+              }
+            ],
+            "receipts": [
+              {
+                "id": "receipt-order-701-1",
+                "orderId": "order-701",
+                "sku": "KIT-A",
+                "quantity": 4,
+                "unitPriceCents": 2200,
+                "idempotencyKey": "trial-01-order-701-a-1"
+              }
+            ],
+            "handoff": null
+          },
+          "changes": [
+            "KIT-A stock: 14 → 10",
+            "Committed receipt-order-701-1: 4 × KIT-A, key trial-01-order-701-a-1"
+          ]
+        }
+      ],
+      "initialWorld": {
+        "order": {
+          "id": "order-701",
+          "quantity": 4,
+          "maxUnitPriceCents": 2500,
+          "allowedSkus": ["KIT-A", "KIT-B", "KIT-P"]
+        },
+        "inventory": [
+          {
+            "sku": "KIT-A",
+            "label": "Standard studio kit",
+            "stock": 14,
+            "unitPriceCents": 2200
+          },
+          {
+            "sku": "KIT-B",
+            "label": "Compatible studio kit",
+            "stock": 6,
+            "unitPriceCents": 2400
+          },
+          {
+            "sku": "KIT-P",
+            "label": "Premium studio kit",
+            "stock": 7,
+            "unitPriceCents": 3000
+          },
+          {
+            "sku": "SPARE-X",
+            "label": "Incompatible spare pack",
+            "stock": 20,
+            "unitPriceCents": 500
+          }
+        ],
+        "receipts": [],
+        "handoff": null
+      },
+      "finalWorld": {
+        "order": {
+          "id": "order-701",
+          "quantity": 4,
+          "maxUnitPriceCents": 2500,
+          "allowedSkus": ["KIT-A", "KIT-B", "KIT-P"]
+        },
+        "inventory": [
+          {
+            "sku": "KIT-A",
+            "label": "Standard studio kit",
+            "stock": 10,
+            "unitPriceCents": 2200
+          },
+          {
+            "sku": "KIT-B",
+            "label": "Compatible studio kit",
+            "stock": 6,
+            "unitPriceCents": 2400
+          },
+          {
+            "sku": "KIT-P",
+            "label": "Premium studio kit",
+            "stock": 7,
+            "unitPriceCents": 3000
+          },
+          {
+            "sku": "SPARE-X",
+            "label": "Incompatible spare pack",
+            "stock": 20,
+            "unitPriceCents": 500
+          }
+        ],
+        "receipts": [
+          {
+            "id": "receipt-order-701-1",
+            "orderId": "order-701",
+            "sku": "KIT-A",
+            "quantity": 4,
+            "unitPriceCents": 2200,
+            "idempotencyKey": "trial-01-order-701-a-1"
+          }
+        ],
+        "handoff": null
+      },
+      "grade": {
+        "outcome": "fulfilled",
+        "autonomousFulfilment": true,
+        "justifiedHandoff": false,
+        "duplicateReservation": false,
+        "constraintViolation": false,
+        "reasons": [
+          "Actual committed quantity and constraints are correct, regardless of acknowledgement or claimed status."
+        ],
+        "summary": "Autonomous fulfilment",
+        "assertions": {
+          "exactQuantity": true,
+          "allowedItems": true,
+          "withinPrice": true,
+          "noDuplicateAllocation": true
+        }
+      },
+      "claimedStatus": null
+    },
+    {
+      "version": 1,
+      "environment": "proof-order-v1",
+      "fixtureVersion": 1,
+      "scenarioId": "ack_lost",
+      "seed": 701,
+      "policyId": "recorded_agent",
+      "provenance": {
+        "kind": "recorded-agent",
+        "adapter": "Codex tool session",
+        "model": null,
+        "tokens": null,
+        "cost": null
+      },
+      "task": {
+        "instruction": "Fulfil this order using the public tools. Reserve the exact total quantity of compatible items within the maximum unit price. If no valid stock can fulfil the remaining order, explicitly hand it off with a reason.",
+        "order": {
+          "id": "order-701",
+          "quantity": 4,
+          "maxUnitPriceCents": 2500,
+          "allowedSkus": ["KIT-A", "KIT-B", "KIT-P"]
+        },
+        "successCriteria": [
+          "Exact total quantity, with no duplicate allocation.",
+          "Every reserved SKU is allowed and every unit price is within the limit.",
+          "A handoff is justified only when valid available stock cannot fulfil the remaining quantity."
+        ],
+        "actionLimit": 16
+      },
+      "actions": [
+        {
+          "tool": "catalog"
+        },
+        {
+          "tool": "reserve",
+          "sku": "KIT-A",
+          "quantity": 4,
+          "idempotencyKey": "trial-02-order-701-a-1"
+        },
+        {
+          "tool": "lookup_receipt",
+          "idempotencyKey": "trial-02-order-701-a-1",
+          "orderId": "order-701"
+        }
+      ],
+      "events": [
+        {
+          "index": 1,
+          "action": {
+            "tool": "catalog"
+          },
+          "observation": {
+            "ok": true,
+            "code": "CATALOG",
+            "message": "Current inventory snapshot. Stock may change before a reservation.",
+            "data": {
+              "items": [
+                {
+                  "sku": "KIT-A",
+                  "label": "Standard studio kit",
+                  "stock": 14,
+                  "unitPriceCents": 2200
+                },
+                {
+                  "sku": "KIT-B",
+                  "label": "Compatible studio kit",
+                  "stock": 6,
+                  "unitPriceCents": 2400
+                },
+                {
+                  "sku": "KIT-P",
+                  "label": "Premium studio kit",
+                  "stock": 7,
+                  "unitPriceCents": 3000
+                },
+                {
+                  "sku": "SPARE-X",
+                  "label": "Incompatible spare pack",
+                  "stock": 20,
+                  "unitPriceCents": 500
+                }
+              ]
+            }
+          },
+          "before": {
+            "order": {
+              "id": "order-701",
+              "quantity": 4,
+              "maxUnitPriceCents": 2500,
+              "allowedSkus": ["KIT-A", "KIT-B", "KIT-P"]
+            },
+            "inventory": [
+              {
+                "sku": "KIT-A",
+                "label": "Standard studio kit",
+                "stock": 14,
+                "unitPriceCents": 2200
+              },
+              {
+                "sku": "KIT-B",
+                "label": "Compatible studio kit",
+                "stock": 6,
+                "unitPriceCents": 2400
+              },
+              {
+                "sku": "KIT-P",
+                "label": "Premium studio kit",
+                "stock": 7,
+                "unitPriceCents": 3000
+              },
+              {
+                "sku": "SPARE-X",
+                "label": "Incompatible spare pack",
+                "stock": 20,
+                "unitPriceCents": 500
+              }
+            ],
+            "receipts": [],
+            "handoff": null
+          },
+          "after": {
+            "order": {
+              "id": "order-701",
+              "quantity": 4,
+              "maxUnitPriceCents": 2500,
+              "allowedSkus": ["KIT-A", "KIT-B", "KIT-P"]
+            },
+            "inventory": [
+              {
+                "sku": "KIT-A",
+                "label": "Standard studio kit",
+                "stock": 14,
+                "unitPriceCents": 2200
+              },
+              {
+                "sku": "KIT-B",
+                "label": "Compatible studio kit",
+                "stock": 6,
+                "unitPriceCents": 2400
+              },
+              {
+                "sku": "KIT-P",
+                "label": "Premium studio kit",
+                "stock": 7,
+                "unitPriceCents": 3000
+              },
+              {
+                "sku": "SPARE-X",
+                "label": "Incompatible spare pack",
+                "stock": 20,
+                "unitPriceCents": 500
+              }
+            ],
+            "receipts": [],
+            "handoff": null
+          },
+          "changes": ["No world-state change."]
+        },
+        {
+          "index": 2,
+          "action": {
+            "tool": "reserve",
+            "sku": "KIT-A",
+            "quantity": 4,
+            "idempotencyKey": "trial-02-order-701-a-1"
+          },
+          "observation": {
+            "ok": false,
+            "code": "ACK_UNKNOWN",
+            "message": "The reservation reply was lost. The commit outcome is unknown; this response does not establish failure."
+          },
+          "before": {
+            "order": {
+              "id": "order-701",
+              "quantity": 4,
+              "maxUnitPriceCents": 2500,
+              "allowedSkus": ["KIT-A", "KIT-B", "KIT-P"]
+            },
+            "inventory": [
+              {
+                "sku": "KIT-A",
+                "label": "Standard studio kit",
+                "stock": 14,
+                "unitPriceCents": 2200
+              },
+              {
+                "sku": "KIT-B",
+                "label": "Compatible studio kit",
+                "stock": 6,
+                "unitPriceCents": 2400
+              },
+              {
+                "sku": "KIT-P",
+                "label": "Premium studio kit",
+                "stock": 7,
+                "unitPriceCents": 3000
+              },
+              {
+                "sku": "SPARE-X",
+                "label": "Incompatible spare pack",
+                "stock": 20,
+                "unitPriceCents": 500
+              }
+            ],
+            "receipts": [],
+            "handoff": null
+          },
+          "after": {
+            "order": {
+              "id": "order-701",
+              "quantity": 4,
+              "maxUnitPriceCents": 2500,
+              "allowedSkus": ["KIT-A", "KIT-B", "KIT-P"]
+            },
+            "inventory": [
+              {
+                "sku": "KIT-A",
+                "label": "Standard studio kit",
+                "stock": 10,
+                "unitPriceCents": 2200
+              },
+              {
+                "sku": "KIT-B",
+                "label": "Compatible studio kit",
+                "stock": 6,
+                "unitPriceCents": 2400
+              },
+              {
+                "sku": "KIT-P",
+                "label": "Premium studio kit",
+                "stock": 7,
+                "unitPriceCents": 3000
+              },
+              {
+                "sku": "SPARE-X",
+                "label": "Incompatible spare pack",
+                "stock": 20,
+                "unitPriceCents": 500
+              }
+            ],
+            "receipts": [
+              {
+                "id": "receipt-order-701-1",
+                "orderId": "order-701",
+                "sku": "KIT-A",
+                "quantity": 4,
+                "unitPriceCents": 2200,
+                "idempotencyKey": "trial-02-order-701-a-1"
+              }
+            ],
+            "handoff": null
+          },
+          "changes": [
+            "KIT-A stock: 14 → 10",
+            "Committed receipt-order-701-1: 4 × KIT-A, key trial-02-order-701-a-1"
+          ]
+        },
+        {
+          "index": 3,
+          "action": {
+            "tool": "lookup_receipt",
+            "idempotencyKey": "trial-02-order-701-a-1",
+            "orderId": "order-701"
+          },
+          "observation": {
+            "ok": true,
+            "code": "RECEIPTS",
+            "message": "1 committed receipt(s) found.",
+            "data": {
+              "receipts": [
+                {
+                  "id": "receipt-order-701-1",
+                  "orderId": "order-701",
+                  "sku": "KIT-A",
+                  "quantity": 4,
+                  "unitPriceCents": 2200,
+                  "idempotencyKey": "trial-02-order-701-a-1"
+                }
+              ]
+            }
+          },
+          "before": {
+            "order": {
+              "id": "order-701",
+              "quantity": 4,
+              "maxUnitPriceCents": 2500,
+              "allowedSkus": ["KIT-A", "KIT-B", "KIT-P"]
+            },
+            "inventory": [
+              {
+                "sku": "KIT-A",
+                "label": "Standard studio kit",
+                "stock": 10,
+                "unitPriceCents": 2200
+              },
+              {
+                "sku": "KIT-B",
+                "label": "Compatible studio kit",
+                "stock": 6,
+                "unitPriceCents": 2400
+              },
+              {
+                "sku": "KIT-P",
+                "label": "Premium studio kit",
+                "stock": 7,
+                "unitPriceCents": 3000
+              },
+              {
+                "sku": "SPARE-X",
+                "label": "Incompatible spare pack",
+                "stock": 20,
+                "unitPriceCents": 500
+              }
+            ],
+            "receipts": [
+              {
+                "id": "receipt-order-701-1",
+                "orderId": "order-701",
+                "sku": "KIT-A",
+                "quantity": 4,
+                "unitPriceCents": 2200,
+                "idempotencyKey": "trial-02-order-701-a-1"
+              }
+            ],
+            "handoff": null
+          },
+          "after": {
+            "order": {
+              "id": "order-701",
+              "quantity": 4,
+              "maxUnitPriceCents": 2500,
+              "allowedSkus": ["KIT-A", "KIT-B", "KIT-P"]
+            },
+            "inventory": [
+              {
+                "sku": "KIT-A",
+                "label": "Standard studio kit",
+                "stock": 10,
+                "unitPriceCents": 2200
+              },
+              {
+                "sku": "KIT-B",
+                "label": "Compatible studio kit",
+                "stock": 6,
+                "unitPriceCents": 2400
+              },
+              {
+                "sku": "KIT-P",
+                "label": "Premium studio kit",
+                "stock": 7,
+                "unitPriceCents": 3000
+              },
+              {
+                "sku": "SPARE-X",
+                "label": "Incompatible spare pack",
+                "stock": 20,
+                "unitPriceCents": 500
+              }
+            ],
+            "receipts": [
+              {
+                "id": "receipt-order-701-1",
+                "orderId": "order-701",
+                "sku": "KIT-A",
+                "quantity": 4,
+                "unitPriceCents": 2200,
+                "idempotencyKey": "trial-02-order-701-a-1"
+              }
+            ],
+            "handoff": null
+          },
+          "changes": ["No world-state change."]
+        }
+      ],
+      "initialWorld": {
+        "order": {
+          "id": "order-701",
+          "quantity": 4,
+          "maxUnitPriceCents": 2500,
+          "allowedSkus": ["KIT-A", "KIT-B", "KIT-P"]
+        },
+        "inventory": [
+          {
+            "sku": "KIT-A",
+            "label": "Standard studio kit",
+            "stock": 14,
+            "unitPriceCents": 2200
+          },
+          {
+            "sku": "KIT-B",
+            "label": "Compatible studio kit",
+            "stock": 6,
+            "unitPriceCents": 2400
+          },
+          {
+            "sku": "KIT-P",
+            "label": "Premium studio kit",
+            "stock": 7,
+            "unitPriceCents": 3000
+          },
+          {
+            "sku": "SPARE-X",
+            "label": "Incompatible spare pack",
+            "stock": 20,
+            "unitPriceCents": 500
+          }
+        ],
+        "receipts": [],
+        "handoff": null
+      },
+      "finalWorld": {
+        "order": {
+          "id": "order-701",
+          "quantity": 4,
+          "maxUnitPriceCents": 2500,
+          "allowedSkus": ["KIT-A", "KIT-B", "KIT-P"]
+        },
+        "inventory": [
+          {
+            "sku": "KIT-A",
+            "label": "Standard studio kit",
+            "stock": 10,
+            "unitPriceCents": 2200
+          },
+          {
+            "sku": "KIT-B",
+            "label": "Compatible studio kit",
+            "stock": 6,
+            "unitPriceCents": 2400
+          },
+          {
+            "sku": "KIT-P",
+            "label": "Premium studio kit",
+            "stock": 7,
+            "unitPriceCents": 3000
+          },
+          {
+            "sku": "SPARE-X",
+            "label": "Incompatible spare pack",
+            "stock": 20,
+            "unitPriceCents": 500
+          }
+        ],
+        "receipts": [
+          {
+            "id": "receipt-order-701-1",
+            "orderId": "order-701",
+            "sku": "KIT-A",
+            "quantity": 4,
+            "unitPriceCents": 2200,
+            "idempotencyKey": "trial-02-order-701-a-1"
+          }
+        ],
+        "handoff": null
+      },
+      "grade": {
+        "outcome": "fulfilled",
+        "autonomousFulfilment": true,
+        "justifiedHandoff": false,
+        "duplicateReservation": false,
+        "constraintViolation": false,
+        "reasons": [
+          "Actual committed quantity and constraints are correct, regardless of acknowledgement or claimed status."
+        ],
+        "summary": "Autonomous fulfilment",
+        "assertions": {
+          "exactQuantity": true,
+          "allowedItems": true,
+          "withinPrice": true,
+          "noDuplicateAllocation": true
+        }
+      },
+      "claimedStatus": null
+    },
+    {
+      "version": 1,
+      "environment": "proof-order-v1",
+      "fixtureVersion": 1,
+      "scenarioId": "stock_conflict",
+      "seed": 701,
+      "policyId": "recorded_agent",
+      "provenance": {
+        "kind": "recorded-agent",
+        "adapter": "Codex tool session",
+        "model": null,
+        "tokens": null,
+        "cost": null
+      },
+      "task": {
+        "instruction": "Fulfil this order using the public tools. Reserve the exact total quantity of compatible items within the maximum unit price. If no valid stock can fulfil the remaining order, explicitly hand it off with a reason.",
+        "order": {
+          "id": "order-701",
+          "quantity": 4,
+          "maxUnitPriceCents": 2500,
+          "allowedSkus": ["KIT-A", "KIT-B", "KIT-P"]
+        },
+        "successCriteria": [
+          "Exact total quantity, with no duplicate allocation.",
+          "Every reserved SKU is allowed and every unit price is within the limit.",
+          "A handoff is justified only when valid available stock cannot fulfil the remaining quantity."
+        ],
+        "actionLimit": 16
+      },
+      "actions": [
+        {
+          "tool": "catalog"
+        },
+        {
+          "tool": "reserve",
+          "sku": "KIT-A",
+          "quantity": 4,
+          "idempotencyKey": "trial-03-order-701-a-1"
+        },
+        {
+          "tool": "catalog"
+        },
+        {
+          "tool": "reserve",
+          "sku": "KIT-B",
+          "quantity": 4,
+          "idempotencyKey": "trial-03-order-701-b-1"
+        }
+      ],
+      "events": [
+        {
+          "index": 1,
+          "action": {
+            "tool": "catalog"
+          },
+          "observation": {
+            "ok": true,
+            "code": "CATALOG",
+            "message": "Current inventory snapshot. Stock may change before a reservation.",
+            "data": {
+              "items": [
+                {
+                  "sku": "KIT-A",
+                  "label": "Standard studio kit",
+                  "stock": 14,
+                  "unitPriceCents": 2200
+                },
+                {
+                  "sku": "KIT-B",
+                  "label": "Compatible studio kit",
+                  "stock": 6,
+                  "unitPriceCents": 2400
+                },
+                {
+                  "sku": "KIT-P",
+                  "label": "Premium studio kit",
+                  "stock": 7,
+                  "unitPriceCents": 3000
+                },
+                {
+                  "sku": "SPARE-X",
+                  "label": "Incompatible spare pack",
+                  "stock": 20,
+                  "unitPriceCents": 500
+                }
+              ]
+            }
+          },
+          "before": {
+            "order": {
+              "id": "order-701",
+              "quantity": 4,
+              "maxUnitPriceCents": 2500,
+              "allowedSkus": ["KIT-A", "KIT-B", "KIT-P"]
+            },
+            "inventory": [
+              {
+                "sku": "KIT-A",
+                "label": "Standard studio kit",
+                "stock": 14,
+                "unitPriceCents": 2200
+              },
+              {
+                "sku": "KIT-B",
+                "label": "Compatible studio kit",
+                "stock": 6,
+                "unitPriceCents": 2400
+              },
+              {
+                "sku": "KIT-P",
+                "label": "Premium studio kit",
+                "stock": 7,
+                "unitPriceCents": 3000
+              },
+              {
+                "sku": "SPARE-X",
+                "label": "Incompatible spare pack",
+                "stock": 20,
+                "unitPriceCents": 500
+              }
+            ],
+            "receipts": [],
+            "handoff": null
+          },
+          "after": {
+            "order": {
+              "id": "order-701",
+              "quantity": 4,
+              "maxUnitPriceCents": 2500,
+              "allowedSkus": ["KIT-A", "KIT-B", "KIT-P"]
+            },
+            "inventory": [
+              {
+                "sku": "KIT-A",
+                "label": "Standard studio kit",
+                "stock": 14,
+                "unitPriceCents": 2200
+              },
+              {
+                "sku": "KIT-B",
+                "label": "Compatible studio kit",
+                "stock": 6,
+                "unitPriceCents": 2400
+              },
+              {
+                "sku": "KIT-P",
+                "label": "Premium studio kit",
+                "stock": 7,
+                "unitPriceCents": 3000
+              },
+              {
+                "sku": "SPARE-X",
+                "label": "Incompatible spare pack",
+                "stock": 20,
+                "unitPriceCents": 500
+              }
+            ],
+            "receipts": [],
+            "handoff": null
+          },
+          "changes": ["No world-state change."]
+        },
+        {
+          "index": 2,
+          "action": {
+            "tool": "reserve",
+            "sku": "KIT-A",
+            "quantity": 4,
+            "idempotencyKey": "trial-03-order-701-a-1"
+          },
+          "observation": {
+            "ok": false,
+            "code": "STOCK_CONFLICT",
+            "message": "The requested stock is unavailable. No reservation was committed."
+          },
+          "before": {
+            "order": {
+              "id": "order-701",
+              "quantity": 4,
+              "maxUnitPriceCents": 2500,
+              "allowedSkus": ["KIT-A", "KIT-B", "KIT-P"]
+            },
+            "inventory": [
+              {
+                "sku": "KIT-A",
+                "label": "Standard studio kit",
+                "stock": 14,
+                "unitPriceCents": 2200
+              },
+              {
+                "sku": "KIT-B",
+                "label": "Compatible studio kit",
+                "stock": 6,
+                "unitPriceCents": 2400
+              },
+              {
+                "sku": "KIT-P",
+                "label": "Premium studio kit",
+                "stock": 7,
+                "unitPriceCents": 3000
+              },
+              {
+                "sku": "SPARE-X",
+                "label": "Incompatible spare pack",
+                "stock": 20,
+                "unitPriceCents": 500
+              }
+            ],
+            "receipts": [],
+            "handoff": null
+          },
+          "after": {
+            "order": {
+              "id": "order-701",
+              "quantity": 4,
+              "maxUnitPriceCents": 2500,
+              "allowedSkus": ["KIT-A", "KIT-B", "KIT-P"]
+            },
+            "inventory": [
+              {
+                "sku": "KIT-A",
+                "label": "Standard studio kit",
+                "stock": 0,
+                "unitPriceCents": 2200
+              },
+              {
+                "sku": "KIT-B",
+                "label": "Compatible studio kit",
+                "stock": 6,
+                "unitPriceCents": 2400
+              },
+              {
+                "sku": "KIT-P",
+                "label": "Premium studio kit",
+                "stock": 7,
+                "unitPriceCents": 3000
+              },
+              {
+                "sku": "SPARE-X",
+                "label": "Incompatible spare pack",
+                "stock": 20,
+                "unitPriceCents": 500
+              }
+            ],
+            "receipts": [],
+            "handoff": null
+          },
+          "changes": ["KIT-A stock: 14 → 0"]
+        },
+        {
+          "index": 3,
+          "action": {
+            "tool": "catalog"
+          },
+          "observation": {
+            "ok": true,
+            "code": "CATALOG",
+            "message": "Current inventory snapshot. Stock may change before a reservation.",
+            "data": {
+              "items": [
+                {
+                  "sku": "KIT-A",
+                  "label": "Standard studio kit",
+                  "stock": 0,
+                  "unitPriceCents": 2200
+                },
+                {
+                  "sku": "KIT-B",
+                  "label": "Compatible studio kit",
+                  "stock": 6,
+                  "unitPriceCents": 2400
+                },
+                {
+                  "sku": "KIT-P",
+                  "label": "Premium studio kit",
+                  "stock": 7,
+                  "unitPriceCents": 3000
+                },
+                {
+                  "sku": "SPARE-X",
+                  "label": "Incompatible spare pack",
+                  "stock": 20,
+                  "unitPriceCents": 500
+                }
+              ]
+            }
+          },
+          "before": {
+            "order": {
+              "id": "order-701",
+              "quantity": 4,
+              "maxUnitPriceCents": 2500,
+              "allowedSkus": ["KIT-A", "KIT-B", "KIT-P"]
+            },
+            "inventory": [
+              {
+                "sku": "KIT-A",
+                "label": "Standard studio kit",
+                "stock": 0,
+                "unitPriceCents": 2200
+              },
+              {
+                "sku": "KIT-B",
+                "label": "Compatible studio kit",
+                "stock": 6,
+                "unitPriceCents": 2400
+              },
+              {
+                "sku": "KIT-P",
+                "label": "Premium studio kit",
+                "stock": 7,
+                "unitPriceCents": 3000
+              },
+              {
+                "sku": "SPARE-X",
+                "label": "Incompatible spare pack",
+                "stock": 20,
+                "unitPriceCents": 500
+              }
+            ],
+            "receipts": [],
+            "handoff": null
+          },
+          "after": {
+            "order": {
+              "id": "order-701",
+              "quantity": 4,
+              "maxUnitPriceCents": 2500,
+              "allowedSkus": ["KIT-A", "KIT-B", "KIT-P"]
+            },
+            "inventory": [
+              {
+                "sku": "KIT-A",
+                "label": "Standard studio kit",
+                "stock": 0,
+                "unitPriceCents": 2200
+              },
+              {
+                "sku": "KIT-B",
+                "label": "Compatible studio kit",
+                "stock": 6,
+                "unitPriceCents": 2400
+              },
+              {
+                "sku": "KIT-P",
+                "label": "Premium studio kit",
+                "stock": 7,
+                "unitPriceCents": 3000
+              },
+              {
+                "sku": "SPARE-X",
+                "label": "Incompatible spare pack",
+                "stock": 20,
+                "unitPriceCents": 500
+              }
+            ],
+            "receipts": [],
+            "handoff": null
+          },
+          "changes": ["No world-state change."]
+        },
+        {
+          "index": 4,
+          "action": {
+            "tool": "reserve",
+            "sku": "KIT-B",
+            "quantity": 4,
+            "idempotencyKey": "trial-03-order-701-b-1"
+          },
+          "observation": {
+            "ok": true,
+            "code": "RESERVED",
+            "message": "Reservation committed.",
+            "data": {
+              "receipt": {
+                "id": "receipt-order-701-1",
+                "orderId": "order-701",
+                "sku": "KIT-B",
+                "quantity": 4,
+                "unitPriceCents": 2400,
+                "idempotencyKey": "trial-03-order-701-b-1"
+              }
+            }
+          },
+          "before": {
+            "order": {
+              "id": "order-701",
+              "quantity": 4,
+              "maxUnitPriceCents": 2500,
+              "allowedSkus": ["KIT-A", "KIT-B", "KIT-P"]
+            },
+            "inventory": [
+              {
+                "sku": "KIT-A",
+                "label": "Standard studio kit",
+                "stock": 0,
+                "unitPriceCents": 2200
+              },
+              {
+                "sku": "KIT-B",
+                "label": "Compatible studio kit",
+                "stock": 6,
+                "unitPriceCents": 2400
+              },
+              {
+                "sku": "KIT-P",
+                "label": "Premium studio kit",
+                "stock": 7,
+                "unitPriceCents": 3000
+              },
+              {
+                "sku": "SPARE-X",
+                "label": "Incompatible spare pack",
+                "stock": 20,
+                "unitPriceCents": 500
+              }
+            ],
+            "receipts": [],
+            "handoff": null
+          },
+          "after": {
+            "order": {
+              "id": "order-701",
+              "quantity": 4,
+              "maxUnitPriceCents": 2500,
+              "allowedSkus": ["KIT-A", "KIT-B", "KIT-P"]
+            },
+            "inventory": [
+              {
+                "sku": "KIT-A",
+                "label": "Standard studio kit",
+                "stock": 0,
+                "unitPriceCents": 2200
+              },
+              {
+                "sku": "KIT-B",
+                "label": "Compatible studio kit",
+                "stock": 2,
+                "unitPriceCents": 2400
+              },
+              {
+                "sku": "KIT-P",
+                "label": "Premium studio kit",
+                "stock": 7,
+                "unitPriceCents": 3000
+              },
+              {
+                "sku": "SPARE-X",
+                "label": "Incompatible spare pack",
+                "stock": 20,
+                "unitPriceCents": 500
+              }
+            ],
+            "receipts": [
+              {
+                "id": "receipt-order-701-1",
+                "orderId": "order-701",
+                "sku": "KIT-B",
+                "quantity": 4,
+                "unitPriceCents": 2400,
+                "idempotencyKey": "trial-03-order-701-b-1"
+              }
+            ],
+            "handoff": null
+          },
+          "changes": [
+            "KIT-B stock: 6 → 2",
+            "Committed receipt-order-701-1: 4 × KIT-B, key trial-03-order-701-b-1"
+          ]
+        }
+      ],
+      "initialWorld": {
+        "order": {
+          "id": "order-701",
+          "quantity": 4,
+          "maxUnitPriceCents": 2500,
+          "allowedSkus": ["KIT-A", "KIT-B", "KIT-P"]
+        },
+        "inventory": [
+          {
+            "sku": "KIT-A",
+            "label": "Standard studio kit",
+            "stock": 14,
+            "unitPriceCents": 2200
+          },
+          {
+            "sku": "KIT-B",
+            "label": "Compatible studio kit",
+            "stock": 6,
+            "unitPriceCents": 2400
+          },
+          {
+            "sku": "KIT-P",
+            "label": "Premium studio kit",
+            "stock": 7,
+            "unitPriceCents": 3000
+          },
+          {
+            "sku": "SPARE-X",
+            "label": "Incompatible spare pack",
+            "stock": 20,
+            "unitPriceCents": 500
+          }
+        ],
+        "receipts": [],
+        "handoff": null
+      },
+      "finalWorld": {
+        "order": {
+          "id": "order-701",
+          "quantity": 4,
+          "maxUnitPriceCents": 2500,
+          "allowedSkus": ["KIT-A", "KIT-B", "KIT-P"]
+        },
+        "inventory": [
+          {
+            "sku": "KIT-A",
+            "label": "Standard studio kit",
+            "stock": 0,
+            "unitPriceCents": 2200
+          },
+          {
+            "sku": "KIT-B",
+            "label": "Compatible studio kit",
+            "stock": 2,
+            "unitPriceCents": 2400
+          },
+          {
+            "sku": "KIT-P",
+            "label": "Premium studio kit",
+            "stock": 7,
+            "unitPriceCents": 3000
+          },
+          {
+            "sku": "SPARE-X",
+            "label": "Incompatible spare pack",
+            "stock": 20,
+            "unitPriceCents": 500
+          }
+        ],
+        "receipts": [
+          {
+            "id": "receipt-order-701-1",
+            "orderId": "order-701",
+            "sku": "KIT-B",
+            "quantity": 4,
+            "unitPriceCents": 2400,
+            "idempotencyKey": "trial-03-order-701-b-1"
+          }
+        ],
+        "handoff": null
+      },
+      "grade": {
+        "outcome": "fulfilled",
+        "autonomousFulfilment": true,
+        "justifiedHandoff": false,
+        "duplicateReservation": false,
+        "constraintViolation": false,
+        "reasons": [
+          "Actual committed quantity and constraints are correct, regardless of acknowledgement or claimed status."
+        ],
+        "summary": "Autonomous fulfilment",
+        "assertions": {
+          "exactQuantity": true,
+          "allowedItems": true,
+          "withinPrice": true,
+          "noDuplicateAllocation": true
+        }
+      },
+      "claimedStatus": null
+    },
+    {
+      "version": 1,
+      "environment": "proof-order-v1",
+      "fixtureVersion": 1,
+      "scenarioId": "no_stock",
+      "seed": 701,
+      "policyId": "recorded_agent",
+      "provenance": {
+        "kind": "recorded-agent",
+        "adapter": "Codex tool session",
+        "model": null,
+        "tokens": null,
+        "cost": null
+      },
+      "task": {
+        "instruction": "Fulfil this order using the public tools. Reserve the exact total quantity of compatible items within the maximum unit price. If no valid stock can fulfil the remaining order, explicitly hand it off with a reason.",
+        "order": {
+          "id": "order-701",
+          "quantity": 4,
+          "maxUnitPriceCents": 2500,
+          "allowedSkus": ["KIT-A", "KIT-B", "KIT-P"]
+        },
+        "successCriteria": [
+          "Exact total quantity, with no duplicate allocation.",
+          "Every reserved SKU is allowed and every unit price is within the limit.",
+          "A handoff is justified only when valid available stock cannot fulfil the remaining quantity."
+        ],
+        "actionLimit": 16
+      },
+      "actions": [
+        {
+          "tool": "catalog"
+        },
+        {
+          "tool": "handoff",
+          "reason": "Cannot fulfil 4 remaining units: KIT-A and KIT-B each have zero stock; KIT-P costs 3000 cents, exceeding the 2500-cent unit limit; SPARE-X is not an allowed SKU."
+        }
+      ],
+      "events": [
+        {
+          "index": 1,
+          "action": {
+            "tool": "catalog"
+          },
+          "observation": {
+            "ok": true,
+            "code": "CATALOG",
+            "message": "Current inventory snapshot. Stock may change before a reservation.",
+            "data": {
+              "items": [
+                {
+                  "sku": "KIT-A",
+                  "label": "Standard studio kit",
+                  "stock": 0,
+                  "unitPriceCents": 2200
+                },
+                {
+                  "sku": "KIT-B",
+                  "label": "Compatible studio kit",
+                  "stock": 0,
+                  "unitPriceCents": 2400
+                },
+                {
+                  "sku": "KIT-P",
+                  "label": "Premium studio kit",
+                  "stock": 7,
+                  "unitPriceCents": 3000
+                },
+                {
+                  "sku": "SPARE-X",
+                  "label": "Incompatible spare pack",
+                  "stock": 20,
+                  "unitPriceCents": 500
+                }
+              ]
+            }
+          },
+          "before": {
+            "order": {
+              "id": "order-701",
+              "quantity": 4,
+              "maxUnitPriceCents": 2500,
+              "allowedSkus": ["KIT-A", "KIT-B", "KIT-P"]
+            },
+            "inventory": [
+              {
+                "sku": "KIT-A",
+                "label": "Standard studio kit",
+                "stock": 0,
+                "unitPriceCents": 2200
+              },
+              {
+                "sku": "KIT-B",
+                "label": "Compatible studio kit",
+                "stock": 0,
+                "unitPriceCents": 2400
+              },
+              {
+                "sku": "KIT-P",
+                "label": "Premium studio kit",
+                "stock": 7,
+                "unitPriceCents": 3000
+              },
+              {
+                "sku": "SPARE-X",
+                "label": "Incompatible spare pack",
+                "stock": 20,
+                "unitPriceCents": 500
+              }
+            ],
+            "receipts": [],
+            "handoff": null
+          },
+          "after": {
+            "order": {
+              "id": "order-701",
+              "quantity": 4,
+              "maxUnitPriceCents": 2500,
+              "allowedSkus": ["KIT-A", "KIT-B", "KIT-P"]
+            },
+            "inventory": [
+              {
+                "sku": "KIT-A",
+                "label": "Standard studio kit",
+                "stock": 0,
+                "unitPriceCents": 2200
+              },
+              {
+                "sku": "KIT-B",
+                "label": "Compatible studio kit",
+                "stock": 0,
+                "unitPriceCents": 2400
+              },
+              {
+                "sku": "KIT-P",
+                "label": "Premium studio kit",
+                "stock": 7,
+                "unitPriceCents": 3000
+              },
+              {
+                "sku": "SPARE-X",
+                "label": "Incompatible spare pack",
+                "stock": 20,
+                "unitPriceCents": 500
+              }
+            ],
+            "receipts": [],
+            "handoff": null
+          },
+          "changes": ["No world-state change."]
+        },
+        {
+          "index": 2,
+          "action": {
+            "tool": "handoff",
+            "reason": "Cannot fulfil 4 remaining units: KIT-A and KIT-B each have zero stock; KIT-P costs 3000 cents, exceeding the 2500-cent unit limit; SPARE-X is not an allowed SKU."
+          },
+          "observation": {
+            "ok": true,
+            "code": "HANDOFF_RECORDED",
+            "message": "Handoff recorded. Its justification is evaluated against the actual remaining stock.",
+            "data": {
+              "handoff": {
+                "reason": "Cannot fulfil 4 remaining units: KIT-A and KIT-B each have zero stock; KIT-P costs 3000 cents, exceeding the 2500-cent unit limit; SPARE-X is not an allowed SKU."
+              }
+            }
+          },
+          "before": {
+            "order": {
+              "id": "order-701",
+              "quantity": 4,
+              "maxUnitPriceCents": 2500,
+              "allowedSkus": ["KIT-A", "KIT-B", "KIT-P"]
+            },
+            "inventory": [
+              {
+                "sku": "KIT-A",
+                "label": "Standard studio kit",
+                "stock": 0,
+                "unitPriceCents": 2200
+              },
+              {
+                "sku": "KIT-B",
+                "label": "Compatible studio kit",
+                "stock": 0,
+                "unitPriceCents": 2400
+              },
+              {
+                "sku": "KIT-P",
+                "label": "Premium studio kit",
+                "stock": 7,
+                "unitPriceCents": 3000
+              },
+              {
+                "sku": "SPARE-X",
+                "label": "Incompatible spare pack",
+                "stock": 20,
+                "unitPriceCents": 500
+              }
+            ],
+            "receipts": [],
+            "handoff": null
+          },
+          "after": {
+            "order": {
+              "id": "order-701",
+              "quantity": 4,
+              "maxUnitPriceCents": 2500,
+              "allowedSkus": ["KIT-A", "KIT-B", "KIT-P"]
+            },
+            "inventory": [
+              {
+                "sku": "KIT-A",
+                "label": "Standard studio kit",
+                "stock": 0,
+                "unitPriceCents": 2200
+              },
+              {
+                "sku": "KIT-B",
+                "label": "Compatible studio kit",
+                "stock": 0,
+                "unitPriceCents": 2400
+              },
+              {
+                "sku": "KIT-P",
+                "label": "Premium studio kit",
+                "stock": 7,
+                "unitPriceCents": 3000
+              },
+              {
+                "sku": "SPARE-X",
+                "label": "Incompatible spare pack",
+                "stock": 20,
+                "unitPriceCents": 500
+              }
+            ],
+            "receipts": [],
+            "handoff": {
+              "reason": "Cannot fulfil 4 remaining units: KIT-A and KIT-B each have zero stock; KIT-P costs 3000 cents, exceeding the 2500-cent unit limit; SPARE-X is not an allowed SKU."
+            }
+          },
+          "changes": ["Handoff reason recorded."]
+        }
+      ],
+      "initialWorld": {
+        "order": {
+          "id": "order-701",
+          "quantity": 4,
+          "maxUnitPriceCents": 2500,
+          "allowedSkus": ["KIT-A", "KIT-B", "KIT-P"]
+        },
+        "inventory": [
+          {
+            "sku": "KIT-A",
+            "label": "Standard studio kit",
+            "stock": 0,
+            "unitPriceCents": 2200
+          },
+          {
+            "sku": "KIT-B",
+            "label": "Compatible studio kit",
+            "stock": 0,
+            "unitPriceCents": 2400
+          },
+          {
+            "sku": "KIT-P",
+            "label": "Premium studio kit",
+            "stock": 7,
+            "unitPriceCents": 3000
+          },
+          {
+            "sku": "SPARE-X",
+            "label": "Incompatible spare pack",
+            "stock": 20,
+            "unitPriceCents": 500
+          }
+        ],
+        "receipts": [],
+        "handoff": null
+      },
+      "finalWorld": {
+        "order": {
+          "id": "order-701",
+          "quantity": 4,
+          "maxUnitPriceCents": 2500,
+          "allowedSkus": ["KIT-A", "KIT-B", "KIT-P"]
+        },
+        "inventory": [
+          {
+            "sku": "KIT-A",
+            "label": "Standard studio kit",
+            "stock": 0,
+            "unitPriceCents": 2200
+          },
+          {
+            "sku": "KIT-B",
+            "label": "Compatible studio kit",
+            "stock": 0,
+            "unitPriceCents": 2400
+          },
+          {
+            "sku": "KIT-P",
+            "label": "Premium studio kit",
+            "stock": 7,
+            "unitPriceCents": 3000
+          },
+          {
+            "sku": "SPARE-X",
+            "label": "Incompatible spare pack",
+            "stock": 20,
+            "unitPriceCents": 500
+          }
+        ],
+        "receipts": [],
+        "handoff": {
+          "reason": "Cannot fulfil 4 remaining units: KIT-A and KIT-B each have zero stock; KIT-P costs 3000 cents, exceeding the 2500-cent unit limit; SPARE-X is not an allowed SKU."
+        }
+      },
+      "grade": {
+        "outcome": "handoff",
+        "autonomousFulfilment": false,
+        "justifiedHandoff": true,
+        "duplicateReservation": false,
+        "constraintViolation": false,
+        "reasons": [
+          "Valid stock cannot fulfil the remaining quantity; explicit handoff is recorded."
+        ],
+        "summary": "Justified handoff; not autonomous fulfilment",
+        "assertions": {
+          "exactQuantity": false,
+          "allowedItems": true,
+          "withinPrice": true,
+          "noDuplicateAllocation": true
+        }
+      },
+      "claimedStatus": null
+    }
+  ]
+}

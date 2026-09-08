@@ -10,40 +10,47 @@ type Screening = 'motion' | 'infinite' | 'ribbon';
 const screenings: Screening[] = ['motion', 'infinite', 'ribbon'];
 const projects = [
   {
+    name: 'Proof',
+    detail: 'Agent trials',
+    description: 'Agent tool-use reliability trials',
+    route: 'proof',
+    number: '01',
+  },
+  {
     name: 'Type',
     detail: '11s / Canvas2D',
     description: 'Flat letter and logo motion, an independent identity study',
     route: 'motion',
-    number: '01',
+    number: '02',
   },
   {
     name: 'Infinite',
     detail: 'Lorenz traces',
     description: 'Seven evolving Lorenz trajectories',
     route: 'infinite',
-    number: '02',
+    number: '03',
   },
-  { name: 'Halo', detail: '3D', description: 'Product configurator', route: 'halo', number: '03' },
+  { name: 'Halo', detail: '3D', description: 'Product configurator', route: 'halo', number: '04' },
   {
     name: 'Field',
     detail: 'GPU study',
     description: 'Generative graphics',
     route: 'field',
-    number: '04',
+    number: '05',
   },
   {
     name: 'Current',
     detail: 'CSV data',
     description: '100,000-row CSV workbench',
     route: 'current',
-    number: '05',
+    number: '06',
   },
   {
     name: 'Relay',
     detail: 'Queue recovery',
     description: 'Durable queue and recovery',
     route: 'relay',
-    number: '06',
+    number: '07',
   },
 ];
 
@@ -284,7 +291,7 @@ export default function Home() {
         <aside className="screening-index" aria-labelledby="project-index-title">
           <div className="screening-index-heading">
             <h2 id="project-index-title">Project index</h2>
-            <span>06</span>
+            <span>07</span>
           </div>
           <nav aria-label="Working projects">
             {projects.map((project) => (
@@ -292,7 +299,7 @@ export default function Home() {
                 key={project.route}
                 href={`#/${project.route}`}
                 aria-label={`Open ${project.name}: ${project.description}`}
-                className={project.route === 'motion' ? 'screening-featured-project' : undefined}
+                className={project.route === 'proof' ? 'screening-featured-project' : undefined}
               >
                 <span className="screening-project-number">{project.number}</span>
                 <span className="screening-project-name">{project.name}</span>

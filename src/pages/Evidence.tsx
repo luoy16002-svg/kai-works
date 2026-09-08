@@ -52,6 +52,27 @@ export default function Evidence() {
         </section>
         <div className="evidence-grid">
           <article className="evidence-card">
+            <span className="eyebrow">PROOF / PROTOTYPE</span>
+            <h2>Agent failure recovery.</h2>
+            <ul>
+              <li>
+                Four public conditions × six seeded variants: clean runs, lost acknowledgements,
+                inventory conflicts and no valid stock.
+              </li>
+              <li>
+                Replayable actions are graded against final world state. Correct handoff is reported
+                separately from autonomous fulfilment.
+              </li>
+              <li>
+                Reference code policies and recorded agent traces have separate provenance labels.
+                These synthetic cases do not establish an AI model ranking.
+              </li>
+            </ul>
+            <a href="#/proof">
+              Open reliability lab <ArrowUpRight size={13} />
+            </a>
+          </article>
+          <article className="evidence-card">
             <span className="eyebrow">01 / FIELD</span>
             <h2>GPU versus CPU.</h2>
             <ul>
