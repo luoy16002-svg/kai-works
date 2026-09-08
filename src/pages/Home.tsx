@@ -1,359 +1,195 @@
-import { useRef, type MouseEvent } from 'react';
-import { ArrowUpRight, ArrowDown, ArrowRight, Check } from 'lucide-react';
-import { FieldLab } from './Field';
+import { lazy, Suspense, useRef, useState, type KeyboardEvent } from 'react';
+import { ArrowUpRight } from 'lucide-react';
 import KineticArtwork from '../components/KineticArtwork';
 import { REPO } from '../ui';
 import '../home.css';
 
-const chart = [31, 44, 36, 54, 47, 69, 53, 73, 61, 81, 70, 92, 82, 100, 90];
+const MotionReel = lazy(() => import('../components/MotionReel'));
+type Screening = 'motion' | 'ribbon';
+const screenings: Screening[] = ['motion', 'ribbon'];
+const projects = [
+  {
+    name: 'Motion',
+    detail: '24s / WebGL',
+    description: 'A real-time 3D film',
+    route: 'motion',
+    number: '01',
+  },
+  { name: 'Halo', detail: '3D', description: 'Product configurator', route: 'halo', number: '02' },
+  {
+    name: 'Field',
+    detail: 'GPU',
+    description: 'Generative graphics',
+    route: 'field',
+    number: '03',
+  },
+  {
+    name: 'Current',
+    detail: '100K rows',
+    description: '100,000-row CSV workbench',
+    route: 'current',
+    number: '04',
+  },
+  {
+    name: 'Relay',
+    detail: 'Recovery',
+    description: 'Durable queue and recovery',
+    route: 'relay',
+    number: '05',
+  },
+];
 
-function CurrentPreview() {
+function FilmPlaceholder() {
   return (
-    <div className="folio-current-preview" aria-hidden="true">
-      <div className="folio-preview-top">
-        <span>CURRENT / DATA WORKBENCH</span>
-        <ArrowUpRight size={20} />
+    <div className="screening-film-placeholder" aria-busy="true">
+      <div className="screening-placeholder-art">
+        <svg viewBox="0 0 640 400" fill="none" aria-hidden="true">
+          <path d="M218 110 368 70 447 248 297 292Z" fill="#c6bad9" />
+          <path d="m297 292 150-44-74 47-150 44Z" fill="#8f7e9f" />
+          <path d="m218 110 79 182-74 47-78-182Z" fill="#eeaa82" />
+          <path d="m245 114 110-29 68 151-111 33Z" stroke="#251c2d" strokeWidth="2" />
+          <circle cx="444" cy="116" r="19" fill="#f7f2e8" />
+          <path d="M140 365H504" stroke="#65546b" />
+        </svg>
       </div>
-      <div className="folio-current-number">
-        100,000<span>ROWS. ONE BROWSER TAB.</span>
+      <div className="screening-placeholder-caption">
+        <span role="status">Preparing the scene…</span>
+        <span>24 SECONDS / REAL-TIME 3D</span>
       </div>
-      <svg className="folio-current-chart" viewBox="0 0 600 115" preserveAspectRatio="none">
-        {chart.map((height, index) => (
-          <rect
-            key={index}
-            x={index * 40}
-            y={110 - height}
-            width="26"
-            height={height}
-            fill={index > 10 ? '#c6bad9' : '#eeaa82'}
-          />
-        ))}
-      </svg>
-      <div className="folio-current-table">
-        <span>ORDER</span>
-        <span>REGION</span>
-        <span>TOTAL</span>
-        <span>ORD-099998</span>
-        <span>APAC</span>
-        <span>684.32</span>
-        <span>ORD-099999</span>
-        <span>EU</span>
-        <span>127.08</span>
-        <span>ORD-100000</span>
-        <span>AMER</span>
-        <span>842.98</span>
-      </div>
-      <small>UI PREVIEW / SYNTHETIC DATA</small>
-    </div>
-  );
-}
-
-function RelayPreview() {
-  return (
-    <div className="folio-relay-preview" aria-hidden="true">
-      <div className="folio-preview-top">
-        <span>RELAY / DURABLE QUEUE</span>
-        <ArrowUpRight size={20} />
-      </div>
-      <svg className="folio-relay-diagram" viewBox="0 0 440 340" fill="none">
-        <path
-          className="relay-flow-line"
-          d="M102 85H289C340 85 360 119 360 163V220C360 253 337 279 303 279H163"
-          stroke="#251c2d"
-          strokeWidth="2"
-        />
-        <path d="m181 263-18 16 18 16" stroke="#251c2d" strokeWidth="2" />
-        <circle cx="102" cy="85" r="52" fill="#f7f2e8" />
-        <path d="m82 85 13 13 28-29" stroke="#251c2d" strokeWidth="3" />
-        <rect x="271" y="150" width="145" height="53" fill="#c6bad9" stroke="#251c2d" />
-        <path d="M290 168v17m8-17v17" stroke="#251c2d" strokeWidth="2" />
-        <text x="310" y="181" fill="#251c2d">
-          INTERRUPTED
-        </text>
-        <rect x="20" y="245" width="169" height="68" fill="#251c2d" />
-        <path d="m41 278 7 7 14-16" stroke="#f7f2e8" strokeWidth="2" />
-        <text x="74" y="283" fill="#f7f2e8">
-          RECOVERED
-        </text>
-        <text x="67" y="162" fill="#251c2d">
-          01 / CLAIMED
-        </text>
-        <text x="195" y="65" fill="#625966">
-          LEASE EXPIRES
-        </text>
-      </svg>
-      <small>RECOVERY FLOW / ILLUSTRATION</small>
     </div>
   );
 }
 
 export default function Home() {
-  const workRef = useRef<HTMLElement>(null);
-  const showWork = (event: MouseEvent<HTMLAnchorElement>) => {
+  const [screening, setScreening] = useState<Screening>('motion');
+  const [ribbonOpened, setRibbonOpened] = useState(false);
+  const tabs = useRef<(HTMLButtonElement | null)[]>([]);
+  const select = (value: Screening) => {
+    if (value === 'ribbon') setRibbonOpened(true);
+    setScreening(value);
+  };
+  const switchWithKeys = (event: KeyboardEvent<HTMLButtonElement>, index: number) => {
+    let next: number;
+    if (event.key === 'ArrowRight') next = (index + 1) % screenings.length;
+    else if (event.key === 'ArrowLeft') next = (index + screenings.length - 1) % screenings.length;
+    else if (event.key === 'Home') next = 0;
+    else if (event.key === 'End') next = screenings.length - 1;
+    else return;
     event.preventDefault();
-    const section = workRef.current;
-    if (!section) return;
-    section.focus({ preventScroll: true });
-    section.scrollIntoView({
-      behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth',
-      block: 'start',
-    });
+    select(screenings[next]);
+    tabs.current[next]?.focus();
   };
 
   return (
-    <div className="folio">
-      <header className="folio-nav">
-        <a href="#/" className="folio-brand" aria-label="Kai, selected work">
+    <div className="screening-home">
+      <header className="screening-nav">
+        <a className="screening-brand" href="#/" aria-label="Kai, selected work">
           KAI<span>↗</span>
         </a>
-        <span className="folio-location">
-          INDEPENDENT DEVELOPER
-          <br />
-          CHINA · UTC+8
-        </span>
-        <nav aria-label="Main navigation">
-          <a href="#selected-work" onClick={showWork}>
-            Selected work <ArrowDown size={13} />
-          </a>
-          <a className="folio-nav-contact" href="mailto:fuddleyu@gmail.com">
-            Let’s talk <ArrowUpRight size={15} />
-          </a>
-        </nav>
+        <p className="screening-role">Independent creative developer</p>
+        <span className="screening-location">CHINA / UTC+8</span>
+        <a className="screening-contact" href="mailto:fuddleyu@gmail.com">
+          Let’s talk <ArrowUpRight size={15} />
+        </a>
       </header>
-      <main id="main-content" tabIndex={-1}>
-        <section className="folio-hero" aria-labelledby="folio-title">
-          <div className="folio-kicker">
-            <span>CREATIVE DEVELOPMENT</span>
-            <span>SELECTED WORK / 2026</span>
-          </div>
-          <div className="folio-hero-grid">
-            <div className="folio-hero-copy">
-              <h1 id="folio-title">
-                <span className="folio-title-line">Expressive</span>
-                <span className="folio-title-line">on screen.</span>
-                <span className="folio-title-solid">
-                  <em>Solid</em> underneath.
-                </span>
-              </h1>
-              <p>
-                I’m Kai. I build expressive websites, interactive graphics and data tools that stay
-                fast under real use.
-              </p>
-              <a className="folio-primary-link" href="#selected-work" onClick={showWork}>
-                View selected work <ArrowDown size={18} />
-              </a>
+      <main id="main-content" tabIndex={-1} className="screening-workspace">
+        <section className="screening-theater" aria-label="Interactive work screening room">
+          <header className="screening-stage-head">
+            <div className="screening-now">
+              <span>NOW SHOWING</span>
+              <h1>{screening === 'motion' ? 'Motion film' : 'Ribbon study'}</h1>
             </div>
-            <KineticArtwork />
+            <div className="screening-tabs" role="tablist" aria-label="Choose a study">
+              {screenings.map((value, index) => (
+                <button
+                  key={value}
+                  id={`screening-tab-${value}`}
+                  role="tab"
+                  type="button"
+                  aria-selected={screening === value}
+                  aria-controls={`screening-panel-${value}`}
+                  tabIndex={screening === value ? 0 : -1}
+                  ref={(element) => {
+                    tabs.current[index] = element;
+                  }}
+                  onClick={() => select(value)}
+                  onKeyDown={(event) => switchWithKeys(event, index)}
+                >
+                  {value === 'motion' ? 'Motion film' : 'Ribbon study'}
+                </button>
+              ))}
+            </div>
+          </header>
+          <div
+            className="screening-panel"
+            id="screening-panel-motion"
+            role="tabpanel"
+            aria-labelledby="screening-tab-motion"
+            hidden={screening !== 'motion'}
+            tabIndex={0}
+          >
+            <Suspense fallback={<FilmPlaceholder />}>
+              <MotionReel embedded />
+            </Suspense>
           </div>
-          <div className="folio-hero-bottom">
-            <span>DESIGN SENSIBILITY. ENGINEERING DEPTH.</span>
+          <div
+            className="screening-panel screening-ribbon-panel"
+            id="screening-panel-ribbon"
+            role="tabpanel"
+            aria-labelledby="screening-tab-ribbon"
+            hidden={screening !== 'ribbon'}
+            tabIndex={0}
+          >
+            {ribbonOpened && <KineticArtwork />}
+          </div>
+          <div className="screening-stage-note">
             <span>
-              SCROLL TO EXPLORE <ArrowDown size={12} />
+              {screening === 'motion'
+                ? 'Rendered live. Use the player to explore the sequence.'
+                : 'An original procedural form. Move your pointer to shift the view.'}
             </span>
+            <span>INDEPENDENT STUDY</span>
           </div>
         </section>
 
-        <section
-          className="folio-selected"
-          id="selected-work"
-          tabIndex={-1}
-          ref={workRef}
-          aria-labelledby="work-title"
-        >
-          <div className="folio-work-heading folio-reveal">
-            <h2 id="work-title">
-              Selected work<sup>(04)</sup>
-            </h2>
-            <p>
-              Independent projects.
-              <br />
-              Real interfaces. Open to explore.
-            </p>
+        <aside className="screening-index" aria-labelledby="project-index-title">
+          <div className="screening-index-heading">
+            <h2 id="project-index-title">Project index</h2>
+            <span>05</span>
           </div>
-
-          <article className="folio-field-project folio-reveal" aria-labelledby="field-title">
-            <header className="folio-project-header">
-              <div className="folio-project-identity">
-                <span className="folio-index">01 / INTERACTIVE GRAPHICS</span>
-                <h3 id="field-title">Field</h3>
-              </div>
-              <p>
-                Make a brand feel alive.
-                <span>Generative graphics for distinctive digital experiences.</span>
-              </p>
-              <a className="folio-demo-link" href="#/field">
-                Open Field <ArrowUpRight size={20} />
-              </a>
-            </header>
-            <div className="folio-field-view">
-              <FieldLab embedded initialPalette={1} />
-            </div>
-            <div className="folio-project-caption">
-              <span>PAINT INTO A LIVING PATTERN. TRY THE CONTROLS.</span>
-              <span>GPU SIMULATION / INDEPENDENT EXPERIMENT</span>
-            </div>
-          </article>
-
-          <article className="folio-halo-project folio-reveal" aria-labelledby="halo-title">
-            <figure className="folio-halo-figure">
+          <nav aria-label="Working projects">
+            {projects.map((project) => (
               <a
-                href="#/halo"
-                className="folio-visual-link"
-                aria-label="Explore Halo, an interactive product configurator"
+                key={project.route}
+                href={`#/${project.route}`}
+                aria-label={`Open ${project.name}: ${project.description}`}
+                className={project.route === 'motion' ? 'screening-featured-project' : undefined}
               >
-                <img
-                  src={`${import.meta.env.BASE_URL}assets/halo-live.png`}
-                  width="1498"
-                  height="503"
-                  loading="lazy"
-                  decoding="async"
-                  alt="The graphite Halo pendant on a warm studio background, rendered by the working product configurator."
-                />
-                <span className="folio-image-open">
-                  Explore in 3D <ArrowUpRight size={21} />
-                </span>
+                <span className="screening-project-number">{project.number}</span>
+                <span className="screening-project-name">{project.name}</span>
+                <span className="screening-project-meta">{project.detail}</span>
+                <ArrowUpRight size={16} />
               </a>
-              <figcaption>ACTUAL CONFIGURATOR RENDER / INDEPENDENT PROJECT</figcaption>
-            </figure>
-            <div className="folio-halo-copy">
-              <span className="folio-index">02 / PRODUCT EXPERIENCES</span>
-              <h3 id="halo-title">Halo</h3>
-              <p className="folio-project-promise">
-                Let people explore
-                <br />
-                before they buy.
-              </p>
-              <p className="folio-project-description">
-                A configurable product scene. Change materials, proportions and light, then share
-                the exact setup.
-              </p>
-              <div className="folio-halo-materials" aria-hidden="true">
-                <span />
-                <span />
-                <span />
-                <small>MATERIALS / LIGHT / FORM</small>
-              </div>
-              <a className="folio-demo-link" href="#/halo">
-                Open configurator <ArrowUpRight size={20} />
-              </a>
-              <span className="folio-project-tech">THREE.JS / REAL-TIME 3D / SHAREABLE STATE</span>
-            </div>
-          </article>
-
-          <div className="folio-systems-spread">
-            <article className="folio-current-project folio-reveal" aria-labelledby="current-title">
-              <a
-                className="folio-visual-link"
-                href="#/current"
-                aria-label="Open Current, the 100,000-row data workbench"
-              >
-                <CurrentPreview />
-              </a>
-              <div className="folio-project-copy">
-                <div className="folio-small-project-title">
-                  <span className="folio-index">03</span>
-                  <h3 id="current-title">Current</h3>
-                  <a href="#/current" aria-label="Open Current workbench">
-                    <ArrowUpRight size={26} />
-                  </a>
-                </div>
-                <p className="folio-project-promise">Make heavy data feel light.</p>
-                <p className="folio-project-description">
-                  Search, filter and export a 100,000-row CSV in the browser. A practical foundation
-                  for internal tools.
-                </p>
-                <span className="folio-project-tech">STREAMING CSV / WORKERS / VIRTUALIZATION</span>
-                <a className="folio-text-link" href="#/current">
-                  Open workbench <ArrowRight size={16} />
-                </a>
-              </div>
-            </article>
-            <article className="folio-relay-project folio-reveal" aria-labelledby="relay-title">
-              <a
-                className="folio-visual-link"
-                href="#/relay"
-                aria-label="Open Relay, the durable queue and recovery lab"
-              >
-                <RelayPreview />
-              </a>
-              <div className="folio-project-copy">
-                <div className="folio-small-project-title">
-                  <span className="folio-index">04</span>
-                  <h3 id="relay-title">Relay</h3>
-                  <a href="#/relay" aria-label="Open Relay recovery lab">
-                    <ArrowUpRight size={26} />
-                  </a>
-                </div>
-                <p className="folio-project-promise">Keep important work moving.</p>
-                <p className="folio-project-description">
-                  A durable queue lab for jobs that need to survive interruptions. Stop the worker
-                  and watch recovery.
-                </p>
-                <span className="folio-project-tech">TRANSACTIONS / LEASES / RECOVERY</span>
-                <a className="folio-text-link" href="#/relay">
-                  Open recovery lab <ArrowRight size={16} />
-                </a>
-              </div>
-            </article>
-          </div>
-
-          <section className="folio-colophon folio-reveal" aria-labelledby="proof-title">
-            <div>
-              <span className="folio-index">BEHIND THE FINISH</span>
-              <h2 id="proof-title">
-                Built to look good.
-                <br />
-                And hold up.
-              </h2>
-              <a className="folio-text-link" href={REPO} target="_blank" rel="noreferrer">
-                Explore the source <ArrowUpRight size={17} />
-              </a>
-            </div>
-            <div className="folio-proof-details">
-              <p>The engineering is open, with checks you can inspect and run.</p>
-              <ul>
-                <li>
-                  <Check size={15} />
-                  <span>GPU output compared with a CPU reference.</span>
-                </li>
-                <li>
-                  <Check size={15} />
-                  <span>CSV totals checked independently with integer arithmetic.</span>
-                </li>
-                <li>
-                  <Check size={15} />
-                  <span>Queue recovery tested across abandoned leases and interrupted writes.</span>
-                </li>
-              </ul>
-              <a className="folio-text-link" href="#/evidence">
-                Read the test records <ArrowRight size={17} />
-              </a>
-            </div>
-          </section>
-        </section>
-
-        <section className="folio-contact" aria-label="Contact Kai">
-          <div className="folio-contact-top">
-            <span>HAVE A PROJECT IN MIND?</span>
-            <span>LET’S MAKE SOMETHING THAT MATTERS.</span>
-          </div>
-          <a className="folio-contact-cta" href="mailto:fuddleyu@gmail.com">
-            Send the brief.
-            <ArrowUpRight />
-          </a>
-          <div className="folio-contact-bottom">
-            <p>Websites · Interactive graphics · Data tools</p>
-            <a href="mailto:fuddleyu@gmail.com">
-              fuddleyu@gmail.com <ArrowUpRight size={16} />
+            ))}
+          </nav>
+          <div className="screening-source-links">
+            <a href={REPO} target="_blank" rel="noreferrer">
+              Source code <ArrowUpRight size={14} />
+            </a>
+            <a href="#/evidence">
+              Test records <ArrowUpRight size={14} />
             </a>
           </div>
-        </section>
+          <p className="screening-disclosure">
+            Independent projects, built to explore. Each link opens the working demo.
+          </p>
+        </aside>
       </main>
-      <footer className="folio-footer">
+      <footer className="screening-footer">
         <span>KAI / 2026</span>
-        <span>INDEPENDENT PROJECTS · CHINA / UTC+8</span>
-        <a href={REPO} target="_blank" rel="noreferrer">
-          Source on GitHub <ArrowUpRight size={12} />
+        <span>Frontend · Interactive graphics · Browser tools</span>
+        <a href="mailto:fuddleyu@gmail.com">
+          fuddleyu@gmail.com <ArrowUpRight size={13} />
         </a>
       </footer>
     </div>
