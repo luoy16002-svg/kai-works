@@ -205,7 +205,11 @@ export function FieldLab({
           </button>
           <button
             disabled={!ready}
-            aria-label="Change field palette"
+            aria-label={
+              palette === 0
+                ? 'Switch to paper and plum palette'
+                : 'Switch to plum and apricot palette'
+            }
             onClick={() => setPalette((v) => (v === 0 ? 1 : 0))}
           >
             <span className="palette-swatch" />

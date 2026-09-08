@@ -118,7 +118,7 @@ const still = sculpture(0).map((band) => ({
   strands: bandStrands(band),
 }));
 
-export default function KineticArtwork() {
+export default function KineticArtwork({ active = true }: { active?: boolean }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const frameRef = useRef<HTMLDivElement>(null);
   const syncRef = useRef<(() => void) | null>(null);
@@ -127,7 +127,9 @@ export default function KineticArtwork() {
   );
   const [ready, setReady] = useState(false);
   const pausedRef = useRef(paused);
+  const activeRef = useRef(active);
   pausedRef.current = paused;
+  activeRef.current = active;
 
   useEffect(() => {
     const canvas = canvasRef.current!;
@@ -197,10 +199,11 @@ export default function KineticArtwork() {
         setReady(false);
       }
     };
-    const active = () => !pausedRef.current && visible && !document.hidden && !failed;
+    const canAnimate = () =>
+      activeRef.current && !pausedRef.current && visible && !document.hidden && !failed;
     const tick = (now: number) => {
       frame = 0;
-      if (!active()) return;
+      if (!canAnimate()) return;
       // The form changes slowly; 30 fps avoids unnecessary work on high-refresh screens.
       if (now - lastPaint >= 32) {
         elapsed += previous ? Math.min(0.06, (now - previous) / 1000) : 0;
@@ -210,10 +213,10 @@ export default function KineticArtwork() {
         pointerY += (targetY - pointerY) * 0.075;
         draw();
       }
-      if (active()) frame = requestAnimationFrame(tick);
+      if (canAnimate()) frame = requestAnimationFrame(tick);
     };
     const sync = () => {
-      if (active()) {
+      if (canAnimate()) {
         if (!frame) {
           previous = 0;
           frame = requestAnimationFrame(tick);
@@ -288,7 +291,7 @@ export default function KineticArtwork() {
 
   useEffect(() => {
     syncRef.current?.();
-  }, [paused]);
+  }, [paused, active]);
 
   return (
     <figure className="kinetic-artwork">

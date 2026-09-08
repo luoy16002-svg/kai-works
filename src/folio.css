@@ -1,8 +1,11 @@
 /* Personal project index: a live experiment first, with direct access to the work. */
-.folio,
-.field-page {
+.folio {
   background: #eceee9;
   color: #181b1a;
+}
+.field-page {
+  background: var(--kai-paper);
+  color: var(--kai-ink);
 }
 .folio {
   padding: 0 max(28px, calc((100vw - 1360px) / 2));
@@ -96,15 +99,15 @@
   font-weight: 600;
 }
 .field-lab {
-  background: #101411;
-  color: #e0e8d7;
-  border: 1px solid #273028;
+  background: var(--kai-surface);
+  color: var(--kai-ink);
+  border: 1px solid var(--kai-line);
 }
 .field-surface {
   position: relative;
   height: min(57vw, 620px);
   min-height: 350px;
-  background: #0b0d10;
+  background: var(--kai-ink);
   overflow: hidden;
 }
 .field-surface canvas {
@@ -129,7 +132,7 @@
   font-family: 'DM Mono', monospace;
   font-size: 10px;
   letter-spacing: 0.04em;
-  color: #f0ffe0;
+  color: var(--kai-paper);
   mix-blend-mode: difference;
 }
 .field-overlay {
@@ -147,7 +150,7 @@
   align-items: center;
   justify-content: space-between;
   min-height: 63px;
-  border-top: 1px solid #313c2d;
+  border-top: 1px solid var(--kai-line);
   padding: 10px 20px;
   gap: 16px;
 }
@@ -158,7 +161,7 @@
   gap: 6px;
 }
 .field-lab button {
-  border-radius: 0;
+  border-radius: 3px;
   background: transparent;
   color: inherit;
   font-size: 11px;
@@ -170,12 +173,12 @@
   border: 1px solid transparent;
 }
 .field-presets button[aria-pressed='true'] {
-  color: #c6f978;
-  border-color: #576f3a;
-  background: #202a16;
+  color: var(--kai-ink);
+  border-color: var(--kai-line-strong);
+  background: var(--kai-lilac);
 }
 .field-lab button:hover {
-  background: #30372b;
+  background: var(--kai-surface-selected);
 }
 .field-actions button,
 .field-actions a {
@@ -188,10 +191,13 @@
 .palette-swatch {
   width: 14px;
   height: 14px;
-  background: linear-gradient(90deg, #d7edbd 50%, transparent 50%);
-  border: 1px solid #d7edbd;
+  background: linear-gradient(90deg, var(--kai-apricot) 50%, var(--kai-lilac) 50%);
+  border: 1px solid var(--kai-ink);
   border-radius: 50%;
   display: block;
+}
+.field-lab[data-palette='1'] .palette-swatch {
+  background: linear-gradient(90deg, var(--kai-paper) 50%, var(--kai-ink) 50%);
 }
 .folio-feature-caption {
   display: flex;
@@ -399,9 +405,6 @@
   color: #758168;
   font-size: 9px;
 }
-.field-page .work-nav {
-  background: #e2e5de;
-}
 .field-page > main {
   padding: 0 max(24px, calc((100vw - 1240px) / 2));
 }
@@ -412,27 +415,27 @@
   padding: 32px 0 28px;
 }
 .field-page-heading .mono {
-  font-size: 9px;
-  color: #6c7563;
+  font-size: 11px;
+  color: var(--kai-muted);
 }
 .field-page-heading h1 {
-  font-size: clamp(70px, 9vw, 125px);
+  font-size: clamp(30px, 3vw, 36px);
   font-weight: 600;
-  letter-spacing: -0.075em;
-  line-height: 1;
-  margin-top: 15px;
+  letter-spacing: -0.045em;
+  line-height: 1.15;
+  margin-top: 10px;
 }
 .field-page-heading h1 span {
   font-size: 0.65em;
-  margin-left: 30px;
+  margin-left: 14px;
 }
 .field-page-heading > p {
-  color: #69735f;
+  color: var(--kai-muted);
   font-size: 14px;
-  padding-bottom: 10px;
+  padding-bottom: 0;
 }
 .field-settings {
-  border-top: 1px solid #30392b;
+  border-top: 1px solid var(--kai-line);
   padding: 24px;
 }
 .field-setting-row {
@@ -450,14 +453,14 @@
 }
 .field-setting-row label,
 .field-meter span {
-  color: #98a58d;
+  color: var(--kai-muted);
 }
 .field-setting-row select {
   padding: 7px;
-  background: #1d2619;
-  color: #d3e7be;
-  border: 1px solid #46553b;
-  border-radius: 0;
+  background: var(--kai-paper);
+  color: var(--kai-ink);
+  border: 1px solid var(--kai-line-strong);
+  border-radius: 3px;
 }
 .field-meter b {
   font:
@@ -468,12 +471,12 @@
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  border-top: 1px solid #30392b;
+  border-top: 1px solid var(--kai-line);
   margin-top: 25px;
   padding-top: 18px;
 }
 .field-test-row button {
-  border: 1px solid #46553b;
+  border: 1px solid var(--kai-line-strong);
   display: flex;
   align-items: center;
   gap: 9px;
@@ -482,11 +485,11 @@
   font:
     10px/1.6 'DM Mono',
     monospace;
-  color: #afc39e;
+  color: var(--kai-muted);
   margin-top: 20px;
 }
 .field-settings .field-failed {
-  color: #ffa996;
+  color: var(--kai-error);
 }
 .field-error {
   position: absolute;
@@ -495,11 +498,11 @@
   place-content: center;
   text-align: center;
   gap: 20px;
-  background: #13190feb;
+  background: var(--kai-paper);
   padding: 25px;
 }
 .field-error button {
-  border: 1px solid #769459;
+  border: 1px solid var(--kai-line-strong);
 }
 .field-about {
   display: grid;
@@ -508,13 +511,13 @@
   padding: 42px 0 75px;
 }
 .field-about p {
-  color: #647357;
+  color: var(--kai-muted);
   font-size: 12px;
   line-height: 1.8;
 }
 .field-about > p {
   font-size: 17px;
-  color: #313c28;
+  color: var(--kai-ink);
 }
 .field-about a {
   font-size: 11px;
@@ -526,9 +529,9 @@
 }
 .evidence-intro h1 {
   font-family: Manrope, sans-serif;
-  font-size: clamp(42px, 5vw, 72px);
+  font-size: clamp(30px, 3vw, 36px);
   font-weight: 500;
-  letter-spacing: -0.06em;
+  letter-spacing: -0.04em;
 }
 .evidence-intro h1 em {
   font-family: inherit;
@@ -746,13 +749,13 @@
     padding: 25px 0;
   }
   .field-page-heading h1 {
-    font-size: 76px;
+    font-size: 32px;
   }
   .field-page-heading h1 span {
     margin-left: 12px;
   }
   .field-page-heading > p {
-    font-size: 11px;
+    font-size: 13px;
   }
   .field-settings {
     padding: 17px;

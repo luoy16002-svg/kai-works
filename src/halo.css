@@ -1,11 +1,11 @@
 /* A warm product studio, isolated from the other project workspaces. */
 .halo-page {
-  --halo-ink: #251c2d;
-  --halo-paper: #f7f2e8;
-  --halo-apricot: #eeaa82;
-  --halo-lilac: #c6bad9;
-  --halo-muted: #69566c;
-  --halo-line: #cfc1bd;
+  --halo-ink: var(--kai-ink);
+  --halo-paper: var(--kai-paper);
+  --halo-apricot: var(--kai-apricot);
+  --halo-lilac: var(--kai-lilac);
+  --halo-muted: var(--kai-muted);
+  --halo-line: var(--kai-line);
   min-height: 100svh;
   color: var(--halo-ink);
   background: var(--halo-paper);
@@ -16,41 +16,12 @@
   background: var(--halo-lilac);
 }
 
-.halo-page :is(button, a, input):focus-visible {
-  outline: 2px solid var(--halo-ink);
-  outline-offset: 4px;
-}
-
 .halo-page button {
   border-radius: 2px;
 }
 
 .halo-page button:disabled {
   opacity: 0.68;
-}
-
-.halo-page .work-nav {
-  min-height: 48px;
-  height: auto;
-  padding: 0 36px;
-  background: var(--halo-ink);
-  color: var(--halo-lilac);
-  border: 0;
-  font-size: 11px;
-}
-
-.halo-page .work-nav a {
-  min-height: 48px;
-  color: var(--halo-paper);
-}
-
-.halo-page .work-nav a:focus-visible {
-  outline-color: var(--halo-apricot);
-  outline-offset: -4px;
-}
-
-.halo-page .work-nav i {
-  color: var(--halo-lilac);
 }
 
 .halo-page main {
@@ -330,13 +301,13 @@
 
 .halo-page .finish-choices button.selected {
   border-color: var(--halo-ink);
-  background: #e7dfed;
+  background: var(--kai-surface-selected);
 }
 
 .halo-page .finish-choices button > span {
   width: 29px;
   height: 29px;
-  outline: 1px solid #776a73;
+  outline: 1px solid var(--kai-line-strong);
   outline-offset: 2px;
 }
 
@@ -357,7 +328,7 @@
 .halo-page .size-choices button {
   min-height: 44px;
   padding: 9px 0;
-  border-color: #8b7a8f;
+  border-color: var(--kai-line-strong);
   font-size: 15px;
 }
 
@@ -394,7 +365,7 @@
 .halo-page .halo-controls input[type='range']::-webkit-slider-runnable-track {
   height: 4px;
   border-radius: 2px;
-  background: #95839d;
+  background: var(--kai-line-strong);
 }
 
 .halo-page .halo-controls input[type='range'].temperature-range::-webkit-slider-runnable-track {
@@ -416,7 +387,7 @@
 .halo-page .halo-controls input[type='range']::-moz-range-track {
   height: 4px;
   border-radius: 2px;
-  background: #95839d;
+  background: var(--kai-line-strong);
 }
 
 .halo-page .halo-controls input[type='range'].temperature-range::-moz-range-track {
@@ -572,14 +543,6 @@
 }
 
 @media (max-width: 800px) {
-  .halo-page .work-nav {
-    padding: 0 22px;
-  }
-
-  .halo-page .work-nav > span {
-    display: none;
-  }
-
   .halo-page .halo-header > .small-caps {
     display: none;
   }
@@ -632,12 +595,6 @@
 }
 
 @media (max-width: 480px) {
-  .halo-page .work-nav {
-    padding: 0 18px;
-    gap: 10px;
-    font-size: 11px;
-  }
-
   .halo-page .halo-header {
     height: 94px;
     margin: 0 20px;

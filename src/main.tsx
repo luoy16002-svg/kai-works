@@ -16,6 +16,7 @@ const Evidence = lazy(() => import('./pages/Evidence'));
 const Home = lazy(() => import('./pages/Home'));
 const Field = lazy(() => import('./pages/Field'));
 const Motion = lazy(() => import('./pages/Motion'));
+const Infinite = lazy(() => import('./pages/Infinite'));
 class WorkspaceBoundary extends React.Component<
   { children: React.ReactNode },
   { failed: boolean }
@@ -52,7 +53,8 @@ function App() {
       (
         {
           '#/': 'Kai — Work screening room',
-          '#/motion': 'Motion — A real-time 3D film',
+          '#/motion': 'Kai — Type into system',
+          '#/infinite': 'Kai — Infinite field',
           '#/halo': 'HALO — Product configurator',
           '#/field': 'FIELD — Reaction diffusion studio',
           '#/current': 'Current — Local data workbench',
@@ -81,7 +83,9 @@ function App() {
           </div>
         }
       >
-        {route === '#/motion' ? (
+        {route === '#/infinite' ? (
+          <Infinite />
+        ) : route === '#/motion' ? (
           <Motion />
         ) : route === '#/field' ? (
           <Field />

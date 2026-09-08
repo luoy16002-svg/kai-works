@@ -45,9 +45,9 @@ void main() {
   float b = mix(mix(a, b0, f.x), mix(c, d, f.x), f.y);
   float shape = smoothstep(0.07, 0.31, b);
   float ridge = pow(max(0.0, 1.0 - abs(b - 0.20) * 12.0), 3.0);
-  vec3 bg = palette == 0 ? vec3(0.045,0.052,0.065) : vec3(0.91,0.92,0.90);
-  vec3 fg = palette == 0 ? vec3(0.71,0.94,0.37) : vec3(0.055,0.085,0.14);
-  color = vec4(mix(bg, fg, shape) + ridge * (palette == 0 ? 0.12 : -0.035), 1.0);
+  vec3 bg = palette == 0 ? vec3(0.145,0.110,0.176) : vec3(0.969,0.949,0.910);
+  vec3 fg = palette == 0 ? vec3(0.933,0.667,0.510) : vec3(0.145,0.110,0.176);
+  color = vec4(mix(bg, fg, shape) + ridge * (palette == 0 ? vec3(0.093,0.088,0.102) : vec3(-0.035)), 1.0);
 }`;
 
 export class FieldGPU {

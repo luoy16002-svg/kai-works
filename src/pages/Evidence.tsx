@@ -34,9 +34,7 @@ export default function Evidence() {
         <section className="evidence-intro">
           <span className="eyebrow">TEST RECORDS / SOURCE / LIMITS</span>
           <h1>
-            Checks &
-            <br />
-            <em>observations.</em>
+            Checks & <em>observations.</em>
           </h1>
           <p>
             These are independent portfolio projects. The source includes failure injection,
