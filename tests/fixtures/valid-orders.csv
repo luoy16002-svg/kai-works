@@ -1,0 +1,4 @@
+id,date,region,channel,amount
+TEST-001,2026-02-28,"Europe, West",Direct,12.34
+TEST-002,2026-03-01,"Europe, West",Partner,0.66
+TEST-003,2026-03-02,Asia Pacific,"Retail ""store""",87.00
