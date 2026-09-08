@@ -4,7 +4,13 @@ import { fieldPresets, seedField, type FieldPreset } from '../core/field';
 import { FieldGPU, validateGPU } from '../core/field-gpu';
 import { download, REPO, WorkNav } from '../ui';
 
-export function FieldLab({ embedded = false }: { embedded?: boolean }) {
+export function FieldLab({
+  embedded = false,
+  initialPalette = 0,
+}: {
+  embedded?: boolean;
+  initialPalette?: 0 | 1;
+}) {
   const canvas = useRef<HTMLCanvasElement>(null);
   const renderer = useRef<FieldGPU | null>(null);
   const brush = useRef([-1, -1, 0]);
@@ -13,7 +19,7 @@ export function FieldLab({ embedded = false }: { embedded?: boolean }) {
   const [running, setRunning] = useState(
     () => !matchMedia('(prefers-reduced-motion: reduce)').matches,
   );
-  const [palette, setPalette] = useState(0);
+  const [palette, setPalette] = useState(initialPalette);
   const [seed, setSeed] = useState(7126);
   const [contextVersion, setContextVersion] = useState(0);
   const [ready, setReady] = useState(false);
@@ -132,7 +138,7 @@ export function FieldLab({ embedded = false }: { embedded?: boolean }) {
     }
   };
   return (
-    <div className={`field-lab ${embedded ? 'field-embedded' : ''}`}>
+    <div className={`field-lab ${embedded ? 'field-embedded' : ''}`} data-palette={palette}>
       <div className="field-surface">
         <canvas
           key={contextVersion}
@@ -200,7 +206,7 @@ export function FieldLab({ embedded = false }: { embedded?: boolean }) {
           <button
             disabled={!ready}
             aria-label="Change field palette"
-            onClick={() => setPalette((v) => 1 - v)}
+            onClick={() => setPalette((v) => (v === 0 ? 1 : 0))}
           >
             <span className="palette-swatch" />
           </button>

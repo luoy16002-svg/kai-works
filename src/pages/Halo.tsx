@@ -2,8 +2,18 @@ import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
-import { ArrowDownToLine, RotateCcw, Link, Move, Sun, ArrowUpRight } from 'lucide-react';
+import {
+  ArrowDownToLine,
+  RotateCcw,
+  Link,
+  Move,
+  Sun,
+  ArrowUpRight,
+  Pause,
+  Play,
+} from 'lucide-react';
 import { WorkNav, SourceLink, download } from '../ui';
+import '../halo.css';
 import {
   decodeHalo,
   encodeHalo,
@@ -18,20 +28,24 @@ type SceneControl = {
   reset: () => void;
   picture: () => string;
   turn: (direction: number) => void;
+  setRotation: (enabled: boolean) => void;
 };
 function Stage({
   config,
+  rotating,
   control,
   onReady,
   onFailure,
 }: {
   config: HaloConfig;
+  rotating: boolean;
   control: React.RefObject<SceneControl | null>;
   onReady: (ready: boolean) => void;
   onFailure: (error: string) => void;
 }) {
   const element = useRef<HTMLDivElement>(null);
   const initial = useRef(config);
+  const initialRotation = useRef(rotating);
   useEffect(() => {
     const host = element.current!;
     let renderer: THREE.WebGLRenderer;
@@ -51,34 +65,42 @@ function Stage({
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 0.9;
+    renderer.toneMappingExposure = 1;
     host.appendChild(renderer.domElement);
     renderer.domElement.setAttribute(
       'aria-label',
       'Interactive pendant light. Drag to orbit or use the rotate buttons.',
     );
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color('#dedcd2');
-    scene.fog = new THREE.Fog('#dedcd2', 13, 28);
+    scene.background = new THREE.Color('#eeaa82');
+    scene.fog = new THREE.Fog('#eeaa82', 11, 28);
     const pmrem = new THREE.PMREMGenerator(renderer);
     const room = new RoomEnvironment();
     const environment = pmrem.fromScene(room, 0.04);
     scene.environment = environment.texture;
     room.dispose();
-    const camera = new THREE.PerspectiveCamera(37, 1, 0.1, 60);
-    camera.position.set(4.8, 3.3, 6.5);
+    const camera = new THREE.PerspectiveCamera(38, 1, 0.1, 60);
+    const cameraDirection = new THREE.Vector3(0.61, 0.35, 0.72).normalize();
+    let fitDistance = 4.6;
+    camera.position
+      .copy(cameraDirection)
+      .multiplyScalar(fitDistance)
+      .add(new THREE.Vector3(0, 2, 0));
     const orbit = new OrbitControls(camera, renderer.domElement);
-    orbit.target.set(0, 1.95, 0);
-    orbit.minDistance = 4;
-    orbit.maxDistance = 12;
-    orbit.maxPolarAngle = Math.PI * 0.64;
-    orbit.minPolarAngle = 0.3;
+    orbit.target.set(0, 2, 0);
+    orbit.minDistance = 3;
+    orbit.maxDistance = 16;
+    orbit.maxPolarAngle = Math.PI * 0.58;
+    orbit.minPolarAngle = 0.4;
     orbit.enablePan = false;
     orbit.enableDamping = true;
+    orbit.dampingFactor = 0.085;
+    orbit.autoRotate = initialRotation.current;
+    orbit.autoRotateSpeed = 1.05;
     orbit.update();
-    const hemi = new THREE.HemisphereLight('#ffffff', '#9c917b', 2.4);
+    const hemi = new THREE.HemisphereLight('#fff7ed', '#81576d', 1.8);
     scene.add(hemi);
-    const key = new THREE.DirectionalLight('#fff8ea', 4.5);
+    const key = new THREE.DirectionalLight('#fff4de', 3.1);
     key.position.set(-3, 7, 4);
     key.castShadow = true;
     key.shadow.mapSize.set(2048, 2048);
@@ -88,9 +110,12 @@ function Stage({
     key.shadow.camera.bottom = -6;
     key.shadow.normalBias = 0.03;
     scene.add(key);
+    const fill = new THREE.DirectionalLight('#d3c4f2', 1.1);
+    fill.position.set(4, 3, -5);
+    scene.add(fill);
     const floor = new THREE.Mesh(
       new THREE.PlaneGeometry(200, 200),
-      new THREE.MeshStandardMaterial({ color: '#bdb7a6', roughness: 0.95 }),
+      new THREE.MeshStandardMaterial({ color: '#d59475', roughness: 1 }),
     );
     floor.rotation.x = -Math.PI / 2;
     floor.receiveShadow = true;
@@ -139,7 +164,7 @@ function Stage({
     const wires = new THREE.Group();
     scene.add(wires);
     const wireMat = new THREE.MeshStandardMaterial({
-      color: '#55564d',
+      color: '#4d3847',
       metalness: 0.8,
       roughness: 0.4,
     });
@@ -153,6 +178,40 @@ function Stage({
     spot.position.set(0, 1.86, 0);
     spot.target.position.set(0, 0, 0);
     scene.add(spot, spot.target);
+    let frame = 0;
+    let inView = true;
+    let disposed = false;
+    let previousTime = 0;
+    const canDraw = () => !disposed && inView && document.visibilityState === 'visible';
+    const requestDraw = () => {
+      if (!frame && canDraw()) frame = requestAnimationFrame(draw);
+    };
+    const draw = (time: number) => {
+      frame = 0;
+      if (!canDraw()) return;
+      const delta = previousTime ? Math.min((time - previousTime) / 1000, 0.05) : 1 / 60;
+      previousTime = time;
+      orbit.update(delta);
+      renderer.render(scene, camera);
+      if (orbit.autoRotate) requestDraw();
+    };
+    const syncVisibility = () => {
+      previousTime = 0;
+      if (canDraw()) {
+        requestDraw();
+      } else {
+        cancelAnimationFrame(frame);
+        frame = 0;
+      }
+    };
+    // Orbit changes schedule only the frames needed for drag damping to settle.
+    orbit.addEventListener('change', requestDraw);
+    document.addEventListener('visibilitychange', syncVisibility);
+    const intersection = new IntersectionObserver(([entry]) => {
+      inView = entry.isIntersecting;
+      syncVisibility();
+    });
+    intersection.observe(host);
     const apply = (value: HaloConfig) => {
       const finish = finishes[value.finish];
       metal.color.set(finish.color);
@@ -167,14 +226,16 @@ function Stage({
       const scale = value.diameter / 90;
       lamp.scale.set(scale, 1, scale);
       wires.scale.set(scale, 1, scale);
+      requestDraw();
     };
     apply(initial.current);
     control.current = {
       apply,
       reset: () => {
-        camera.position.set(4.8, 3.3, 6.5);
-        orbit.target.set(0, 1.95, 0);
+        orbit.target.set(0, 2, 0);
+        camera.position.copy(cameraDirection).multiplyScalar(fitDistance).add(orbit.target);
         orbit.update();
+        requestDraw();
       },
       picture: () => {
         renderer.render(scene, camera);
@@ -185,26 +246,38 @@ function Stage({
         delta.applyAxisAngle(new THREE.Vector3(0, 1, 0), (direction * Math.PI) / 8);
         camera.position.copy(orbit.target).add(delta);
         orbit.update();
+        requestDraw();
+      },
+      setRotation: (enabled) => {
+        orbit.autoRotate = enabled;
+        if (!enabled) {
+          orbit.enableDamping = false;
+          orbit.update(0);
+          orbit.enableDamping = true;
+        }
+        previousTime = 0;
+        requestDraw();
       },
     };
     const resize = () => {
       const { width, height } = host.getBoundingClientRect();
+      if (!width || !height) return;
       renderer.setSize(width, height);
       camera.aspect = width / height;
+      fitDistance = Math.max(
+        4.6,
+        2.45 / (Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) * camera.aspect),
+      );
+      camera.position.sub(orbit.target).normalize().multiplyScalar(fitDistance).add(orbit.target);
+      orbit.minDistance = fitDistance * 0.65;
+      orbit.maxDistance = fitDistance * 2.1;
       camera.updateProjectionMatrix();
+      orbit.update();
+      requestDraw();
     };
     const observer = new ResizeObserver(resize);
     observer.observe(host);
     resize();
-    let frame = 0;
-    const draw = () => {
-      frame = requestAnimationFrame(draw);
-      if (document.visibilityState === 'visible') {
-        orbit.update();
-        renderer.render(scene, camera);
-      }
-    };
-    draw();
     onReady(true);
     const lost = (event: Event) => {
       event.preventDefault();
@@ -212,8 +285,13 @@ function Stage({
     };
     renderer.domElement.addEventListener('webglcontextlost', lost);
     return () => {
+      disposed = true;
       cancelAnimationFrame(frame);
       observer.disconnect();
+      intersection.disconnect();
+      document.removeEventListener('visibilitychange', syncVisibility);
+      renderer.domElement.removeEventListener('webglcontextlost', lost);
+      orbit.removeEventListener('change', requestDraw);
       orbit.dispose();
       control.current = null;
       scene.traverse((object) => {
@@ -232,6 +310,9 @@ function Stage({
   useEffect(() => {
     control.current?.apply(config);
   }, [config, control]);
+  useEffect(() => {
+    control.current?.setRotation(rotating);
+  }, [rotating, control]);
   return <div className="halo-canvas" ref={element} />;
 }
 // Stable callbacks keep the renderer alive while controls change.
@@ -240,7 +321,22 @@ export default function Halo() {
   const [ready, setReady] = useState(false);
   const [failure, setFailure] = useState('');
   const [notice, setNotice] = useState('');
+  const [reducedMotion, setReducedMotion] = useState(
+    () => window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+  );
+  const [rotating, setRotating] = useState(
+    () => !window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+  );
   const control = useRef<SceneControl | null>(null);
+  useEffect(() => {
+    const preference = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const change = () => {
+      setReducedMotion(preference.matches);
+      if (preference.matches) setRotating(false);
+    };
+    preference.addEventListener('change', change);
+    return () => preference.removeEventListener('change', change);
+  }, []);
   const update = (value: Partial<HaloConfig>) => {
     const next = { ...config, ...value };
     setConfig(next);
@@ -272,47 +368,87 @@ export default function Halo() {
           <a className="halo-logo" href="#/halo">
             HALO<span>LIGHTING OBJECTS</span>
           </a>
-          <span className="small-caps">FORM / MATERIAL / ATMOSPHERE</span>
+          <span className="small-caps">FORM. MATERIAL. ATMOSPHERE.</span>
           <SourceLink />
         </header>
         <div className="halo-layout">
           <section className="halo-stage" aria-label="Product preview">
-            {!failure && (
-              <Stage config={config} control={control} onReady={setReady} onFailure={setFailure} />
-            )}
-            {failure && (
-              <img
-                className="halo-fallback"
-                src={`${import.meta.env.BASE_URL}assets/halo-editorial.png`}
-                alt="Reference image of the HALO pendant"
-              />
-            )}
             <div className="stage-heading">
-              <span className="eyebrow">THE PENDANT COLLECTION</span>
+              <div className="stage-overline">
+                <span className="eyebrow">THE PENDANT COLLECTION</span>
+                <span className="stage-badge">
+                  <span className="status-dot" />
+                  {failure ? 'REFERENCE VIEW' : ready ? 'LIVE 3D VIEW' : 'OPENING LIVE VIEW'}
+                </span>
+              </div>
               <h1>
-                A study
-                <br />
-                in <em>light.</em>
+                A study in <em>light.</em>
               </h1>
             </div>
-            <div className="stage-badge">
-              <span className="status-dot" />
-              {ready && !failure ? 'LIVE 3D VIEW' : 'REFERENCE VIEW'}
+            <div className="halo-scene">
+              {!failure && (
+                <Stage
+                  config={config}
+                  rotating={rotating && !reducedMotion}
+                  control={control}
+                  onReady={setReady}
+                  onFailure={setFailure}
+                />
+              )}
+              {failure && (
+                <img
+                  className="halo-fallback"
+                  src={`${import.meta.env.BASE_URL}assets/halo-editorial.png`}
+                  alt="Reference image of the HALO pendant"
+                />
+              )}
+              <div className="halo-stage-spec">
+                <span>H / 01</span>
+                <span>
+                  {config.diameter} cm · {finishes[config.finish].label}
+                </span>
+              </div>
             </div>
             <div className="stage-tools">
               <span>
-                <Move size={14} /> Drag to explore
+                <Move size={16} /> Drag to explore
               </span>
               <div>
                 <button
-                  onClick={() => control.current?.turn(-1)}
+                  className="halo-rotation"
+                  onClick={() => setRotating((value) => !value)}
+                  disabled={!ready || !!failure || reducedMotion}
+                  aria-label={
+                    reducedMotion
+                      ? 'Rotation off: reduced motion preference'
+                      : rotating
+                        ? 'Pause rotation'
+                        : 'Play rotation'
+                  }
+                  aria-pressed={rotating && !reducedMotion}
+                >
+                  {rotating && !reducedMotion ? <Pause size={15} /> : <Play size={15} />}
+                  <span>
+                    {reducedMotion ? 'Rotation off' : rotating ? 'Pause rotation' : 'Play rotation'}
+                  </span>
+                </button>
+                <button
+                  onClick={() => {
+                    setRotating(false);
+                    control.current?.setRotation(false);
+                    control.current?.turn(-1);
+                  }}
                   disabled={!ready || !!failure}
                   aria-label="Rotate left"
                 >
                   ←
                 </button>
                 <button
-                  onClick={() => control.current?.turn(1)}
+                  onClick={() => {
+                    setRotating(false);
+                    control.current?.setRotation(false);
+                    control.current?.turn(1);
+                  }}
                   disabled={!ready || !!failure}
                   aria-label="Rotate right"
                 >
@@ -329,12 +465,10 @@ export default function Halo() {
             </div>
           </section>
           <aside className="halo-controls">
-            <div className="eyebrow">DESIGNED AROUND YOU</div>
+            <div className="eyebrow">YOUR LIGHT, YOUR WAY</div>
             <h2>Make it yours.</h2>
             <p className="halo-intro">
-              A quiet circle. A different atmosphere.
-              <br />
-              Find your balance of form and light.
+              Shape the atmosphere with a finish, a scale, and a little warmth.
             </p>
             <fieldset>
               <legend>
