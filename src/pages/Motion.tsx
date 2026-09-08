@@ -6,11 +6,11 @@ import '../home.css';
 export default function Motion() {
   return (
     <div className="motion-page">
-      <WorkNav name="MOTION" detail="A real-time 3D film" />
+      <WorkNav name="MOTION" detail="Type into system" />
       <main id="main-content" tabIndex={-1}>
         <header className="motion-page-heading">
-          <h1>Motion film</h1>
-          <span>INDEPENDENT STUDY / 24 SECONDS</span>
+          <h1>Type into system</h1>
+          <span>INDEPENDENT IDENTITY STUDY / 11 SECONDS</span>
           <a href={REPO} target="_blank" rel="noreferrer">
             Source code <ArrowUpRight size={14} />
           </a>

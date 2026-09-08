@@ -1,16 +1,17 @@
 # Kai / Selected work
 
-Five working, independent portfolio projects. React, TypeScript, WebGL 2, Web Workers and Three.js. No client commissions, users or revenue are implied.
+Six working, independent portfolio projects. React, TypeScript, Canvas 2D, WebGL 2, Web Workers and Three.js. No client commissions, users or revenue are implied.
 
 [Open the portfolio](https://luoy16002-svg.github.io/kai-works/) · [Verify the build](https://github.com/luoy16002-svg/kai-works/actions)
 
-| Project | Try it                                                                        | Engineering focus                                                                                               |
-| ------- | ----------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
-| Motion  | Play a 24-second 3D film; seek, change materials, export a frame and timeline | Instanced geometry, deterministic choreography, camera sequencing, visibility-aware rendering                   |
-| Field   | Paint into a reaction–diffusion simulation; compare GPU and CPU; export PNG   | Floating-point ping-pong render targets, periodic finite differences, deterministic seeding, numerical readback |
-| HALO    | Change the pendant, share its URL, export PNG and JSON                        | Procedural geometry, real material updates, bounded serializable state, responsive WebGL                        |
-| Current | Import CSV or generate 100,000 rows; filter and export                        | Streaming CSV parser, independent worker, exact integer sums, virtual table, cancellation                       |
-| Relay   | Run 1,000 jobs, crash the worker, reload and restart                          | Atomic claims, expiring leases, stale-token rejection, idempotency, transactional local effects                 |
+| Project  | Try it                                                                                | Engineering focus                                                                                               |
+| -------- | ------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| Motion   | Transform KAI letterforms into working project entries; scrub and export the sequence | Custom letterforms, continuous vertex transforms, deterministic choreography, visibility-aware Canvas 2D        |
+| Infinite | Explore Lorenz trajectories; change rho, pause, step and export a trace               | Fixed-step RK4, bounded history, inspectable numerical state, responsive 3D rendering                           |
+| Field    | Paint into a reaction–diffusion simulation; compare GPU and CPU; export PNG           | Floating-point ping-pong render targets, periodic finite differences, deterministic seeding, numerical readback |
+| HALO     | Change the pendant, share its URL, export PNG and JSON                                | Procedural geometry, real material updates, bounded serializable state, responsive WebGL                        |
+| Current  | Import CSV or generate 100,000 rows; filter and export                                | Streaming CSV parser, independent worker, exact integer sums, virtual table, cancellation                       |
+| Relay    | Run 1,000 jobs, crash the worker, reload and restart                                  | Atomic claims, expiring leases, stale-token rejection, idempotency, transactional local effects                 |
 
 ```sh
 npm ci
@@ -19,11 +20,11 @@ npm run benchmark
 npm run dev
 ```
 
-Open `http://127.0.0.1:5173/kai-works/`. `npm run build` produces a static `dist/`. Hash routes support direct links on GitHub Pages. The motion player and HALO load through separate lazy imports and share Three.js. Node 24 is used in CI.
+Open `http://127.0.0.1:5173/kai-works/`. `npm run build` produces a static `dist/`. Hash routes support direct links on GitHub Pages. The motion player and Infinite Field load separately; Three.js is shared by Infinite and HALO. Node 24 is used in CI.
 
 ## Evidence
 
-- 23 tests, including 500 randomized CSV round trips, 900 configuration combinations, and reaction–diffusion equilibrium / boundary / stability checks.
+- 26 tests, including 500 randomized CSV round trips, 900 configuration combinations, reaction–diffusion equilibrium / boundary / stability checks, and Lorenz equilibrium, analytic convergence and trace-history checks.
 - Field's live GPU check runs 20 steps on a 64 × 64 grid and compares 8,192 concentrations against a CPU implementation. It reports the actual maximum absolute error, with a 0.0005 threshold; the result can be downloaded. This check runs on the visitor's real graphics context, not in the Node harness.
 - Recorded browser checks: [Coral](verification/field-gpu-validation.json), [Maze](verification/field-gpu-maze.json), [Cells](verification/field-gpu-cells.json). Each record includes its parameters, observed error, browser and timestamp.
 - 100,000 records checked against an independent BigInt reference, with filtered totals and sort order verified.
@@ -36,7 +37,9 @@ Open `http://127.0.0.1:5173/kai-works/`. `npm run build` produces a static `dist
 
 ## Boundaries
 
-Motion is an original, silent, browser-rendered study with four compositions and 84 instanced ribs. Playback runs once, suspends when hidden, and begins on a finished still for reduced-motion preferences. Render counters describe the current device; they are not a frame-rate guarantee. PNG exports contain the rendered canvas, and timeline JSON records the current choreography and material.
+Motion is an original, silent KAI identity study. Letterform strokes transform into interface boundaries and real project links. The Canvas 2D sequence uses one absolute playhead, plays once, suspends when hidden, and begins on a finished still for reduced-motion preferences. PNG exports contain the rendered canvas; timeline JSON records the current composition and palette.
+
+Infinite is a numerical illustration of the [Lorenz system](https://journals.ametsoc.org/view/journals/atsc/20/2/1520-0469_1963_020_0130_dnf_2_0_co_2.xml), with sigma 10, beta 8/3 and adjustable rho from 18 to 40. Seven known initial states advance using CPU RK4 at a fixed 0.005 simulation time step. Each trace retains 1,600 segments; the initial field includes 4,000 warmup steps and 1,600 recorded steps. Exported JSON identifies this preparation, the selected state, parameters, simulation time and Float32 visualization samples. It is a mathematical visualization, not a weather model or a claim of long-range prediction accuracy.
 
 Field is a dimensionless Gray–Scott visual simulation with unit time step, diffusion coefficients 1 and 0.5, a nine-point Laplacian and periodic boundaries. It is not a calibrated chemical model. The model is described by [MIT's Gray–Scott project](https://groups.csail.mit.edu/mac/projects/amorphous/GrayScott/). Animation pauses when hidden or scrolled off screen, and starts paused for reduced-motion preferences. WebGL 2 and floating-point render targets are required. The field uses bilinear display sampling without requiring floating-point linear-filtering extensions. Actual device performance and long-run patterns vary.
 
