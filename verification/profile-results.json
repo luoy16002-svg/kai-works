@@ -1,0 +1,32 @@
+{
+  "date": "2026-09-09",
+  "environment": "Microsoft Edge on Windows; local Vite development server",
+  "scope": "Profile pages, case-study navigation, resume downloads and PDF layout",
+  "routes": ["profile/frontend", "profile/creative", "profile/writing", "case/current", "case/relay", "case/halo", "case/field", "case/invoice-gate", "case/proof"],
+  "viewportWidths": [320, 390, 768, 1440],
+  "routeViewportChecks": 36,
+  "horizontalOverflow": false,
+  "oneMainHeadingPerRoute": true,
+  "frontendProfileAt200PercentCssZoom": { "viewportWidth": 1440, "horizontalOverflow": false },
+  "reducedMotion": "reduce",
+  "observedRuntimeErrors": [],
+  "englishResumeDownloads": {
+    "kai-frontend-developer.pdf": "Downloaded through the matching role page and matched source bytes",
+    "kai-creative-developer.pdf": "Downloaded through the matching role page and matched source bytes",
+    "kai-developer-writer.pdf": "Downloaded through the matching role page and matched source bytes"
+  },
+  "pdfs": {
+    "count": 4,
+    "pagesPerFile": 1,
+    "clickableLinksPerFile": 6,
+    "textExtractionChecked": true,
+    "allFinalPagesRenderedAndVisuallyReviewed": true,
+    "chineseFontEmbedded": true
+  },
+  "existingPortfolioTests": { "passed": 42, "failed": 0 },
+  "invoiceGateTests": { "passed": 20, "failed": 0 },
+  "typecheck": "passed",
+  "productionBuild": "passed",
+  "prettier": "passed",
+  "notes": "Layout checks cover these routes and widths, not an exhaustive accessibility audit. Product metrics on the profile refer to the original linked project evidence. This pass did not rerun all recorded GPU and queue browser experiments."
+}

@@ -1,0 +1,40 @@
+Kai
+Developer & Technical Writer
+China, UTC+8 | Remote projects | Email / chat
+fuddleyu@gmail.com
+Portfolio: https://luoy16002-svg.github.io/kai-works/#/profile/writing
+Source: https://github.com/luoy16002-svg/kai-works
+
+I write code-led explanations about data validation, browser performance and failure recovery. Each topic starts with a runnable example and makes its limits explicit.
+
+TECHNICAL SKILLS
+Python, TypeScript, React, SQLite, data validation, CLI examples, automated tests, technical documentation, Git
+
+SELECTED INDEPENDENT PROJECTS | 2026
+
+Invoice Gate
+Python / SQLite / Decimal / unittest
+https://luoy16002-svg.github.io/kai-works/#/case/invoice-gate
+- Wrote a code-led article explaining invoice arithmetic, explicit number formats, retry handling and transactional SQLite imports.
+- Built the companion Python CLI with 20 tests, including conflicting revisions, rollback and concurrent imports; no external packages required.
+Source: https://github.com/luoy16002-svg/invoice-gate
+Writing sample: https://github.com/luoy16002-svg/invoice-gate/blob/main/writing-sample.md
+
+Current
+React / TypeScript / Web Workers / SVG
+https://luoy16002-svg.github.io/kai-works/#/case/current
+- Built a React CSV workspace with worker-based parsing and queries, a virtual table, cancellation and filtered export.
+- Checked 100,000 synthetic records against an independent BigInt reference; browser export was verified with Python csv and Decimal.
+Source: https://github.com/luoy16002-svg/kai-works/blob/main/src/pages/Current.tsx
+
+PROOF
+TypeScript / React / Node.js / deterministic simulation
+https://luoy16002-svg.github.io/kai-works/#/case/proof
+- Built a seeded agent evaluation simulator with bounded actions, final-state grading and replay verification of imported traces.
+- Documented four public scenarios with six variants each, separating reference policies, recorded agent trials and justified handoffs.
+Source: https://github.com/luoy16002-svg/kai-works/blob/main/src/core/proof.ts
+
+WORKING ARRANGEMENT
+Remote project work, with written briefs and review over email or chat. Open to a scoped paid trial. Agree scope, delivery date and payment terms before work starts.
+
+September 2026

@@ -1,0 +1,343 @@
+{
+  "name": "Kai",
+  "email": "fuddleyu@gmail.com",
+  "location": "China / UTC+8",
+  "updated": "September 2026",
+  "portfolio": "https://luoy16002-svg.github.io/kai-works/",
+  "github": "https://github.com/luoy16002-svg/kai-works",
+  "summary": "I build React interfaces, interactive graphics and browser tools. My independent projects pair working demos with source code, repeatable checks and written explanations.",
+  "working": "Remote project work, with written briefs and review over email or chat. Open to a scoped paid trial. Agree scope, delivery date and payment terms before work starts.",
+  "roles": [
+    {
+      "id": "frontend",
+      "label": "Frontend development",
+      "title": "Frontend Developer",
+      "headline": "Useful interfaces.\nCareful engineering.",
+      "summary": "I build React and TypeScript interfaces for data-heavy tools and product experiences, with attention to responsive layouts, failure states and handover.",
+      "fit": "Product interfaces, internal tools and scoped React implementation.",
+      "skills": "React, TypeScript, JavaScript, HTML, CSS, Web Workers, IndexedDB, CSV processing, Git, automated tests",
+      "cases": ["current", "relay", "halo"],
+      "related": [
+        { "name": "PROOF / agent evaluation", "route": "proof" },
+        { "name": "Type / identity motion", "route": "motion" }
+      ],
+      "file": "kai-frontend-developer",
+      "subject": "Frontend development project"
+    },
+    {
+      "id": "creative",
+      "label": "Interactive & 3D",
+      "title": "Creative Developer",
+      "headline": "Expressive on screen.\nInspectable underneath.",
+      "summary": "I build interactive product scenes, generative graphics and small browser experiences. Visual work comes with usable controls, bounded state and a clear implementation.",
+      "fit": "Interactive websites, Three.js product experiences and creative prototypes.",
+      "skills": "TypeScript, React, Three.js, WebGL 2, Canvas 2D, procedural geometry, GLSL, responsive CSS, Git",
+      "cases": ["halo", "field", "current"],
+      "related": [
+        { "name": "Pixel / playable courier", "route": "pixel" },
+        { "name": "Type / identity motion", "route": "motion" },
+        { "name": "Infinite / Lorenz field", "route": "infinite" }
+      ],
+      "file": "kai-creative-developer",
+      "subject": "Interactive development project"
+    },
+    {
+      "id": "writing",
+      "label": "Technical writing",
+      "title": "Developer & Technical Writer",
+      "headline": "Working code.\nA clear explanation.",
+      "summary": "I write code-led explanations about data validation, browser performance and failure recovery. Each topic starts with a runnable example and makes its limits explicit.",
+      "fit": "Developer tutorials, integration examples and technical walkthroughs.",
+      "skills": "Python, TypeScript, React, SQLite, data validation, CLI examples, automated tests, technical documentation, Git",
+      "cases": ["invoice-gate", "current", "proof"],
+      "related": [{ "name": "Relay / failure recovery", "route": "relay" }],
+      "file": "kai-developer-writer",
+      "subject": "Technical writing project"
+    }
+  ],
+  "cases": [
+    {
+      "id": "current",
+      "name": "Current",
+      "category": "DATA INTERFACE",
+      "title": "A CSV workspace that keeps the interface usable.",
+      "summary": "Import, filter and export order data in the browser. A worker handles parsing and queries while a virtual table keeps the visible interface small.",
+      "stack": "React / TypeScript / Web Workers / SVG",
+      "metric": "100,000",
+      "unit": "synthetic rows in the reference check",
+      "route": "current",
+      "source": "https://github.com/luoy16002-svg/kai-works/blob/main/src/pages/Current.tsx",
+      "problem": "A large CSV can block the interface, and a plausible total can still be wrong. The brief was to make import, inspection and export usable while keeping parsing and arithmetic independently checkable.",
+      "decisions": [
+        {
+          "title": "Move work off the interface",
+          "body": "Parsing and queries run in a dedicated worker. Import can be cancelled, and the table renders a small window of rows rather than the entire dataset."
+        },
+        {
+          "title": "Reject ambiguous input",
+          "body": "The parser handles quoted fields and newlines, validates the fixed schema and dates, and stops on duplicate IDs or malformed amounts. Money is summed in integer cents."
+        },
+        {
+          "title": "Make output reviewable",
+          "body": "Filtered results can be exported. Formula-like text is prefixed for spreadsheet safety, and reference totals are checked independently."
+        }
+      ],
+      "try": [
+        "Open the demo and generate 100,000 sample rows.",
+        "Choose Europe and Direct, then inspect the filtered total.",
+        "Export the result; the recorded reference contains 8,263 rows and $4,197,257.69."
+      ],
+      "resume": [
+        "Built a React CSV workspace with worker-based parsing and queries, a virtual table, cancellation and filtered export.",
+        "Checked 100,000 synthetic records against an independent BigInt reference; browser export was verified with Python csv and Decimal."
+      ],
+      "evidence": [
+        {
+          "label": "Parser and data checks",
+          "url": "https://github.com/luoy16002-svg/kai-works/blob/main/tests/csv.test.ts"
+        },
+        {
+          "label": "Recorded browser and export checks",
+          "url": "https://github.com/luoy16002-svg/kai-works/blob/main/verification/browser-results.json"
+        }
+      ],
+      "boundary": "Independent project with synthetic order data. The app does not transmit imported files; data stays in memory and is cleared when leaving the workspace. This is a fixed-schema CSV tool, not a general spreadsheet."
+    },
+    {
+      "id": "relay",
+      "name": "Relay",
+      "category": "RECOVERY & LOCAL STATE",
+      "title": "Interrupt the worker. Recover the queue.",
+      "summary": "A browser queue lab that makes interrupted jobs, retries and local effects visible. Crash a worker, reload the page and inspect what recovered.",
+      "stack": "TypeScript / IndexedDB / Web Workers / React",
+      "metric": "1,000",
+      "unit": "jobs recovered to 1,000 unique local effects",
+      "route": "relay",
+      "source": "https://github.com/luoy16002-svg/kai-works/blob/main/src/core/queue.ts",
+      "problem": "A worker can stop after claiming a job, and a retry can repeat an effect. The brief was to expose those failure states and recover local work without silently duplicating ledger entries.",
+      "decisions": [
+        {
+          "title": "Use expiring ownership",
+          "body": "Jobs are claimed atomically with a lease and token. Expired jobs can be reclaimed; a stale token cannot finish work after ownership changes."
+        },
+        {
+          "title": "Commit related state together",
+          "body": "A local effect and job completion share one IndexedDB transaction. Injected write failures must roll back both changes."
+        },
+        {
+          "title": "Make recovery observable",
+          "body": "The interface exposes attempts, leases and effects, with controls to terminate the worker and export the ledger for inspection."
+        }
+      ],
+      "try": [
+        "Create a 1,000-job batch and start the worker.",
+        "Crash the worker while jobs are running, then reload.",
+        "After leases expire, restart and export the ledger to inspect unique effects."
+      ],
+      "resume": [
+        "Implemented atomic job claims, expiring leases, stale-token rejection and transactional local effects in IndexedDB.",
+        "Recorded an Edge run recovering 1,000 jobs after worker termination and reload, with exactly 1,000 unique local effects."
+      ],
+      "evidence": [
+        {
+          "label": "Concurrency and rollback tests",
+          "url": "https://github.com/luoy16002-svg/kai-works/blob/main/tests/queue.test.ts"
+        },
+        {
+          "label": "Recorded interruption and recovery",
+          "url": "https://github.com/luoy16002-svg/kai-works/blob/main/verification/browser-results.json"
+        }
+      ],
+      "boundary": "At-least-once execution with deduplicated local ledger effects. This does not guarantee exactly-once effects in external APIs. An open page and retained browser storage are required."
+    },
+    {
+      "id": "halo",
+      "name": "HALO",
+      "category": "INTERACTIVE PRODUCT",
+      "title": "A product scene with choices that travel.",
+      "summary": "Configure a procedural pendant light, change its material and scale, then share the exact configuration or save a view and specification.",
+      "stack": "React / TypeScript / Three.js / WebGL",
+      "metric": "900",
+      "unit": "configuration combinations checked for URL round trips",
+      "route": "halo",
+      "source": "https://github.com/luoy16002-svg/kai-works/blob/main/src/pages/Halo.tsx",
+      "problem": "An attractive 3D scene is only part of a configurator. Controls need to change the object, shared links need to restore the same choices, and people without WebGL still need a useful page.",
+      "decisions": [
+        {
+          "title": "Connect controls to the scene",
+          "body": "Procedural geometry, rendered materials, diameter and light color respond to configuration state. Camera and rotation controls let visitors inspect the result."
+        },
+        {
+          "title": "Validate the shared state",
+          "body": "Only supported finite values enter the scene. URL decoding rejects unknown finishes and out-of-range settings; zero brightness survives a round trip."
+        },
+        {
+          "title": "Keep an accessible fallback",
+          "body": "Responsive controls and specification export remain available without WebGL. Reduced-motion preferences disable automatic rotation."
+        }
+      ],
+      "try": [
+        "Choose a finish and diameter, then change brightness.",
+        "Share the configuration and reopen its URL.",
+        "Save the JSON specification and compare it with the restored controls."
+      ],
+      "resume": [
+        "Built a responsive Three.js configurator with procedural geometry, live material controls, shareable URLs, PNG and JSON export.",
+        "Verified 900 configuration round trips, including zero brightness; added input bounds, reduced-motion behavior and a WebGL fallback."
+      ],
+      "evidence": [
+        {
+          "label": "900 configuration round trips",
+          "url": "https://github.com/luoy16002-svg/kai-works/blob/main/tests/halo.test.ts"
+        },
+        {
+          "label": "Recorded browser export and reload",
+          "url": "https://github.com/luoy16002-svg/kai-works/blob/main/verification/browser-results.json"
+        }
+      ],
+      "boundary": "Independent product concept. There is no physical product for sale, checkout or calibrated light simulation. The editorial image is generated; the live scene uses code-built geometry."
+    },
+    {
+      "id": "field",
+      "name": "Field",
+      "category": "GENERATIVE GRAPHICS",
+      "title": "A living pattern, with a numerical check.",
+      "summary": "Paint into a Gray-Scott reaction-diffusion field, adjust parameters and export the result. Compare the GPU implementation with a CPU reference in the browser.",
+      "stack": "TypeScript / WebGL 2 / GLSL / React",
+      "metric": "8,192",
+      "unit": "concentrations compared in the live GPU check",
+      "route": "field",
+      "source": "https://github.com/luoy16002-svg/kai-works/blob/main/src/core/field-gpu.ts",
+      "problem": "A generated pattern can look convincing even when a GPU update is incorrect. The brief was to combine an expressive drawing surface with a small, reproducible numerical comparison.",
+      "decisions": [
+        {
+          "title": "Advance the field on the GPU",
+          "body": "Two floating-point render targets alternate reading and writing. A nine-point Laplacian and periodic boundaries define the update."
+        },
+        {
+          "title": "Compare against a reference",
+          "body": "A live check advances a seeded 64 by 64 field for 20 steps on the GPU and CPU, compares 8,192 concentrations, and reports the observed maximum absolute error."
+        },
+        {
+          "title": "Respect the viewing context",
+          "body": "The simulation pauses when hidden or off screen and starts paused for reduced motion. PNG export captures the current field."
+        }
+      ],
+      "try": [
+        "Open the studio and choose a pattern preset.",
+        "Paint into the surface and adjust the parameters.",
+        "Run the GPU check and download the observed result; the pass threshold is 0.0005."
+      ],
+      "resume": [
+        "Implemented a Gray-Scott studio with floating-point GPU ping-pong targets, seeded drawing, parameter controls and PNG export.",
+        "Added a live GPU/CPU comparison over 8,192 concentrations, plus equilibrium, boundary and stability tests."
+      ],
+      "evidence": [
+        {
+          "label": "Simulation tests",
+          "url": "https://github.com/luoy16002-svg/kai-works/blob/main/tests/field.test.ts"
+        },
+        {
+          "label": "Recorded GPU comparison",
+          "url": "https://github.com/luoy16002-svg/kai-works/blob/main/verification/field-gpu-validation.json"
+        }
+      ],
+      "boundary": "A dimensionless visual simulation, not a calibrated chemical model. WebGL 2 and floating-point render targets are required. The numerical check reports the visitor's actual graphics context."
+    },
+    {
+      "id": "invoice-gate",
+      "name": "Invoice Gate",
+      "category": "PYTHON & TECHNICAL WRITING",
+      "title": "Valid JSON can still be the wrong invoice.",
+      "summary": "A runnable Python example and accompanying article about the checks between extracted invoice data and a SQLite ledger.",
+      "stack": "Python / SQLite / Decimal / unittest",
+      "metric": "20",
+      "unit": "tests covering validation, retries and import transactions",
+      "route": "",
+      "source": "https://github.com/luoy16002-svg/invoice-gate",
+      "article": "https://github.com/luoy16002-svg/invoice-gate/blob/main/writing-sample.md",
+      "problem": "Extracted fields can satisfy a JSON schema while the arithmetic is wrong. The article starts with a synthetic invoice that is off by twenty cents, then explains how to stop that inconsistency before import.",
+      "decisions": [
+        {
+          "title": "Start with a concrete failure",
+          "body": "The explanation follows one incorrect total from line items to tax and total, making the validation problem easy to reproduce."
+        },
+        {
+          "title": "Keep parsing decisions explicit",
+          "body": "A trusted number-format setting controls parsing. Decimal text becomes integer minor units, and original extracted strings remain available for review."
+        },
+        {
+          "title": "Explain retries and limits",
+          "body": "Identical retries return duplicate; changed content needs review. Batch conflicts roll back the transaction. The article distinguishes arithmetic consistency from approval."
+        }
+      ],
+      "try": [
+        "Read the article's twenty-cent mismatch example.",
+        "Clone the repository and run python demo.py (Python 3.12+).",
+        "Run python -m unittest -v, then inspect the retry and conflicting-batch cases."
+      ],
+      "resume": [
+        "Wrote a code-led article explaining invoice arithmetic, explicit number formats, retry handling and transactional SQLite imports.",
+        "Built the companion Python CLI with 20 tests, including conflicting revisions, rollback and concurrent imports; no external packages required."
+      ],
+      "evidence": [
+        {
+          "label": "Read the writing sample",
+          "url": "https://github.com/luoy16002-svg/invoice-gate/blob/main/writing-sample.md"
+        },
+        {
+          "label": "20 companion tests",
+          "url": "https://github.com/luoy16002-svg/invoice-gate/blob/main/test_invoice_gate.py"
+        }
+      ],
+      "boundary": "Independent writing sample with synthetic data. The project starts after extraction; it contains no OCR engine or payment connection. Consistent arithmetic does not mean an invoice is authentic or approved."
+    },
+    {
+      "id": "proof",
+      "name": "PROOF",
+      "category": "AGENT EVALUATION",
+      "title": "Grade the resulting state, then inspect the trace.",
+      "summary": "A small order-fulfilment simulator for exploring agent tool-use failures, recorded actions and recovery. Imported traces are replayed and graded again.",
+      "stack": "TypeScript / React / Node.js / deterministic simulation",
+      "metric": "4",
+      "unit": "public scenarios, with six seeded variants each",
+      "route": "proof",
+      "source": "https://github.com/luoy16002-svg/kai-works/blob/main/src/core/proof.ts",
+      "problem": "A plausible action trace does not establish that an order was fulfilled. Lost acknowledgements and stock conflicts make it useful to inspect final state and distinguish justified handoff from autonomous completion.",
+      "decisions": [
+        {
+          "title": "Keep the environment bounded",
+          "body": "Four public conditions cover normal execution, a lost acknowledgement, inventory conflict and required handoff. A session permits at most 16 accepted world actions."
+        },
+        {
+          "title": "Recompute the result",
+          "body": "Imported actions replay against the versioned simulator. The grader checks orders and constraints rather than trusting supplied scores or one exact action path."
+        },
+        {
+          "title": "Keep provenance visible",
+          "body": "Reference policies and recorded agent trials are labelled separately. The recording retains failed submissions alongside successful actions, and unknown usage stays unknown."
+        }
+      ],
+      "try": [
+        "Open the lab and compare the reference policies.",
+        "Choose the lost-acknowledgement scenario and inspect final order state.",
+        "Replay a recorded trial and inspect the action trace and separate handoff result."
+      ],
+      "resume": [
+        "Built a seeded agent evaluation simulator with bounded actions, final-state grading and replay verification of imported traces.",
+        "Documented four public scenarios with six variants each, separating reference policies, recorded agent trials and justified handoffs."
+      ],
+      "evidence": [
+        {
+          "label": "Environment and grading tests",
+          "url": "https://github.com/luoy16002-svg/kai-works/blob/main/tests/proof.test.ts"
+        },
+        {
+          "label": "Recorded agent trials",
+          "url": "https://github.com/luoy16002-svg/kai-works/blob/main/public/proof-agent-trials.json"
+        }
+      ],
+      "boundary": "Synthetic, public demonstration cases. This is not a general model ranking or production reliability benchmark. Replaying a trace verifies its consequences in the simulator, not the model's identity."
+    }
+  ]
+}

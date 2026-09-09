@@ -1,0 +1,39 @@
+Kai
+Creative Developer
+China, UTC+8 | Remote projects | Email / chat
+fuddleyu@gmail.com
+Portfolio: https://luoy16002-svg.github.io/kai-works/#/profile/creative
+Source: https://github.com/luoy16002-svg/kai-works
+
+I build interactive product scenes, generative graphics and small browser experiences. Visual work comes with usable controls, bounded state and a clear implementation.
+
+TECHNICAL SKILLS
+TypeScript, React, Three.js, WebGL 2, Canvas 2D, procedural geometry, GLSL, responsive CSS, Git
+
+SELECTED INDEPENDENT PROJECTS | 2026
+
+HALO
+React / TypeScript / Three.js / WebGL
+https://luoy16002-svg.github.io/kai-works/#/case/halo
+- Built a responsive Three.js configurator with procedural geometry, live material controls, shareable URLs, PNG and JSON export.
+- Verified 900 configuration round trips, including zero brightness; added input bounds, reduced-motion behavior and a WebGL fallback.
+Source: https://github.com/luoy16002-svg/kai-works/blob/main/src/pages/Halo.tsx
+
+Field
+TypeScript / WebGL 2 / GLSL / React
+https://luoy16002-svg.github.io/kai-works/#/case/field
+- Implemented a Gray-Scott studio with floating-point GPU ping-pong targets, seeded drawing, parameter controls and PNG export.
+- Added a live GPU/CPU comparison over 8,192 concentrations, plus equilibrium, boundary and stability tests.
+Source: https://github.com/luoy16002-svg/kai-works/blob/main/src/core/field-gpu.ts
+
+Current
+React / TypeScript / Web Workers / SVG
+https://luoy16002-svg.github.io/kai-works/#/case/current
+- Built a React CSV workspace with worker-based parsing and queries, a virtual table, cancellation and filtered export.
+- Checked 100,000 synthetic records against an independent BigInt reference; browser export was verified with Python csv and Decimal.
+Source: https://github.com/luoy16002-svg/kai-works/blob/main/src/pages/Current.tsx
+
+WORKING ARRANGEMENT
+Remote project work, with written briefs and review over email or chat. Open to a scoped paid trial. Agree scope, delivery date and payment terms before work starts.
+
+September 2026

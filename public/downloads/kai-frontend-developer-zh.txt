@@ -1,0 +1,39 @@
+Kai
+前端开发 / React · TypeScript
+中国，UTC+8 | 远程项目 | 邮件 / 文字沟通
+fuddleyu@gmail.com
+Portfolio: https://luoy16002-svg.github.io/kai-works/#/profile/frontend
+Source: https://github.com/luoy16002-svg/kai-works
+
+使用 React、TypeScript 开发数据工具和交互式产品界面，关注响应式布局、异常状态和可复现验证。以下为独立作品，提供可运行演示、源码及说明文档；寻找范围明确的远程开发项目。
+
+技术能力
+React, TypeScript, JavaScript, HTML, CSS, Web Workers, IndexedDB, CSV processing, Git, automated tests
+
+独立项目 | 2026
+
+Current
+React / TypeScript / Web Workers / SVG
+https://luoy16002-svg.github.io/kai-works/#/case/current
+- 实现 CSV 导入、筛选与导出；使用 Web Worker 处理解析和查询，配合虚拟表格与导入取消，减少主线程阻塞。
+- 以独立 BigInt 参考校验 100,000 条合成记录，并使用 Python csv、Decimal 核对浏览器导出的行数与金额。
+Source: https://github.com/luoy16002-svg/kai-works/blob/main/src/pages/Current.tsx
+
+Relay
+TypeScript / IndexedDB / Web Workers / React
+https://luoy16002-svg.github.io/kai-works/#/case/relay
+- 基于 IndexedDB 实现原子任务领取、租约过期回收、旧令牌拒绝，以及与完成状态同事务提交的本地记账。
+- 记录 Edge 浏览器中断并刷新后的恢复过程：1,000 个任务最终产生 1,000 条唯一的本地记账结果。
+Source: https://github.com/luoy16002-svg/kai-works/blob/main/src/core/queue.ts
+
+HALO
+React / TypeScript / Three.js / WebGL
+https://luoy16002-svg.github.io/kai-works/#/case/halo
+- 使用 Three.js 构建响应式产品配置器，支持程序化几何、材质与尺寸调整、URL 分享、PNG 和 JSON 导出。
+- 验证 900 组配置序列化往返，覆盖零亮度；处理参数边界、减少动态效果偏好和 WebGL 不可用时的降级。
+Source: https://github.com/luoy16002-svg/kai-works/blob/main/src/pages/Halo.tsx
+
+合作方式
+通过书面需求、可运行预览和文字反馈推进；交付源码、运行说明与相关检查。可从小范围付费试做开始，开工前确定范围、交期和付款方式。
+
+September 2026

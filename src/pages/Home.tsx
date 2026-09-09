@@ -210,8 +210,8 @@ export default function Home() {
         </a>
         <p className="screening-role">Independent creative developer</p>
         <span className="screening-location">CHINA / UTC+8</span>
-        <a className="screening-contact" href="mailto:fuddleyu@gmail.com">
-          Let’s talk <ArrowUpRight size={15} />
+        <a className="screening-contact" href="#/profile">
+          Profile & resume <ArrowUpRight size={15} />
         </a>
       </header>
       <main id="main-content" tabIndex={-1} className="screening-workspace">
@@ -390,6 +390,16 @@ export default function Home() {
           <p className="screening-disclosure">
             Independent projects, built to explore. Each link opens the working demo.
           </p>
+          <a className="screening-profile-card" href="#/profile">
+            <span>HAVE A PROJECT IN MIND?</span>
+            <strong>
+              Find the relevant work <ArrowUpRight size={16} />
+            </strong>
+            <p>
+              Frontend, interactive development and technical writing. Case notes & one-page
+              resumes.
+            </p>
+          </a>
         </aside>
       </main>
       <footer className="screening-footer">

@@ -19,6 +19,10 @@ const Motion = lazy(() => import('./pages/Motion'));
 const Infinite = lazy(() => import('./pages/Infinite'));
 const Proof = lazy(() => import('./pages/Proof'));
 const Pixel = lazy(() => import('./pages/Pixel'));
+const Profile = lazy(() => import('./pages/Profile'));
+const CaseStudy = lazy(() =>
+  import('./pages/Profile').then((module) => ({ default: module.CaseStudy })),
+);
 class WorkspaceBoundary extends React.Component<
   { children: React.ReactNode },
   { failed: boolean }
@@ -64,8 +68,23 @@ function App() {
           '#/current': 'Current — Local data workbench',
           '#/relay': 'Relay — Durable queue lab',
           '#/evidence': 'Engineering evidence — Kai',
+          '#/profile': 'Kai — Frontend developer | Profile & resume',
+          '#/profile/frontend': 'Kai — Frontend developer | Profile & resume',
+          '#/profile/creative': 'Kai — Creative developer | Profile & resume',
+          '#/profile/writing': 'Kai — Developer & technical writer | Profile & resume',
+          '#/case/current': 'Current — CSV workspace case study | Kai',
+          '#/case/relay': 'Relay — Queue recovery case study | Kai',
+          '#/case/halo': 'HALO — Product configurator case study | Kai',
+          '#/case/field': 'Field — GPU simulation case study | Kai',
+          '#/case/invoice-gate': 'Invoice Gate — Python writing sample | Kai',
+          '#/case/proof': 'PROOF — Agent evaluation case study | Kai',
         } as Record<string, string>
-      )[route] ?? 'Kai — Selected work';
+      )[route] ??
+      (route.startsWith('#/profile')
+        ? 'Kai — Profile & selected work'
+        : route.startsWith('#/case/')
+          ? 'Kai — Project decisions & evidence'
+          : 'Kai — Selected work');
   }, [route]);
   return (
     <>
@@ -87,7 +106,11 @@ function App() {
           </div>
         }
       >
-        {route === '#/pixel' ? (
+        {route === '#/profile' || route.startsWith('#/profile/') ? (
+          <Profile focus={route.split('/')[2]} />
+        ) : route.startsWith('#/case/') ? (
+          <CaseStudy id={route.split('/')[2]} />
+        ) : route === '#/pixel' ? (
           <Pixel />
         ) : route === '#/proof' ? (
           <Proof />

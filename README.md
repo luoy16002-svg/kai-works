@@ -4,6 +4,10 @@ Eight working, independent portfolio projects. React, TypeScript, Canvas 2D, Web
 
 [Open the portfolio](https://luoy16002-svg.github.io/kai-works/) · [Verify the build](https://github.com/luoy16002-svg/kai-works/actions)
 
+[Profile & resume](https://luoy16002-svg.github.io/kai-works/#/profile) provides three shareable selections: [frontend](https://luoy16002-svg.github.io/kai-works/#/profile/frontend), [interactive & 3D](https://luoy16002-svg.github.io/kai-works/#/profile/creative), and [technical writing](https://luoy16002-svg.github.io/kai-works/#/profile/writing). Six case notes connect the brief, implementation decisions, a short walkthrough and the original evidence. One-page English profiles and a Chinese frontend profile are available as PDF and plain text.
+
+Site copy and English profile content share `src/content/profile.json`. Regenerate the committed downloads with `python scripts/build-profile.py` (requires ReportLab). The Chinese PDF embeds a supplied TrueType font; pass `--chinese-font /path/to/font.ttf` outside the local Windows setup. The generator rejects a profile that exceeds one page. PDF layout should still be rendered and reviewed after content changes. These are profiles of independent projects; no employment history, client commissions, education or years of experience are inferred.
+
 | Project  | Try it                                                                                | Engineering focus                                                                                               |
 | -------- | ------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
 | Pixel    | Watch Little deliveries or take control to run and jump                               | A playable Canvas 2D courier scene with keyboard and touch controls                                             |
