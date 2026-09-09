@@ -1,4 +1,12 @@
-import { lazy, Suspense, useLayoutEffect, useRef, useState, type KeyboardEvent } from 'react';
+import {
+  Fragment,
+  lazy,
+  Suspense,
+  useLayoutEffect,
+  useRef,
+  useState,
+  type KeyboardEvent,
+} from 'react';
 import { ArrowUpRight } from 'lucide-react';
 import KineticArtwork from '../components/KineticArtwork';
 import KaiLogo from '../components/KaiLogo';
@@ -97,6 +105,11 @@ const projects = [
     route: 'relay',
     number: '08',
   },
+];
+const projectGroups = [
+  { label: 'Product interfaces', routes: ['current', 'halo'] },
+  { label: 'Interactive graphics', routes: ['motion', 'field', 'infinite'] },
+  { label: 'Systems & play', routes: ['relay', 'proof', 'pixel'] },
 ];
 
 function FilmPlaceholder() {
@@ -359,26 +372,29 @@ export default function Home() {
             <span>08</span>
           </div>
           <nav aria-label="Working projects">
-            {projects.map((project) => (
-              <a
-                key={project.route}
-                href={`#/${project.route}`}
-                aria-label={`Open ${project.name}: ${project.description}`}
-                className={
-                  project.route === 'pixel'
-                    ? 'screening-featured-project'
-                    : project.route === 'proof'
-                      ? 'screening-proof-project'
-                      : undefined
-                }
-              >
-                <span className="screening-project-number">{project.number}</span>
-                <span className="screening-project-name">{project.name}</span>
-                <span className="screening-project-meta">{project.detail}</span>
-                <ArrowUpRight size={16} />
-              </a>
+            {projectGroups.map((group) => (
+              <Fragment key={group.label}>
+                <p className="screening-project-group">{group.label}</p>
+                {group.routes
+                  .map((route) => projects.find((project) => project.route === route)!)
+                  .map((project) => (
+                    <a
+                      key={project.route}
+                      href={`#/${project.route}`}
+                      aria-label={`Open ${project.name}: ${project.description}`}
+                    >
+                      <span className="screening-project-number">{project.number}</span>
+                      <span className="screening-project-name">{project.name}</span>
+                      <span className="screening-project-meta">{project.detail}</span>
+                      <ArrowUpRight size={16} />
+                    </a>
+                  ))}
+              </Fragment>
             ))}
           </nav>
+          <a className="screening-model-link" href="#/halo/models">
+            New in HALO: open your own 3D model <ArrowUpRight size={14} />
+          </a>
           <div className="screening-source-links">
             <a href={REPO} target="_blank" rel="noreferrer">
               Source code <ArrowUpRight size={14} />
@@ -396,7 +412,7 @@ export default function Home() {
               Find the relevant work <ArrowUpRight size={16} />
             </strong>
             <p>
-              Frontend, interactive development and technical writing. Case notes & one-page
+              Product interfaces, interactive graphics and browser tools. Selected work & one-page
               resumes.
             </p>
           </a>
