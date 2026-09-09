@@ -12,6 +12,7 @@ import './folio.css';
 const Halo = lazy(() => import('./pages/Halo'));
 const ModelViewer = lazy(() => import('./pages/ModelViewer'));
 const Current = lazy(() => import('./pages/Current'));
+const Gather = lazy(() => import('./pages/Gather'));
 const Relay = lazy(() => import('./pages/Relay'));
 const Evidence = lazy(() => import('./pages/Evidence'));
 const Home = lazy(() => import('./pages/Home'));
@@ -68,6 +69,7 @@ function App() {
           '#/halo/models': 'HALO — Model workspace',
           '#/field': 'FIELD — Reaction diffusion studio',
           '#/current': 'Current — Local data workbench',
+          '#/gather': 'Gather — Studio booking experience',
           '#/relay': 'Relay — Durable queue lab',
           '#/evidence': 'Engineering evidence — Kai',
           '#/profile': 'Kai — Frontend developer | Profile & resume',
@@ -75,6 +77,7 @@ function App() {
           '#/profile/creative': 'Kai — Creative developer | Profile & resume',
           '#/profile/writing': 'Kai — Developer & technical writer | Profile & resume',
           '#/case/current': 'Current — CSV workspace case study | Kai',
+          '#/case/gather': 'Gather — Booking experience case study | Kai',
           '#/case/relay': 'Relay — Queue recovery case study | Kai',
           '#/case/halo': 'HALO — Product configurator case study | Kai',
           '#/case/field': 'Field — GPU simulation case study | Kai',
@@ -126,6 +129,8 @@ function App() {
           <ModelViewer />
         ) : route === '#/halo' ? (
           <Halo />
+        ) : route === '#/gather' ? (
+          <Gather />
         ) : route === '#/current' ? (
           <Current />
         ) : route === '#/relay' ? (

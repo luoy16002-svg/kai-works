@@ -18,6 +18,7 @@
       "skills": "React, TypeScript, JavaScript, HTML, CSS, Web Workers, IndexedDB, CSV processing, Git, automated tests",
       "cases": ["current", "relay", "halo"],
       "related": [
+        { "name": "Gather / complete booking flow", "route": "gather" },
         { "name": "PROOF / agent evaluation", "route": "proof" },
         { "name": "Type / identity motion", "route": "motion" }
       ],
@@ -57,6 +58,53 @@
     }
   ],
   "cases": [
+    {
+      "id": "gather",
+      "name": "Gather",
+      "category": "BOOKING EXPERIENCE",
+      "title": "A booking flow, from first choice to change of plan.",
+      "summary": "Choose a workshop, date and group size, review the details, then manage the saved booking. A complete frontend experience with responsive layouts and local persistence.",
+      "stack": "React / TypeScript / IndexedDB / CSS",
+      "metric": "3",
+      "unit": "steps from choosing a session to reviewing a booking",
+      "route": "gather",
+      "source": "https://github.com/luoy16002-svg/kai-works/blob/main/src/pages/Gather.tsx",
+      "problem": "A registration interface needs more than a successful submit button. People need to understand availability, fix an input, review their choices and change a booking later. The brief was to connect those moments into one usable flow.",
+      "decisions": [
+        {
+          "title": "Keep the choices visible",
+          "body": "Workshop, session, group size and price stay connected throughout the flow. Date labels follow the selected timezone, and unavailable sessions explain their state."
+        },
+        {
+          "title": "Keep changes attached to their booking",
+          "body": "Drafts retain the booking ID and revision when editing, including after a reload. Capacity checks and record changes share a transaction; stale edits from another tab produce a clear message."
+        },
+        {
+          "title": "Finish the management flow",
+          "body": "Saved bookings can be reviewed, edited, cancelled or exported as JSON. Calendar downloads are labelled as demo events. Cancelling returns the places to the local schedule."
+        }
+      ],
+      "try": [
+        "Pick an available date and two places, then continue with example details.",
+        "Review and save the booking. Open Your bookings and change its date or group size.",
+        "Reload while editing to resume the draft, then save the changes or cancel the booking."
+      ],
+      "resume": [
+        "Built a responsive, accessible booking flow with validation, review, draft recovery and saved booking management.",
+        "Implemented transactional local capacity checks, duplicate booking prevention and revision checks for edits from multiple tabs."
+      ],
+      "evidence": [
+        {
+          "label": "Booking state and persistence",
+          "url": "https://github.com/luoy16002-svg/kai-works/blob/main/src/core/bookings.ts"
+        },
+        {
+          "label": "Interface implementation",
+          "url": "https://github.com/luoy16002-svg/kai-works/blob/main/src/pages/Gather.tsx"
+        }
+      ],
+      "boundary": "Independent frontend prototype with fictional workshops. Bookings and capacity exist only in this browser; no payment, email or real reservation is made. A live service would need a server, shared inventory and an agreed integration."
+    },
     {
       "id": "current",
       "name": "Current",

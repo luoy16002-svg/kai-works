@@ -105,9 +105,16 @@ const projects = [
     route: 'relay',
     number: '08',
   },
+  {
+    name: 'Gather',
+    detail: 'Booking flow',
+    description: 'Choose a session, reserve, edit and cancel',
+    route: 'gather',
+    number: '09',
+  },
 ];
 const projectGroups = [
-  { label: 'Product interfaces', routes: ['current', 'halo'] },
+  { label: 'Product interfaces', routes: ['gather', 'current', 'halo'] },
   { label: 'Interactive graphics', routes: ['motion', 'field', 'infinite'] },
   { label: 'Systems & play', routes: ['relay', 'proof', 'pixel'] },
 ];
@@ -369,7 +376,7 @@ export default function Home() {
         <aside className="screening-index" aria-labelledby="project-index-title">
           <div className="screening-index-heading">
             <h2 id="project-index-title">Project index</h2>
-            <span>08</span>
+            <span>{String(projects.length).padStart(2, '0')}</span>
           </div>
           <nav aria-label="Working projects">
             {projectGroups.map((group) => (
