@@ -1,4 +1,35 @@
 /* A compact screening room. Film and working projects carry the page. */
+.screening-profile-card {
+  display: block;
+  margin-top: 18px;
+  padding: 16px;
+  border: 1px solid #cbbab0;
+  background: #eeded0;
+}
+.screening-profile-card > span {
+  display: block;
+  font:
+    9px/1.6 'DM Mono',
+    monospace;
+  color: #625966;
+}
+.screening-profile-card strong {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  margin: 9px 0;
+}
+.screening-profile-card p {
+  font-size: 12px;
+  line-height: 1.7;
+  color: #625966;
+}
+.screening-profile-card:hover {
+  background: #e7d2be;
+}
 .screening-home,
 .motion-page {
   --folio-ink: #251c2d;
