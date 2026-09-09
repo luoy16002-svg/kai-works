@@ -263,6 +263,24 @@
   color: var(--folio-muted);
   align-self: center;
 }
+.screening-project-group {
+  margin: 16px 4px 4px;
+  color: var(--folio-muted);
+  font:
+    9px 'DM Mono',
+    monospace;
+  letter-spacing: 0.025em;
+}
+.screening-model-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: #eadbce;
+  padding: 13px 12px;
+  margin-top: 14px;
+  font-size: 11px;
+}
 .screening-project-name {
   font-size: 14px;
   letter-spacing: -0.025em;

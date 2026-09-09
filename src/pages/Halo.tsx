@@ -368,7 +368,9 @@ export default function Halo() {
           <a className="halo-logo" href="#/halo">
             HALO<span>LIGHTING OBJECTS</span>
           </a>
-          <span className="small-caps">FORM. MATERIAL. ATMOSPHERE.</span>
+          <a className="small-caps halo-model-entry" href="#/halo/models">
+            Open your own model <ArrowUpRight size={14} />
+          </a>
           <SourceLink />
         </header>
         <div className="halo-layout">

@@ -10,6 +10,7 @@ import '@fontsource/instrument-serif/400-italic.css';
 import './styles.css';
 import './folio.css';
 const Halo = lazy(() => import('./pages/Halo'));
+const ModelViewer = lazy(() => import('./pages/ModelViewer'));
 const Current = lazy(() => import('./pages/Current'));
 const Relay = lazy(() => import('./pages/Relay'));
 const Evidence = lazy(() => import('./pages/Evidence'));
@@ -64,6 +65,7 @@ function App() {
           '#/proof': 'Proof — Agent reliability lab',
           '#/pixel': 'Pixel — Little deliveries',
           '#/halo': 'HALO — Product configurator',
+          '#/halo/models': 'HALO — Model workspace',
           '#/field': 'FIELD — Reaction diffusion studio',
           '#/current': 'Current — Local data workbench',
           '#/relay': 'Relay — Durable queue lab',
@@ -120,6 +122,8 @@ function App() {
           <Motion />
         ) : route === '#/field' ? (
           <Field />
+        ) : route === '#/halo/models' ? (
+          <ModelViewer />
         ) : route === '#/halo' ? (
           <Halo />
         ) : route === '#/current' ? (

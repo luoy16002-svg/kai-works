@@ -34,6 +34,7 @@
       "skills": "TypeScript, React, Three.js, WebGL 2, Canvas 2D, procedural geometry, GLSL, responsive CSS, Git",
       "cases": ["halo", "field", "current"],
       "related": [
+        { "name": "HALO / model workspace", "route": "halo/models" },
         { "name": "Pixel / playable courier", "route": "pixel" },
         { "name": "Type / identity motion", "route": "motion" },
         { "name": "Infinite / Lorenz field", "route": "infinite" }
@@ -155,7 +156,7 @@
       "name": "HALO",
       "category": "INTERACTIVE PRODUCT",
       "title": "A product scene with choices that travel.",
-      "summary": "Configure a procedural pendant light, change its material and scale, then share the exact configuration or save a view and specification.",
+      "summary": "Configure a pendant light and share its settings, or open your own GLB in the companion model workspace. Inspect original materials, fit the view and export a PNG.",
       "stack": "React / TypeScript / Three.js / WebGL",
       "metric": "900",
       "unit": "configuration combinations checked for URL round trips",
@@ -174,18 +175,31 @@
         {
           "title": "Keep an accessible fallback",
           "body": "Responsive controls and specification export remain available without WebGL. Reduced-motion preferences disable automatic rotation."
+        },
+        {
+          "title": "Work with supplied product assets",
+          "body": "The companion model workspace loads self-contained GLB files in the browser, preserves their materials and fits different proportions to the camera. Two original downloadable objects make the flow usable immediately. New files replace the scene only after loading successfully."
         }
       ],
       "try": [
         "Choose a finish and diameter, then change brightness.",
         "Share the configuration and reopen its URL.",
-        "Save the JSON specification and compare it with the restored controls."
+        "Save the JSON specification and compare it with the restored controls.",
+        "Open the model workspace, switch between the two sample objects, or open a local GLB and save its view."
       ],
       "resume": [
         "Built a responsive Three.js configurator with procedural geometry, live material controls, shareable URLs, PNG and JSON export.",
         "Verified 900 configuration round trips, including zero brightness; added input bounds, reduced-motion behavior and a WebGL fallback."
       ],
       "evidence": [
+        {
+          "label": "Open the model workspace",
+          "url": "https://luoy16002-svg.github.io/kai-works/#/halo/models"
+        },
+        {
+          "label": "GLB import and camera implementation",
+          "url": "https://github.com/luoy16002-svg/kai-works/blob/main/src/pages/ModelViewer.tsx"
+        },
         {
           "label": "900 configuration round trips",
           "url": "https://github.com/luoy16002-svg/kai-works/blob/main/tests/halo.test.ts"
@@ -195,7 +209,7 @@
           "url": "https://github.com/luoy16002-svg/kai-works/blob/main/verification/browser-results.json"
         }
       ],
-      "boundary": "Independent product concept. There is no physical product for sale, checkout or calibrated light simulation. The editorial image is generated; the live scene uses code-built geometry."
+      "boundary": "Independent product concept, with no checkout or calibrated light simulation. The model workspace displays a static view of uncompressed GLB files up to 20 MB with embedded textures. Uploaded files remain in memory; the sample objects are original code-built geometry."
     },
     {
       "id": "field",
