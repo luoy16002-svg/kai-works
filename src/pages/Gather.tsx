@@ -29,7 +29,7 @@ import {
   type BookingDraft,
   type WorkshopId,
 } from '../core/bookings';
-import { download, SourceLink, WorkNav } from '../ui';
+import { download } from '../ui';
 import '../gather.css';
 
 type View = 'session' | 'details' | 'review' | 'saved' | 'bookings';
@@ -75,75 +75,15 @@ function restoreDraft(): { draft: BookingDraft; editing: Editing | null } {
 
 function WorkshopArt({ kind }: { kind: WorkshopId }) {
   return (
-    <svg viewBox="0 0 320 190" fill="none" aria-hidden="true">
-      {kind === 'clay' ? (
-        <>
-          <ellipse cx="166" cy="158" rx="73" ry="12" fill="#874b3222" />
-          <path
-            d="M99 49C94 81 94 118 111 144C129 167 195 167 214 143C229 119 230 79 222 49Z"
-            fill="#bb6d46"
-          />
-          <path
-            d="M112 54C109 86 110 126 125 148M132 59C128 93 131 133 141 154M154 61V158M177 60C181 97 176 137 174 156M199 56C210 89 208 128 193 150"
-            stroke="#d9956c"
-            strokeWidth="4"
-          />
-          <ellipse cx="160" cy="49" rx="62" ry="17" fill="#d7936c" />
-          <ellipse cx="160" cy="49" rx="50" ry="10" fill="#704533" />
-          <path
-            d="M251 84L259 74M253 105L268 104M246 128L257 136"
-            stroke="#835e42"
-            strokeWidth="2"
-            strokeLinecap="round"
-          />
-        </>
-      ) : kind === 'print' ? (
-        <>
-          <path d="M83 26L231 41L216 171L68 155Z" fill="#274337" opacity=".18" />
-          <path d="M77 19L225 34L210 164L62 148Z" fill="#f2eddc" />
-          {[0, 1, 2].flatMap((row) =>
-            [0, 1, 2].map((column) => (
-              <path
-                key={`${row}-${column}`}
-                d={`M${87 + column * 39 - row * 4} ${42 + row * 36 + column * 4}q-18 14-2 27q17-9 2-27Z`}
-                fill={(row + column) % 2 ? '#8f9d69' : '#43634b'}
-              />
-            )),
-          )}
-          <rect
-            x="232"
-            y="75"
-            width="18"
-            height="82"
-            rx="8"
-            fill="#b28b5f"
-            transform="rotate(12 232 75)"
-          />
-          <path d="M238 89L228 141" stroke="#674f36" strokeWidth="2" />
-        </>
-      ) : (
-        <>
-          <path d="M160 0V40" stroke="#725e3d" strokeWidth="3" />
-          <path d="M160 29L86 131H234L160 29Z" fill="#dfb467" />
-          <path
-            d="M160 29L104 130M160 29L125 130M160 29L147 130M160 29L171 130M160 29L193 130M160 29L215 130"
-            stroke="#f5d894"
-            strokeWidth="3"
-          />
-          <ellipse cx="160" cy="131" rx="74" ry="12" fill="#c69548" />
-          <ellipse cx="160" cy="131" rx="60" ry="7" fill="#f7e8b1" />
-          <path
-            d="M105 157L99 168M132 162L130 174M160 164V178M188 162L190 174M215 157L221 168"
-            stroke="#b99357"
-            strokeWidth="2"
-            strokeLinecap="round"
-          />
-        </>
-      )}
-    </svg>
+    <img
+      src={`${import.meta.env.BASE_URL}gather/${kind}-still-life.webp`}
+      alt=""
+      width={1024}
+      height={1024}
+      draggable={false}
+    />
   );
 }
-
 export default function Gather() {
   const [restored] = useState(restoreDraft);
   const [draft, setDraft] = useState<BookingDraft>(restored.draft);
@@ -162,6 +102,7 @@ export default function Gather() {
   const previousView = useRef(view);
   const schedule = sessions();
   const workshop = workshops.find((item) => item.id === draft.workshop)!;
+  const displayedWorkshop = view === 'saved' && saved ? saved.session.workshop : draft.workshop;
   const chosen = schedule.find(
     (session) => session.id === draft.session && session.workshop === draft.workshop,
   );
@@ -307,19 +248,14 @@ export default function Gather() {
     );
 
   return (
-    <div className="gather-page">
-      <WorkNav name="09 / GATHER" detail="Booking experience" />
+    <div className="gather-page" data-view={view}>
       <main className="gather-main" id="main-content" tabIndex={-1}>
         <header className="gather-heading">
-          <div>
-            <p className="gather-wordmark">
-              gather<span>STUDIO SESSIONS</span>
-            </p>
-            <h1>
-              Make time
-              <br />
-              to <em>make something.</em>
-            </h1>
+          <div className="gather-heading-start">
+            <a href="#/" aria-label="Back to portfolio" className="gather-home">
+              <ArrowLeft size={19} />
+            </a>
+            <h1 className="gather-wordmark">gather</h1>
           </div>
           <div className="gather-heading-side">
             <button
@@ -332,60 +268,37 @@ export default function Gather() {
             >
               <CalendarDays size={16} /> Your bookings <span>{activeBookings.length}</span>
             </button>
-            <p>
-              Small groups. A little curiosity.
-              <br />
-              Something made by you.
-            </p>
           </div>
         </header>
-        <div className="gather-demo-note">
-          <span>INTERACTIVE DEMO</span> Sample workshops. Bookings stay on this device; no payment
-          or email is sent.
-        </div>
         <div className="gather-layout">
           <aside className="gather-collection" aria-label="Workshops">
-            <div className="gather-section-label">
-              <span>THE WORKSHOPS</span>
-              <span>01—03</span>
-            </div>
-            {workshops.map((item, index) => (
+            {workshops.map((item) => (
               <button
                 key={item.id}
                 className="gather-workshop"
                 data-workshop={item.id}
-                aria-pressed={draft.workshop === item.id}
+                aria-pressed={view === 'bookings' ? undefined : displayedWorkshop === item.id}
                 disabled={busy || view === 'saved' || view === 'bookings'}
                 onClick={() => {
                   update({ workshop: item.id, session: '' });
                   move('session');
                 }}
               >
-                <span className="gather-workshop-heading">
-                  <span>0{index + 1}</span>
-                  <strong>{item.name}</strong>
-                  {draft.workshop === item.id && <Check size={16} />}
+                <span className="gather-art">
+                  <WorkshopArt kind={item.id} />
                 </span>
-                {draft.workshop === item.id && (
-                  <div className="gather-art">
-                    <WorkshopArt kind={item.id} />
-                  </div>
-                )}
-                <span className="gather-workshop-detail">{item.detail}</span>
-                <span className="gather-workshop-meta">
-                  <span>
-                    {item.duration} min · {item.level}
+                <span className="gather-workshop-copy">
+                  <span className="gather-workshop-heading">
+                    <strong>{item.name}</strong>
+                    {view !== 'bookings' && displayedWorkshop === item.id && <Check size={17} />}
                   </span>
-                  <b>{money(item.price)}</b>
+                  <span className="gather-workshop-meta">
+                    <b>{money(item.price)}</b>
+                    <span>{item.duration} min</span>
+                  </span>
                 </span>
               </button>
             ))}
-            <p className="gather-collection-note">
-              Three original workshop concepts.
-              <br />
-              One complete booking flow.
-            </p>
-            <SourceLink path="/blob/main/src/pages/Gather.tsx">View implementation</SourceLink>
           </aside>
           <section ref={panel} className="gather-panel" aria-label="Booking form">
             {step >= 0 && (
@@ -401,7 +314,7 @@ export default function Gather() {
                       disabled={index > step || busy}
                       onClick={() => move(item)}
                     >
-                      <span>{index < step ? <Check size={12} /> : `0${index + 1}`}</span>
+                      <span>{index < step ? <Check size={13} /> : index + 1}</span>
                       {['Session', 'Details', 'Review'][index]}
                     </button>
                   </li>
@@ -418,13 +331,9 @@ export default function Gather() {
               <form noValidate onSubmit={next}>
                 {view === 'session' && (
                   <>
-                    <h2 id="gather-step-title" tabIndex={-1}>
-                      Find your moment.
+                    <h2 id="gather-step-title" className="gather-sr-only" tabIndex={-1}>
+                      Choose a session
                     </h2>
-                    <p className="gather-panel-intro">
-                      Choose a date for <strong>{workshop.name}</strong>. Bring a friend or make it
-                      a moment for yourself.
-                    </p>
                     <div className="gather-date-header">
                       <h3>Available sessions</h3>
                       <label>
@@ -465,9 +374,9 @@ export default function Gather() {
                               <span className="gather-date-radio" aria-hidden="true">
                                 {draft.session === session.id && <span />}
                               </span>
-                              <span>
+                              <span className="gather-date-info">
                                 <strong>{sessionDate(session, draft.timezone)}</strong>
-                                <small>{sessionTime(session, draft.timezone)}</small>
+                                <span>{sessionTime(session, draft.timezone)}</span>
                               </span>
                               <span className="gather-spots">
                                 {seats === 0 ? 'Fully booked' : `${seats} places left`}
@@ -477,10 +386,9 @@ export default function Gather() {
                         })}
                     </div>
                     <div className="gather-people">
-                      <div>
-                        <h3>How many people?</h3>
-                        <p>Book for up to four, including you.</p>
-                      </div>
+                      <h3>
+                        People <span className="gather-limit">up to 4</span>
+                      </h3>
                       <div className="gather-stepper" role="group" aria-label="Number of attendees">
                         <button
                           type="button"
@@ -506,17 +414,14 @@ export default function Gather() {
                 {view === 'details' && (
                   <>
                     <h2 id="gather-step-title" tabIndex={-1}>
-                      A little about you.
+                      Your details
                     </h2>
-                    <p className="gather-panel-intro">
-                      Add a name and email to the booking. You can review everything before saving.
-                    </p>
                     <button
                       type="button"
                       className="gather-example"
                       onClick={() => update({ name: 'Alex Chen', email: 'alex@example.com' })}
                     >
-                      Use example details <ArrowUpRight size={13} />
+                      Fill sample details <ArrowUpRight size={13} />
                     </button>
                     <div className="gather-fields">
                       <label htmlFor="gather-name">
@@ -585,11 +490,8 @@ export default function Gather() {
                 {view === 'review' && (
                   <>
                     <h2 id="gather-step-title" tabIndex={-1}>
-                      All looking good?
+                      Review booking
                     </h2>
-                    <p className="gather-panel-intro">
-                      Here’s your booking. Take a moment to check the details.
-                    </p>
                     <div className="gather-review-section">
                       <div className="gather-review-heading">
                         <h3>Your session</h3>
@@ -643,7 +545,6 @@ export default function Gather() {
                     <span>
                       {draft.attendees} × {money(workshop.price)}
                     </span>
-                    <small>Sample price · No payment collected</small>
                   </div>
                   <strong>
                     {money(workshop.price * draft.attendees)} <small>USD</small>
@@ -673,11 +574,11 @@ export default function Gather() {
                     {!busy && <ArrowRight size={16} />}
                   </button>
                 </div>
-                <p className="gather-draft-note">
-                  {draftSaved
-                    ? 'Your draft is kept in this tab as you go.'
-                    : 'Draft storage is unavailable. Keep this tab open while booking.'}
-                </p>
+                {!draftSaved && (
+                  <p className="gather-draft-note" role="status">
+                    Keep this tab open; your draft could not be saved.
+                  </p>
+                )}
               </form>
             )}
             {view === 'saved' && saved && (
@@ -685,15 +586,9 @@ export default function Gather() {
                 <div className="gather-complete-mark">
                   <Check size={28} />
                 </div>
-                <p className="gather-section-label">BOOKING SAVED ON THIS DEVICE</p>
                 <h2 id="gather-step-title" tabIndex={-1}>
-                  A little making,
-                  <br />
-                  <em>on the calendar.</em>
+                  Booking saved
                 </h2>
-                <p className="gather-panel-intro">
-                  Your demo booking is saved. You can return to change the details or cancel it.
-                </p>
                 <div className="gather-ticket">
                   <div>
                     <span>GATHER / {saved.id.slice(0, 8).toUpperCase()}</span>
@@ -707,7 +602,7 @@ export default function Gather() {
                     </p>
                   </div>
                   <div>
-                    <span>FOR</span>
+                    <span>Booked by</span>
                     <b>{saved.name}</b>
                     <p>
                       {saved.attendees} {saved.attendees === 1 ? 'person' : 'people'} ·{' '}
@@ -737,11 +632,8 @@ export default function Gather() {
             {view === 'bookings' && (
               <div className="gather-bookings">
                 <h2 id="gather-step-title" tabIndex={-1}>
-                  Your little plans.
+                  Your bookings
                 </h2>
-                <p className="gather-panel-intro">
-                  Bookings saved in this browser. Keep a copy, make a change, or free up your place.
-                </p>
                 <div className="gather-bookings-actions">
                   <button className="gather-primary" onClick={startNew} disabled={busy}>
                     New booking <Plus size={16} />
@@ -759,8 +651,7 @@ export default function Gather() {
                 {!bookings.length && !storageError && (
                   <div className="gather-empty">
                     <CalendarDays size={26} />
-                    <h3>A little space for a new plan.</h3>
-                    <p>Your saved bookings will appear here.</p>
+                    <h3>No bookings yet</h3>
                   </div>
                 )}
                 {bookings.map((booking) => (
@@ -844,12 +735,9 @@ export default function Gather() {
           </section>
         </div>
         <footer className="gather-footer">
-          <span>GATHER / AN INDEPENDENT INTERFACE BY KAI</span>
+          <span>Demo only · Saved on this device · No real reservations or payments</span>
           <a href="#/case/gather">
-            How the booking flow works <ArrowUpRight size={14} />
-          </a>
-          <a href="#/current">
-            Next: Current <ArrowRight size={14} />
+            About this demo <ArrowUpRight size={14} />
           </a>
         </footer>
       </main>
