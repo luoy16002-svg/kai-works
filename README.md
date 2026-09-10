@@ -82,6 +82,6 @@ HALO is a visual product concept, not a photometric simulator or a physical item
 
 ## Visual assets and licenses
 
-The HALO editorial image and two initial interface studies in `design/` were generated with image tools. The interface studies are references, not product screenshots. All functional UI, charts and 3D geometry are code. The final interfaces deliberately omit unsupported controls from those studies. Fonts are self-hosted through Fontsource and retain their upstream SIL OFL licenses. Code is MIT licensed; generated images are supplied as portfolio assets without a claim of exclusive copyright.
+The HALO editorial image, two initial interface studies in `design/`, and Gather's three workshop still-life images in `public/gather/` were generated with image tools. The interface studies are references, not product screenshots. Gather's images illustrate fictional course concepts. All functional UI, charts and 3D geometry are code. The final interfaces deliberately omit unsupported controls from those studies. Fonts are self-hosted through Fontsource and retain their upstream SIL OFL licenses. Code is MIT licensed; generated images are supplied as portfolio assets without a claim of exclusive copyright.
 
 Contact: Kai · China, UTC+8 · [fuddleyu@gmail.com](mailto:fuddleyu@gmail.com). Collaboration by email or chat.

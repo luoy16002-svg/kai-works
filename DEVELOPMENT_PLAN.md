@@ -1,10 +1,12 @@
 # Portfolio development plan
 
-Updated 9 September 2026. Improve the portfolio around real software development briefs, with working examples that are easy to review.
+Updated 10 September 2026. Find suitable overseas software development work and keep the portfolio useful for those briefs. New applications take priority; portfolio changes should improve the examples already available.
 
 ## Current delivery: Gather booking experience
 
-[Gather](https://luoy16002-svg.github.io/kai-works/#/gather) fills the registration and form-flow gap identified in the previous plan. It is an independent frontend prototype with three fictional workshop concepts, original illustrations and responsive layouts.
+[Gather](https://luoy16002-svg.github.io/kai-works/#/gather) fills the registration and form-flow gap identified in the previous plan. It is an independent frontend prototype with three fictional workshop concepts, generated still-life images and responsive layouts.
+
+The 10 September design update places workshop choices beside the booking form. Object photography, materials, spacing and selected states provide the visual character. Course names, prices and durations remain visible for comparison, including on mobile. The page opens directly into booking controls, with no promotional headline, introductory paragraph or design-instruction copy. Image prompts and visual studies stay outside the product interface.
 
 Implemented:
 
@@ -18,6 +20,8 @@ Implemented:
 The interface labels the sample schedule and local storage. It sends no email, takes no payment and reserves no real workshop. A live integration needs a server and shared inventory; choose that integration from an actual brief.
 
 Delivery checks: the build passes. In the regular browser, a two-person booking was saved, edited to another date, reloaded with its draft intact, updated under the original booking ID and cancelled. Its places returned to the local schedule. The 390 px layout was reviewed. Publish through the existing GitHub Pages workflow; released revisions are tracked in the outreach ledger. No new benchmark or self-test project was added.
+
+The 10 September layout was reviewed in Chrome on desktop and at 390 px. A two-person Print & pattern booking was saved, changed to another date under the same ID, and cancelled. The three generated images use WebP encoding and total about 607 kB. The booking storage and capacity implementation remains the same.
 
 ## Previous delivery: HALO model workspace
 
