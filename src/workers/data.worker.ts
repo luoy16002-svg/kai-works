@@ -20,7 +20,7 @@ self.onmessage = async (event: MessageEvent) => {
       if (loading) throw new Error('An import is already running.');
       loading = true;
       const start = performance.now();
-      const collector = orderCollector();
+      const collector = orderCollector(type === 'file' ? event.data.mapping : undefined);
       if (type === 'generate') {
         const count = event.data.count;
         for (const chunk of syntheticCsv(count)) {

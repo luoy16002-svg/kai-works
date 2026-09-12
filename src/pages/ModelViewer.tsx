@@ -22,13 +22,27 @@ const samples = [
   { id: 'fold-vessel', title: 'Fold / vessel', note: 'Terracotta & glazed clay', shape: 'vessel' },
 ];
 type Sample = (typeof samples)[number];
-type AssetInfo = { meshes: number; materials: number; triangles: number; bounds: string };
+type MaterialInfo = {
+  name: string;
+  type: string;
+  color: string | null;
+  roughness: number | null;
+  metalness: number | null;
+};
+type AssetInfo = {
+  meshes: number;
+  materials: number;
+  triangles: number;
+  bounds: string;
+  materialList: MaterialInfo[];
+};
 type Viewer = {
   load: (data: ArrayBuffer, current: () => boolean) => Promise<AssetInfo | null>;
   fit: () => void;
   turn: (direction: number) => void;
   zoom: (factor: number) => void;
   picture: () => Promise<Blob>;
+  exposure: (value: number) => void;
 };
 const assetUrl = (id: string) => `${import.meta.env.BASE_URL}models/${id}.glb`;
 const bytesLabel = (bytes: number) =>
@@ -41,6 +55,8 @@ export default function ModelViewer() {
   const request = useRef(0);
   const [ready, setReady] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [exposure, setExposure] = useState(1.1);
+  const [materialIndex, setMaterialIndex] = useState(0);
   const [failure, setFailure] = useState('');
   const [error, setError] = useState('');
   const [notice, setNotice] = useState('');
@@ -213,6 +229,16 @@ export default function ModelViewer() {
         return {
           meshes,
           materials: materials.size,
+          materialList: [...materials].slice(0, 64).map((material, index) => {
+            const pbr = material as THREE.MeshStandardMaterial;
+            return {
+              name: material.name || `Material ${index + 1}`,
+              type: material.type,
+              color: pbr.color?.isColor ? '#' + pbr.color.getHexString() : null,
+              roughness: typeof pbr.roughness === 'number' ? pbr.roughness : null,
+              metalness: typeof pbr.metalness === 'number' ? pbr.metalness : null,
+            };
+          }),
           triangles: Math.round(triangles),
           bounds: size
             .toArray()
@@ -221,6 +247,10 @@ export default function ModelViewer() {
         };
       },
       fit,
+      exposure(value) {
+        renderer.toneMappingExposure = THREE.MathUtils.clamp(value, 0.3, 2.5);
+        render();
+      },
       turn(direction) {
         const offset = camera.position.clone().sub(controls.target);
         offset.applyAxisAngle(new THREE.Vector3(0, 1, 0), (direction * Math.PI) / 8);
@@ -303,6 +333,7 @@ export default function ModelViewer() {
         info,
       });
       setActive(source instanceof File ? '' : source.id);
+      setMaterialIndex(0);
     } catch (cause) {
       if (current())
         setError(
@@ -338,19 +369,13 @@ export default function ModelViewer() {
           <div>
             <p className="model-eyebrow">HALO / MODEL WORKSPACE</p>
             <h1>
-              A place for
-              <br />
-              <em>your objects.</em>
+              HALO <span>Model workspace</span>
             </h1>
           </div>
           <div className="model-heading-note">
-            <p>
-              Bring a model into the light.
-              <br />
-              Find its angle. Keep the view.
-            </p>
-            <a href="#/halo">
-              <ArrowLeft size={14} /> Pendant configurator
+            <p>Inspect your model. Adjust the view. Export a frame.</p>
+            <a href="#/case/halo">
+              <ArrowUpRight size={14} /> Inside the implementation
             </a>
           </div>
         </header>
@@ -374,7 +399,7 @@ export default function ModelViewer() {
             }}
           >
             <div className="model-stage-top">
-              <span>OBJECT STUDIO</span>
+              <span>GLB / MODEL VIEWER</span>
               <span>
                 {loading ? 'Opening model…' : asset ? bytesLabel(asset.bytes) : 'GLB / 3D'}
               </span>
@@ -395,7 +420,7 @@ export default function ModelViewer() {
           </section>
           <aside className="model-sidebar" aria-label="Choose a model">
             <div className="model-section-label">
-              <span>01 / THE COLLECTION</span>
+              <span>INCLUDED MODELS</span>
               <span>2 objects</span>
             </div>
             <div className="model-samples">
@@ -418,8 +443,8 @@ export default function ModelViewer() {
               ))}
             </div>
             <div className="model-import">
-              <p className="model-section-label">02 / YOUR OWN OBJECT</p>
-              <h2>Made something?</h2>
+              <p className="model-section-label">YOUR OWN MODEL</p>
+              <h2>Open a local file</h2>
               <p>Open a GLB to see it in the studio. The file stays in your browser.</p>
               <input
                 ref={input}
@@ -465,6 +490,55 @@ export default function ModelViewer() {
                 <dd>{asset?.info.bounds ?? '—'}</dd>
               </div>
             </dl>
+            {asset && (
+              <div className="model-materials">
+                <label htmlFor="material-selection">
+                  Materials{' '}
+                  <span>
+                    {asset.info.materials > 64 ? 'First 64 shown' : 'Read-only properties'}
+                  </span>
+                </label>
+                <select
+                  id="material-selection"
+                  value={materialIndex}
+                  onChange={(event) => setMaterialIndex(Number(event.target.value))}
+                >
+                  {asset.info.materialList.map((material, index) => (
+                    <option key={index} value={index}>
+                      {material.name}
+                    </option>
+                  ))}
+                </select>
+                {asset.info.materialList[materialIndex] && (
+                  <dl>
+                    <div>
+                      <dt>Type</dt>
+                      <dd>{asset.info.materialList[materialIndex].type.replace('Mesh', '')}</dd>
+                    </div>
+                    <div>
+                      <dt>Base color</dt>
+                      <dd>
+                        <i
+                          style={{
+                            background:
+                              asset.info.materialList[materialIndex].color ?? 'transparent',
+                          }}
+                        />
+                        {asset.info.materialList[materialIndex].color ?? '—'}
+                      </dd>
+                    </div>
+                    <div>
+                      <dt>Roughness</dt>
+                      <dd>{asset.info.materialList[materialIndex].roughness?.toFixed(2) ?? '—'}</dd>
+                    </div>
+                    <div>
+                      <dt>Metallic</dt>
+                      <dd>{asset.info.materialList[materialIndex].metalness?.toFixed(2) ?? '—'}</dd>
+                    </div>
+                  </dl>
+                )}
+              </div>
+            )}
             <div className="model-feedback" aria-live="polite" aria-atomic="true">
               <p className={error ? 'model-error' : ''}>
                 {error ||
@@ -513,6 +587,24 @@ export default function ModelViewer() {
               <Maximize size={15} /> Fit view
             </button>
           </div>
+          <label className="model-exposure">
+            Exposure
+            <input
+              aria-label="Exposure"
+              type="range"
+              min="0.3"
+              max="2.5"
+              step="0.05"
+              value={exposure}
+              disabled={unavailable}
+              onChange={(event) => {
+                const value = Number(event.target.value);
+                setExposure(value);
+                viewer.current?.exposure(value);
+              }}
+            />
+            <output>{exposure.toFixed(2)}</output>
+          </label>
           <button className="model-save" disabled={unavailable} onClick={() => void save()}>
             Save view <ArrowDownToLine size={16} />
           </button>

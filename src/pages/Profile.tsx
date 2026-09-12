@@ -15,7 +15,7 @@ function ProfileHeader() {
         <KaiLogo />
       </a>
       <a className="profile-back" href="#/">
-        <ArrowLeft size={15} /> Screening room
+        <ArrowLeft size={15} /> Selected work
       </a>
       <span>{profile.location}</span>
       <a href={`mailto:${profile.email}`}>

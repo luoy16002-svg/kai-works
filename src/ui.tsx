@@ -19,13 +19,13 @@ export function WorkNav({ name, detail }: { name: string; detail: string }) {
   return (
     <nav className="work-nav" aria-label="Project navigation">
       <a href="#/" className="back-link">
-        <ArrowLeft size={15} /> Kai / Selected work
+        <ArrowLeft size={15} /> Kai Chen / Selected work
       </a>
       <span>
         {name} <i>/</i> {detail}
       </span>
-      <a href="#/evidence">
-        View evidence <ArrowUpRight size={14} />
+      <a href={REPO + '/tree/main/tests'} target="_blank" rel="noreferrer">
+        Source & tests <ArrowUpRight size={14} />
       </a>
     </nav>
   );

@@ -1,0 +1,39 @@
+KAI CHEN
+Frontend Developer
+Remote projects | Email / chat
+fuddleyu@gmail.com
+Portfolio: https://luoy16002-svg.github.io/kai-works/#/profile/frontend
+Source: https://github.com/luoy16002-svg/kai-works
+
+I build React and TypeScript interfaces for data-heavy tools and product experiences, with attention to responsive layouts, failure states and handover.
+
+TECHNICAL SKILLS
+React, TypeScript, JavaScript, HTML, CSS, Web Workers, IndexedDB, CSV processing, Git, automated tests
+
+SELECTED INDEPENDENT PROJECTS | 2026
+
+Current
+React / TypeScript / Web Workers / SVG
+https://luoy16002-svg.github.io/kai-works/#/case/current
+- Built a React CSV workspace with worker-based parsing and queries, a virtual table, cancellation and filtered export.
+- Checked 100,000 synthetic records against an independent BigInt reference; browser export was verified with Python csv and Decimal.
+Source: https://github.com/luoy16002-svg/kai-works/blob/main/src/pages/Current.tsx
+
+Relay
+TypeScript / IndexedDB / Web Workers / React
+https://luoy16002-svg.github.io/kai-works/#/case/relay
+- Implemented atomic job claims, expiring leases, stale-token rejection and transactional local effects in IndexedDB.
+- Recorded an Edge run recovering 1,000 jobs after worker termination and reload, with exactly 1,000 unique local effects.
+Source: https://github.com/luoy16002-svg/kai-works/blob/main/src/core/queue.ts
+
+HALO
+React / TypeScript / Three.js / WebGL
+https://luoy16002-svg.github.io/kai-works/#/case/halo
+- Built a responsive Three.js configurator with procedural geometry, live material controls, shareable URLs, PNG and JSON export.
+- Verified 900 configuration round trips, including zero brightness; added input bounds, reduced-motion behavior and a WebGL fallback.
+Source: https://github.com/luoy16002-svg/kai-works/blob/main/src/pages/Halo.tsx
+
+WORKING ARRANGEMENT
+I work from written briefs, share working previews, and deliver source code with setup notes.
+
+September 2026

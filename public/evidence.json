@@ -1,11 +1,11 @@
 {
-  "date": "2026-09-08T01:57:48.006Z",
+  "date": "2026-09-12T07:38:39.886Z",
   "node": "24.14.0",
   "platform": "win32 x64 / AMD Ryzen 7 9800X3D 8-Core Processor           ",
   "csv": {
     "rows": 100000,
-    "parseMs": 217.35209999999995,
-    "queryMs": 24.26769999999999,
+    "parseMs": 198.02220000000005,
+    "queryMs": 23.466399999999908,
     "totalCents": 5020018183,
     "filteredRows": 8263
   },
@@ -17,6 +17,6 @@
     "staleRejected": 37,
     "total": 24699808,
     "expected": 24699808,
-    "milliseconds": 676.8972000000001
+    "milliseconds": 638.5022999999999
   }
 }

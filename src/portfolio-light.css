@@ -1,0 +1,252 @@
+.studio-page {
+  --kai-focus: #516f49;
+  --kai-lilac: #d3dfc9;
+  --kai-ink: #28332a;
+  --studio-muted: #75816e;
+  --studio-line: #dfe5d8;
+  background: #f7f7f2;
+  color: #28332a;
+  color-scheme: light;
+}
+.studio-nav {
+  background: #f3f4ee;
+  border-color: #e0e5da;
+  min-height: 76px;
+}
+.studio-wordmark {
+  font-size: 16px;
+  letter-spacing: 2px;
+  font-weight: 500;
+}
+.studio-wordmark span {
+  font-size: 11px;
+  border-color: #d8dfd1;
+  color: #818c7b;
+}
+.studio-nav nav a {
+  color: #798772;
+  font-size: 12px;
+}
+.studio-nav nav a[aria-current] {
+  color: #344930;
+}
+.studio-nav nav a[aria-current]::after {
+  background: #8da67b;
+  bottom: -20px;
+}
+.studio-contact {
+  border-color: #cbd6c1;
+  background: #f5f7f0;
+  color: #566d49;
+  font-size: 11px;
+}
+.studio-contact:hover {
+  background: #e6eddf;
+}
+.studio-page a:focus-visible {
+  outline-color: #6c8a5c;
+}
+.studio-footer {
+  border-color: #dde4d5;
+  color: #708563;
+  background: #f3f4ee;
+}
+.studio-footer i {
+  color: #929f87;
+}
+.studio-footer a {
+  color: #748667;
+}
+.studio-kicker {
+  color: #8ca078;
+}
+.studio-page h1,
+.studio-page h2,
+.studio-page h3 {
+  font-weight: 500;
+}
+.about-heading {
+  border-color: #dbe3d3;
+}
+.about-monogram {
+  background: #e7eddf;
+  color: #718861;
+  border-color: #cbd8bf;
+  font-weight: 400;
+}
+.about-heading h1 {
+  font-size: 28px;
+}
+.about-heading p {
+  color: #8c9a80;
+}
+.about-heading > a {
+  background: #566f43;
+  color: #f8fbed;
+}
+.about-sidebar {
+  border-color: #dce4d4;
+}
+.about-sidebar dt {
+  color: #94a286;
+}
+.about-sidebar dd {
+  color: #5f7451;
+}
+.about-sidebar > a {
+  color: #728c5e;
+}
+.about-content section + section {
+  border-color: #dbe4d1;
+}
+.about-content h2 {
+  font-size: 21px;
+}
+.about-content section > p {
+  color: #748569;
+  font-size: 14px;
+}
+.about-work > a {
+  border-color: #dfe6d6;
+}
+.about-work small {
+  color: #8e9f7f;
+}
+.about-work > a > svg:first-child,
+.about-work > a > svg:last-child {
+  color: #879d75;
+}
+.about-capabilities article p {
+  color: #7c8f6d;
+}
+.about-contact > a {
+  color: #5e7c49;
+}
+.about-contact {
+  border-color: #dbe4d1;
+}
+.case-return {
+  color: #8b9d7b;
+}
+.case-product-label {
+  color: #74935b;
+}
+.project-case-hero h1 {
+  font-size: 28px;
+  line-height: 1.55;
+}
+.project-case-hero p {
+  color: #7c906c;
+  font-size: 13px;
+}
+.case-actions a {
+  border-color: #c9d7bd;
+  color: #688953;
+}
+.case-actions a:first-child {
+  background: #5b7946;
+  color: #fbfff4;
+  border-color: #5b7946;
+}
+.case-context {
+  color: #91a382;
+}
+.case-preview {
+  background: #e6eddf;
+  border-color: #d1ddc5;
+  box-shadow: 0 18px 50px #607d4210;
+}
+.project-case-body {
+  background: #fffef9;
+  color: #31442a;
+  --kai-focus: #668f4d;
+}
+.case-outline > span {
+  color: #a0ad94;
+}
+.case-outline > a {
+  color: #7d966a;
+}
+.case-outline > div {
+  color: #95a785;
+  border-color: #e1e8d8;
+}
+.case-outline strong {
+  color: #728d5e;
+}
+.case-article p,
+.case-article ol {
+  color: #7c9070;
+}
+.case-decisions-list article > span {
+  color: #a5b895;
+}
+.case-verification {
+  background: #f0f5e9;
+  border-color: #e0eacd;
+}
+.case-verification h2 svg {
+  color: #789661;
+}
+.case-verification a {
+  color: #6d9150;
+}
+.case-limits,
+.case-close {
+  border-color: #dfe8d4;
+}
+.case-close > a {
+  color: #628244;
+}
+.case-preview .invoice-preview {
+  background: #fafff2;
+  color: #718c5a;
+}
+.case-preview .invoice-preview > div {
+  border-color: #dfebd2;
+}
+.case-preview .invoice-preview b {
+  color: #536f3c;
+}
+.case-preview .invoice-preview em {
+  color: #72954f;
+}
+.case-preview .invoice-preview small,
+.case-preview .terminal-note {
+  color: #96aa81;
+}
+.about-content section > p,
+.about-capabilities article p,
+.case-article p,
+.case-article ol,
+.project-case-hero p {
+  color: #61734f;
+}
+.about-work small,
+.case-context,
+.studio-kicker,
+.about-heading p,
+.studio-footer i {
+  color: #70815f;
+}
+@media (max-width: 650px) {
+  .about-sidebar {
+    border-color: #dbe4d1;
+  }
+  .studio-nav nav a[aria-current]::after {
+    bottom: -19px;
+  }
+  .project-case-hero h1 {
+    font-size: 25px;
+  }
+  .about-content h2 {
+    font-size: 20px;
+  }
+  .studio-wordmark {
+    font-size: 14px;
+  }
+}
+.about-heading > div:nth-child(2) {
+  flex: 1;
+  min-width: 0;
+}
