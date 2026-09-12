@@ -8,6 +8,10 @@ import {
 import { selectedWork, email } from '../content/work';
 import { caseNotes } from '../content/caseNotes';
 import { CaseStudy as LegacyCaseStudy } from './Profile';
+function scrollToSection(id: string) {
+  const behavior = matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth';
+  document.getElementById(id)?.scrollIntoView({ behavior });
+}
 export default function ProjectCase({ id }: { id: string }) {
   const work = selectedWork.find((item) => item.id === id);
   const notes = caseNotes[id as keyof typeof caseNotes];
@@ -58,13 +62,7 @@ export default function ProjectCase({ id }: { id: string }) {
                 href="#problem"
                 onClick={(e) => {
                   e.preventDefault();
-                  document
-                    .getElementById('problem')
-                    ?.scrollIntoView({
-                      behavior: matchMedia('(prefers-reduced-motion: reduce)').matches
-                        ? 'instant'
-                        : 'smooth',
-                    });
+                  scrollToSection('problem');
                 }}
               >
                 The problem
@@ -73,13 +71,7 @@ export default function ProjectCase({ id }: { id: string }) {
                 href="#decisions"
                 onClick={(e) => {
                   e.preventDefault();
-                  document
-                    .getElementById('decisions')
-                    ?.scrollIntoView({
-                      behavior: matchMedia('(prefers-reduced-motion: reduce)').matches
-                        ? 'instant'
-                        : 'smooth',
-                    });
+                  scrollToSection('decisions');
                 }}
               >
                 Implementation
@@ -88,13 +80,7 @@ export default function ProjectCase({ id }: { id: string }) {
                 href="#verification"
                 onClick={(e) => {
                   e.preventDefault();
-                  document
-                    .getElementById('verification')
-                    ?.scrollIntoView({
-                      behavior: matchMedia('(prefers-reduced-motion: reduce)').matches
-                        ? 'instant'
-                        : 'smooth',
-                    });
+                  scrollToSection('verification');
                 }}
               >
                 Verification
