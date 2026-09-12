@@ -1,0 +1,487 @@
+.current-page {
+  --kai-ink: #172334;
+  --kai-paper: #f5f7fa;
+  --kai-surface: #fff;
+  --kai-surface-muted: #eef2f7;
+  --kai-surface-selected: #e5edfc;
+  --kai-line: #dce3ed;
+  --kai-line-strong: #aabbd0;
+  --kai-muted: #576780;
+  --kai-apricot: #3c71db;
+  --kai-focus: #346bd4;
+  --kai-lilac: #cadcfc;
+  --kai-success: #237b58;
+  --kai-success-dark: #73ceae;
+  --kai-dark-surface: #172432;
+  --kai-dark-raised: #203246;
+  --kai-dark-line: #38506b;
+  --kai-accent-ink: #2459b3;
+  color: var(--kai-ink);
+  background: var(--kai-paper);
+}
+.current-page .work-nav {
+  background: #111b27;
+  color: #c5d1e0;
+  border-color: #2a3b50;
+}
+.current-page .current-rail {
+  background: #172432;
+  color: #becfe3;
+  border-color: #2a3b50;
+}
+.current-page .current-rail > a {
+  color: #89b4ff;
+}
+.current-page .rail-selected {
+  background: #2b4160;
+  color: #fff;
+}
+.current-page .current-header {
+  padding: 26px 0;
+  height: auto;
+  min-height: 100px;
+}
+.current-page .current-header h1 {
+  font-family: Manrope, sans-serif;
+  font-size: 29px;
+  letter-spacing: -1px;
+  font-weight: 700;
+}
+.current-page .current-header > div:first-child {
+  align-items: baseline;
+  gap: 16px;
+}
+.current-page .current-header p {
+  font-size: 14px;
+}
+.current-page .header-actions {
+  flex-wrap: wrap;
+}
+.current-page .header-actions button {
+  background: #fff;
+  border: 1px solid #cdd8e6;
+  color: #284569;
+  padding: 9px 12px;
+}
+.current-page .header-actions button:last-child {
+  background: #3269d3;
+  border-color: #3269d3;
+  color: white;
+}
+.current-page .current-workspace {
+  grid-template-columns: minmax(0, 1fr) 278px;
+}
+.current-page .data-area {
+  background: white;
+  padding: 20px 22px 0 0;
+}
+.current-page .header-actions button,
+.current-page .data-toolbar select,
+.current-page .data-search input {
+  font-size: 12px;
+}
+.current-page .data-toolbar select {
+  height: 38px;
+}
+.current-page .data-search {
+  min-height: 38px;
+}
+.current-page .file-strip {
+  font-size: 12px;
+  min-height: 54px;
+}
+.current-page .file-strip .data-label {
+  font-size: 9px;
+}
+.current-page .file-strip > .mono {
+  font-size: 9px;
+}
+.current-page .plot {
+  height: 140px;
+  margin-top: 18px;
+}
+.current-page .chart-heading {
+  font-size: 12px;
+}
+.current-page .chart-heading > .mono,
+.current-page .chart-dates {
+  font-size: 9px;
+}
+.current-page .plot-labels {
+  font-size: 9px;
+}
+.current-page .result-summary {
+  font-size: 12px;
+  padding: 20px 2px;
+}
+.current-page .result-summary strong {
+  font-size: 16px;
+}
+.current-page .result-summary > span:last-child {
+  font-size: 10px;
+}
+.current-page .table-top,
+.current-page .table-top > button,
+.current-page .table-header,
+.current-page .table-row > span {
+  font-size: 12px;
+}
+.current-page .table-top > .mono,
+.current-page .table-header small {
+  font-size: 10px;
+}
+.current-page .table-row > span:nth-child(2),
+.current-page .table-row > span:first-child,
+.current-page .table-row > span:last-child {
+  font-size: 11px;
+}
+.current-page .inspector-tabs button,
+.current-page .data-inspector dt,
+.current-page .data-inspector dd,
+.current-page .section-label {
+  font-size: 12px;
+}
+.current-page .inspector-note {
+  font-size: 11px;
+  line-height: 1.8;
+}
+.current-page .table-foot {
+  font-size: 10px;
+}
+.current-page .sample-controls p {
+  font-size: 12px;
+}
+.current-page .data-inspector {
+  background: #f5f7fb;
+}
+.current-page .revenue-chart {
+  padding-top: 20px;
+}
+.current-page .plot polyline {
+  stroke: #427dda;
+}
+.current-page .plot .chart-fill {
+  fill: #edf3fe;
+}
+.current-page .current-primary {
+  background: #3269d3;
+  color: white;
+}
+.current-page .sample-controls h3 {
+  font-family: Manrope, sans-serif;
+  font-size: 18px;
+  letter-spacing: -0.4px;
+}
+.current-page .table-row:nth-child(even) {
+  background: #f6f8fc;
+}
+.current-page .table-row:hover {
+  background: #edf3fe;
+}
+.current-page .current-footer {
+  background: #f5f7fa;
+}
+.current-notice {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 26px;
+  background: #eaf7f1;
+  color: #185f47;
+  border-bottom: 1px solid #cce8dc;
+  font-size: 13px;
+}
+.current-notice button {
+  background: transparent;
+  margin-left: auto;
+  padding: 6px;
+}
+.dataset-list {
+  display: grid;
+  gap: 8px;
+  margin-top: 16px;
+}
+.dataset-list > p {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+}
+.dataset-row {
+  display: flex;
+  align-items: center;
+  border: 1px solid #dce3ed;
+  border-radius: 5px;
+  background: white;
+  min-width: 0;
+}
+.dataset-row button {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  background: transparent;
+  padding: 10px;
+  text-align: left;
+  min-width: 0;
+}
+.dataset-row button:first-child {
+  flex: 1;
+}
+.dataset-row button > span {
+  display: grid;
+  min-width: 0;
+}
+.dataset-row strong {
+  font-weight: 600;
+  font-size: 12px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.dataset-row small {
+  font-size: 11px;
+  color: #697a90;
+  margin-top: 3px;
+}
+.dataset-row button:last-child {
+  color: #748297;
+  flex: none;
+}
+.csv-dialog {
+  width: min(760px, calc(100vw - 32px));
+  border: 1px solid #d5dfeb;
+  border-radius: 12px;
+  padding: 0;
+  color: #19283c;
+  background: #fff;
+  max-height: calc(100dvh - 36px);
+  box-shadow: 0 24px 100px #06142655;
+}
+.csv-dialog::backdrop {
+  background: #091827a6;
+  backdrop-filter: blur(3px);
+}
+.csv-dialog form {
+  padding: 26px;
+}
+.csv-dialog header,
+.csv-dialog header > div {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.csv-dialog header {
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+.csv-dialog h2 {
+  font-size: 22px;
+  letter-spacing: -0.6px;
+}
+.csv-dialog header button {
+  background: transparent;
+  padding: 6px;
+}
+.csv-dialog p {
+  font-size: 14px;
+  color: #586a80;
+  line-height: 1.8;
+}
+.csv-dialog label {
+  font-size: 13px;
+  font-weight: 600;
+}
+.csv-dialog input,
+.csv-dialog select,
+.csv-dialog textarea {
+  background: #fff;
+  border: 1px solid #b9c9dc;
+  padding: 10px;
+  color: #19283c;
+  font: inherit;
+  width: 100%;
+}
+.csv-dialog :is(input, select, textarea, button):focus-visible {
+  outline: 2px solid #3977dc;
+  outline-offset: 3px;
+}
+.csv-name,
+.csv-paste {
+  display: grid;
+  gap: 7px;
+  margin-top: 16px;
+}
+.csv-paste textarea {
+  min-height: 200px;
+  resize: vertical;
+  font:
+    12px/1.7 'DM Mono',
+    monospace;
+}
+.csv-mapping {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 10px;
+  margin: 22px 0;
+}
+.csv-mapping label {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+}
+.csv-mapping select {
+  padding: 9px 5px;
+  font-size: 12px;
+}
+.csv-mapping small {
+  font-weight: 400;
+  color: #6b7d91;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 11px;
+}
+.csv-preview-table {
+  overflow: auto;
+  border: 1px solid #e0e6ef;
+  border-radius: 5px;
+}
+.csv-preview-table table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 12px;
+  text-align: left;
+}
+.csv-preview-table caption {
+  text-align: left;
+  padding: 12px;
+  background: #f6f8fc;
+  font-weight: 600;
+}
+.csv-preview-table td,
+.csv-preview-table th {
+  padding: 10px 12px;
+  border-top: 1px solid #e0e6ef;
+  max-width: 220px;
+  overflow-wrap: anywhere;
+}
+.csv-dialog .csv-hint {
+  margin-top: 12px;
+  color: #86602b;
+}
+.csv-dialog footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  border-top: 1px solid #e0e6ef;
+  padding-top: 20px;
+  margin-top: 24px;
+}
+.csv-dialog footer span {
+  font-size: 12px;
+  color: #677991;
+}
+.csv-dialog footer button {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 17px;
+  background: #3269d3;
+  color: white;
+  white-space: nowrap;
+}
+@media (max-width: 1150px) {
+  .current-page .current-header {
+    align-items: flex-start;
+    gap: 20px;
+  }
+  .current-page .current-header > div:first-child {
+    display: block;
+  }
+  .current-page .current-header p {
+    margin-top: 5px;
+  }
+  .current-page .current-workspace {
+    grid-template-columns: minmax(0, 1fr) 255px;
+  }
+}
+@media (max-width: 900px) {
+  .current-page .current-workspace {
+    grid-template-columns: 1fr;
+  }
+  .current-page .current-header {
+    padding: 22px 20px;
+  }
+  .current-page .data-inspector {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+  .current-page .inspector-tabs {
+    grid-column: 1/-1;
+  }
+  .current-page .schema-panel {
+    grid-column: 1/-1;
+  }
+  .current-page .data-inspector > .source-link {
+    margin: 22px;
+  }
+  .current-page .data-inspector .local-note {
+    margin: 20px;
+  }
+}
+@media (max-width: 600px) {
+  .current-page .current-header {
+    display: block;
+  }
+  .current-page .header-actions {
+    margin-top: 18px;
+    justify-content: flex-start;
+  }
+  .current-page .header-actions button {
+    font-size: 12px;
+  }
+  .current-page .data-inspector {
+    display: block;
+  }
+  .current-page .current-rail {
+    display: none;
+  }
+  .current-page .current-shell {
+    display: block;
+  }
+  .current-page .current-header p {
+    font-size: 13px;
+  }
+  .current-notice {
+    padding: 12px 18px;
+  }
+  .csv-dialog form {
+    padding: 18px;
+  }
+  .csv-mapping {
+    grid-template-columns: 1fr 1fr;
+  }
+  .csv-dialog footer {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .csv-dialog footer button {
+    width: 100%;
+    justify-content: center;
+  }
+  .csv-dialog h2 {
+    font-size: 20px;
+  }
+}
+.current-page .file-strip .data-label {
+  display: inline-flex;
+}
+@media (max-width: 600px) {
+  .current-page .file-strip {
+    padding-block: 12px;
+  }
+  .current-page .file-strip > div {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+}

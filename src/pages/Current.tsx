@@ -12,9 +12,24 @@ import {
   ArrowUpRight,
   Database,
   CircleHelp,
+  Save,
+  FolderOpen,
+  Trash2,
+  ClipboardPaste,
 } from 'lucide-react';
 import { WorkNav, SourceLink, download } from '../ui';
-import { defaultQuery, type Order, type Query } from '../core/csv';
+import {
+  defaultQuery,
+  defaultMapping,
+  type ColumnMapping,
+  type Order,
+  type Query,
+} from '../core/csv';
+import { createDatasetLibrary, type DatasetMeta } from '../core/datasets';
+import CsvImportDialog from '../components/CsvImportDialog';
+import '../current.css';
+
+const library = createDatasetLibrary();
 
 type Result = {
   rows: Order[];
@@ -112,6 +127,65 @@ export default function Current() {
   const [lag, setLag] = useState(0);
   const [lagSamples, setLagSamples] = useState(0);
   const [showSchema, setShowSchema] = useState(false);
+  const sourceFile = useRef<{ file: File; mapping: ColumnMapping; id?: string } | null>(null);
+  const [datasets, setDatasets] = useState<DatasetMeta[]>([]);
+  const [saving, setSaving] = useState(false);
+  const [notice, setNotice] = useState('');
+  const [libraryError, setLibraryError] = useState('');
+  const [showImport, setShowImport] = useState(false);
+  const [importFile, setImportFile] = useState<File | null>(null);
+  const refreshLibrary = () =>
+    library
+      .list()
+      .then(setDatasets)
+      .catch((error) => setLibraryError(error.message));
+  async function saveDataset() {
+    const source = sourceFile.current;
+    if (!source || loading || !total) return;
+    setSaving(true);
+    setLibraryError('');
+    setNotice('');
+    try {
+      const saved = await library.save({ ...source, name: source.file.name, rows: total, query });
+      if (sourceFile.current === source) source.id = saved.id;
+      setNotice(`${saved.name} saved on this device, including the current filters.`);
+      await refreshLibrary();
+    } catch (error) {
+      setLibraryError(error instanceof Error ? error.message : 'Could not save the dataset.');
+    } finally {
+      setSaving(false);
+    }
+  }
+  async function reopenDataset(item: DatasetMeta) {
+    setLibraryError('');
+    setNotice('');
+    try {
+      const saved = await library.get(item.id);
+      if (!saved) {
+        await refreshLibrary();
+        throw new Error('This dataset was removed in another tab.');
+      }
+      load(
+        new File([saved.file], saved.name, { type: 'text/csv' }),
+        sampleSize,
+        saved.mapping,
+        saved,
+      );
+      setNotice(`Reopened ${saved.name} with its saved filters.`);
+    } catch (error) {
+      setLibraryError(error instanceof Error ? error.message : 'Could not open the dataset.');
+    }
+  }
+  async function removeDataset(item: DatasetMeta) {
+    try {
+      await library.remove(item.id);
+      if (sourceFile.current?.id === item.id) sourceFile.current.id = undefined;
+      setNotice(`${item.name} removed from the local library.`);
+      await refreshLibrary();
+    } catch (error) {
+      setLibraryError(error instanceof Error ? error.message : 'Could not remove the dataset.');
+    }
+  }
   const runQuery = (offset = 0) => {
     const id = ++sequence.current;
     latestQuery.current = id;
@@ -151,7 +225,7 @@ export default function Current() {
     };
     return current;
   };
-  const load = (file?: File, count = sampleSize) => {
+  const load = (file?: File, count = sampleSize, mapping = defaultMapping, saved?: DatasetMeta) => {
     const current = create();
     const id = ++sequence.current;
     loadId.current = id;
@@ -159,6 +233,8 @@ export default function Current() {
     setLoading(true);
     setProgress(0);
     setError('');
+    setNotice('');
+    sourceFile.current = file ? { file, mapping, id: saved?.id } : null;
     setTotal(0);
     setResult(emptyResult);
     setImportTime(0);
@@ -167,15 +243,18 @@ export default function Current() {
     setLagSamples(0);
     setRegions([]);
     setChannels([]);
-    queryRef.current = defaultQuery;
-    setQuery(defaultQuery);
+    queryRef.current = saved?.query ?? defaultQuery;
+    setQuery(queryRef.current);
     if (scroll.current) scroll.current.scrollTop = 0;
     setFilename(file ? file.name : 'regional-orders.csv');
     setSample(!file);
-    current.postMessage(file ? { type: 'file', id, file } : { type: 'generate', id, count });
+    current.postMessage(
+      file ? { type: 'file', id, file, mapping } : { type: 'generate', id, count },
+    );
   };
   useEffect(() => {
     load(undefined, 100000);
+    void refreshLibrary();
     return () => {
       worker.current?.terminate();
       if (scrollTimer.current) clearTimeout(scrollTimer.current);
@@ -213,7 +292,7 @@ export default function Current() {
   const change = (patch: Partial<Query>) => setQuery({ ...query, ...patch });
   return (
     <div className="current-page">
-      <WorkNav name="02 / CURRENT" detail="Local data workbench" />
+      <WorkNav name="CURRENT" detail="Local data workbench" />
       <div className="current-shell">
         <aside className="current-rail">
           <a href="#/" aria-label="Back to portfolio">
@@ -228,7 +307,7 @@ export default function Current() {
           <header className="current-header">
             <div>
               <h1>Current</h1>
-              <p>Data, within reach.</p>
+              <p>Explore your order data, on your device.</p>
             </div>
             <div className="header-actions">
               <input
@@ -240,12 +319,26 @@ export default function Current() {
                 aria-label="Choose a CSV file"
                 onChange={(e) => {
                   const file = e.target.files?.[0];
-                  if (file) load(file);
+                  if (file) {
+                    setImportFile(file);
+                    setShowImport(true);
+                  }
                   e.target.value = '';
                 }}
               />
               <button onClick={() => input.current?.click()}>
                 <Upload size={16} /> Open CSV
+              </button>
+              <button
+                onClick={() => {
+                  setImportFile(null);
+                  setShowImport(true);
+                }}
+              >
+                <ClipboardPaste size={16} /> Paste CSV
+              </button>
+              <button onClick={saveDataset} disabled={saving || loading || sample || !total}>
+                <Save size={16} /> {saving ? 'Saving…' : 'Save dataset'}
               </button>
               <button
                 onClick={() =>
@@ -267,6 +360,20 @@ export default function Current() {
             </div>
             <span className="mono">CSV · UTF-8 · USD</span>
           </div>
+          {notice && (
+            <div className="current-notice" role="status">
+              <ShieldCheck size={16} />
+              {notice}
+              <button onClick={() => setNotice('')} aria-label="Dismiss message">
+                <X size={16} />
+              </button>
+            </div>
+          )}
+          {libraryError && (
+            <div className="error-box" role="alert">
+              {libraryError}
+            </div>
+          )}
           <div className="current-workspace">
             <section className="data-area" aria-label="Data explorer">
               <div className="data-toolbar">
@@ -434,7 +541,7 @@ export default function Current() {
               </div>
               <div className="table-foot">
                 <span>Only visible rows are rendered.</span>
-                <span>Files stay in memory until you leave this page.</span>
+                <span>Use Save dataset to keep your file on this device.</span>
               </div>
             </section>
             <aside className="data-inspector">
@@ -462,8 +569,8 @@ export default function Current() {
                     </div>
                   ))}
                   <p>
-                    Header names and order must match. Duplicate IDs, invalid dates and malformed
-                    amounts stop the import.
+                    Match your own column names during import. Duplicate IDs, invalid dates and
+                    malformed amounts stop the import.
                   </p>
                   <p>
                     UTF-8, quoted commas and line breaks are supported. Limit: 25 MB / 500,000 rows.
@@ -472,17 +579,46 @@ export default function Current() {
               ) : (
                 <>
                   <div className="inspector-section">
-                    <span className="eyebrow">CURRENT QUERY</span>
-                    <pre>
-                      <span>FROM</span> local_orders
-                      <br />
-                      <span>WHERE</span> region = {query.region ? `'${query.region}'` : 'ANY'}
-                      <br />
-                      {'  '}AND channel = {query.channel ? `'${query.channel}'` : 'ANY'}
-                      <br />
-                      <span>ORDER BY</span> {query.sort} {query.descending ? 'DESC' : 'ASC'}
-                    </pre>
-                    <p className="inspector-note">Filter preview · no SQL execution.</p>
+                    <div className="section-label">
+                      Saved on this device
+                      <FolderOpen size={15} />
+                    </div>
+                    <div className="dataset-list">
+                      {datasets.length ? (
+                        datasets.map((item) => (
+                          <div className="dataset-row" key={item.id}>
+                            <button
+                              disabled={loading || saving}
+                              onClick={() => void reopenDataset(item)}
+                            >
+                              <FileSpreadsheet size={16} />
+                              <span>
+                                <strong>{item.name}</strong>
+                                <small>
+                                  {number(item.rows)} rows ·{' '}
+                                  {item.size < 1024
+                                    ? `${item.size} B`
+                                    : `${(item.size / 1024).toFixed(0)} KB`}
+                                </small>
+                              </span>
+                            </button>
+                            <button
+                              disabled={saving}
+                              aria-label={`Remove ${item.name} from library`}
+                              onClick={() => void removeDataset(item)}
+                            >
+                              <Trash2 size={14} />
+                            </button>
+                          </div>
+                        ))
+                      ) : (
+                        <p>Import your CSV, then save it here to reopen later.</p>
+                      )}
+                    </div>
+                    <p className="inspector-note">
+                      Up to 10 files / 100 MB. Browser storage can be cleared or evicted; keep an
+                      exported copy.
+                    </p>
                   </div>
                   <div className="inspector-section">
                     <div className="section-label">
@@ -512,9 +648,9 @@ export default function Current() {
                     </p>
                   </div>
                   <div className="inspector-section sample-controls">
-                    <span className="eyebrow">TAKE IT FOR A SPIN</span>
-                    <h3>Bring more rows.</h3>
-                    <p>Deterministic sample data. A real worker, parser and query pipeline.</p>
+                    <span className="eyebrow">SAMPLE DATA</span>
+                    <h3>Explore a sample</h3>
+                    <p>Generated orders to try the filters and export.</p>
                     <label>
                       <span className="sr-only">Sample rows</span>
                       <select
@@ -552,12 +688,22 @@ export default function Current() {
             <span>
               <span className="status-dot" /> Browser-local processing
             </span>
-            <a href="#/relay">
-              Next project: Relay <ArrowUpRight size={14} />
+            <a href="#/case/current">
+              How Current works <ArrowUpRight size={14} />
             </a>
           </footer>
         </main>
       </div>
+      {showImport && (
+        <CsvImportDialog
+          initialFile={importFile}
+          onClose={() => setShowImport(false)}
+          onImport={(file, mapping) => {
+            setShowImport(false);
+            load(file, sampleSize, mapping);
+          }}
+        />
+      )}
     </div>
   );
 }

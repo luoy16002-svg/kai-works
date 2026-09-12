@@ -1,0 +1,37 @@
+{
+  "date": "2026-09-12",
+  "environment": "Windows, Codex in-app Chromium, localhost development build",
+  "data": "Synthetic fixtures and the repository's original model assets only",
+  "home": {
+    "defaultViewport": "1280x720",
+    "responsiveWidthsChecked": [320, 390, 768, 1280],
+    "documentHorizontalOverflow": false,
+    "europePreviewRows": 246,
+    "europePreviewCents": 11725930,
+    "focusLayout": "Checked open, collapsed and restored panels",
+    "modelSwitch": "Arc light to Fold vessel, 2 meshes and 6304 triangles",
+    "keyboardTabs": "Arrow keys selected the next mobile project",
+    "commandCopy": "Clipboard write resolved and the interface showed Copied command"
+  },
+  "current": {
+    "savedDataset": "Saved a three-row file with Europe selected; reloaded and reopened to recover two rows and 30 cents",
+    "mappedImport": "Matched five renamed and reordered columns in a six-column source file",
+    "mappedRows": 2,
+    "mappedTotalCents": 30,
+    "export": "current-mapped-export-2026-09-12.csv",
+    "exportInspection": "Downloaded CSV contains SEP-1 / 0.10 and SEP-2 / 0.20 under canonical headers",
+    "removeDataset": "Removed the temporary test file from the local library",
+    "sampleFilter": "100000 generated rows filtered to Europe / Direct: 8263 rows, 419725769 cents"
+  },
+  "halo": {
+    "localImport": "Selected public/models/fold-vessel.glb through the native file chooser",
+    "importResult": "2 meshes, 2 materials, 6304 triangles; imported file name displayed",
+    "materialInspection": "Forest enamel reports #2b443b, roughness 0.27 and metallic 0.20",
+    "exposure": "Keyboard input moved exposure from 1.10 to 1.15",
+    "export": "halo-local-import-export-2026-09-12.png",
+    "exportInspection": "PNG downloaded to disk and was visually inspected",
+    "narrowLayout": "Model and view controls fit a 320px document without horizontal overflow"
+  },
+  "casePages": "Current and HALO screenshots loaded from public/work; profile and case layout checked at 320px",
+  "limits": "This is a browser workflow check using synthetic fixtures. It is not a cross-browser certification or a production performance claim. OS-level reduced-motion and every View Transition frame were not instrumented. Automated test results are recorded separately by CI."
+}

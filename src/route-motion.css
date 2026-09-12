@@ -1,0 +1,64 @@
+.index-project-current,
+.current-main {
+  view-transition-name: work-current;
+}
+.index-project-halo,
+.model-stage {
+  view-transition-name: work-halo;
+}
+.index-project-invoice-gate,
+.case-preview-invoice-gate {
+  view-transition-name: work-invoice;
+}
+.case-preview-current {
+  view-transition-name: work-current;
+}
+.case-preview-halo {
+  view-transition-name: work-halo;
+}
+::view-transition-group(*) {
+  animation-duration: 650ms;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+::view-transition-old(root) {
+  animation: route-leave 250ms ease both;
+}
+::view-transition-new(root) {
+  animation: route-enter 450ms ease both;
+}
+::view-transition-old(work-current),
+::view-transition-new(work-current),
+::view-transition-old(work-halo),
+::view-transition-new(work-halo),
+::view-transition-old(work-invoice),
+::view-transition-new(work-invoice) {
+  height: 100%;
+  object-fit: cover;
+  object-position: top left;
+  mix-blend-mode: normal;
+  border-radius: 10px;
+  overflow: clip;
+}
+@keyframes route-leave {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes route-enter {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+  html {
+    scroll-behavior: auto !important;
+  }
+}

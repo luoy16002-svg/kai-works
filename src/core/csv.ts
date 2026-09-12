@@ -69,7 +69,10 @@ export class CsvParser {
 }
 
 export type Order = { id: string; date: string; region: string; channel: string; cents: number };
-export const columns = ['id', 'date', 'region', 'channel', 'amount'];
+export const columns = ['id', 'date', 'region', 'channel', 'amount'] as const;
+export type ColumnName = (typeof columns)[number];
+export type ColumnMapping = Record<ColumnName, number>;
+export const defaultMapping: ColumnMapping = { id: 0, date: 1, region: 2, channel: 3, amount: 4 };
 export const regions = ['Europe', 'North America', 'Asia Pacific', 'Latin America'];
 export const channels = ['Direct', 'Partner', 'Retail'];
 
@@ -79,20 +82,31 @@ export function parseCents(text: string): number {
   return Number(text.replace('.', ''));
 }
 
-export function orderCollector() {
+export function orderCollector(mapping?: ColumnMapping) {
   const rows: Order[] = [];
   const seen = new Set<string>();
   let header = false;
+  let width = 5;
+  let positions = columns.map((_, index) => index);
   const parser = new CsvParser((fields, line) => {
     if (!header) {
-      if (fields.join(',') !== columns.join(','))
+      if (!mapping && fields.join(',') !== columns.join(','))
         throw new Error(`Expected header: ${columns.join(',')}`);
+      width = fields.length;
+      if (width > 512) throw new Error('The column limit is 512.');
+      if (mapping) {
+        positions = columns.map((name) => mapping[name]);
+        if (positions.some((index) => !Number.isInteger(index) || index < 0 || index >= width))
+          throw new Error('Choose an existing source column for each required field.');
+        if (new Set(positions).size !== columns.length)
+          throw new Error('Each required field needs a different source column.');
+      }
       header = true;
       return;
     }
-    if (fields.length !== 5)
-      throw new Error(`Row ${line}: expected 5 columns, received ${fields.length}.`);
-    const [id, date, region, channel, amount] = fields;
+    if (fields.length !== width)
+      throw new Error(`Row ${line}: expected ${width} columns, received ${fields.length}.`);
+    const [id, date, region, channel, amount] = positions.map((index) => fields[index]);
     if (
       !id ||
       id.length > 128 ||
@@ -110,7 +124,13 @@ export function orderCollector() {
       throw new Error(`Row ${line}: invalid calendar date.`);
     if (seen.has(id)) throw new Error(`Row ${line}: duplicate order ID.`);
     seen.add(id);
-    rows.push({ id, date, region, channel, cents: parseCents(amount) });
+    let cents: number;
+    try {
+      cents = parseCents(amount);
+    } catch {
+      throw new Error(`Row ${line}: amount must be a nonnegative decimal with exactly two places.`);
+    }
+    rows.push({ id, date, region, channel, cents });
     if (rows.length > 500_000) throw new Error('The local limit is 500,000 rows.');
   });
   return {
