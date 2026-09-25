@@ -13,11 +13,13 @@ import {
   Waves,
   Box,
   FileCheck2,
+  Briefcase,
 } from 'lucide-react';
 import CurrentPreview from '../components/CurrentPreview';
 import PreviewTabs from '../components/PreviewTabs';
 import InvoiceWorkspacePreview from '../components/InvoiceWorkspacePreview';
-import { selectedWork, email, source } from '../content/work';
+import HireSections from '../components/HireSections';
+import { selectedWork, email, source, hireUrl } from '../content/work';
 import '../work-index.css';
 const ObjectPreview = lazy(() => import('../components/ObjectPreview'));
 const icons = [Waves, Box, FileCheck2];
@@ -62,6 +64,11 @@ export default function Home() {
             Source
             <ArrowUpRight size={12} />
           </a>
+          <a href={hireUrl} target="_blank" rel="noreferrer">
+            <Briefcase size={15} />
+            Hire me
+            <ArrowUpRight size={12} />
+          </a>
           <a href={`mailto:${email}`}>
             <Mail size={15} />
             Get in touch
@@ -69,7 +76,7 @@ export default function Home() {
           <span>
             Independent developer
             <br />
-            China · UTC+8
+            Remote · UTC+8
           </span>
         </div>
       </aside>
@@ -78,7 +85,7 @@ export default function Home() {
           <h1>
             Selected work <span>2026</span>
           </h1>
-          <p>Useful software. Considered in every detail.</p>
+          <p>Scrapers, automations, web tools and games. Written, async, fixed-price work.</p>
           <div className="index-view-controls" aria-label="Display mode">
             <button
               aria-pressed={focus === -1}
@@ -180,10 +187,11 @@ export default function Home() {
             );
           })}
         </section>
+        <HireSections />
         <footer className="index-footer">
           <span>
-            03 independent projects<span className="index-footer-divider">/</span>Source &
-            engineering notes included
+            03 tools · 03 games<span className="index-footer-divider">/</span>Source & engineering
+            notes included
           </span>
           {focus !== -1 ? (
             <div className="index-focus-navigation">

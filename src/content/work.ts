@@ -1,6 +1,7 @@
 export const source = 'https://github.com/luoy16002-svg/kai-works';
 export const invoiceSource = 'https://github.com/luoy16002-svg/invoice-gate';
 export const email = 'fuddleyu@gmail.com';
+export const hireUrl = 'https://www.freelancer.com/u/kaic38';
 export const selectedWork = [
   {
     id: 'current',
