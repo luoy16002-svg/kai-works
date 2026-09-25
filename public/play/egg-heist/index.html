@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+  <title>Egg Heist</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ctext y=%22.9em%22 font-size=%2290%22%3E%F0%9F%A5%9A%3C/text%3E%3C/svg%3E" />
+  <style>
+    html, body { margin: 0; height: 100%; background: #1b1b3a; overflow: hidden; touch-action: none; -webkit-user-select: none; user-select: none; }
+    #wrap { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; }
+    canvas { display: block; outline: none; }
+  </style>
+  <script>
+    // Show load/runtime errors on screen so a black screen can be diagnosed from a screenshot.
+    (function () {
+      function show(msg) {
+        var d = document.getElementById('err');
+        if (!d) {
+          d = document.createElement('div');
+          d.id = 'err';
+          d.style.cssText = 'position:fixed;left:0;right:0;bottom:0;max-height:40%;overflow:auto;background:rgba(80,0,20,.9);color:#fff;font:12px monospace;padding:6px;z-index:99;white-space:pre-wrap';
+          (document.body || document.documentElement).appendChild(d);
+        }
+        d.textContent += msg + String.fromCharCode(10);
+      }
+      window.addEventListener('error', function (e) {
+        var t = e.target;
+        if (t && t !== window && (t.src || t.href)) show('Failed to load: ' + (t.src || t.href));
+        else show('Error: ' + (e.message || e) + ' @ ' + (e.filename || '') + ':' + (e.lineno || ''));
+      }, true);
+      window.addEventListener('unhandledrejection', function (e) { show('Promise: ' + (e.reason && (e.reason.stack || e.reason))); });
+    })();
+  </script>
+  <script src="https://sdk.crazygames.com/crazygames-sdk-v3.js"></script>
+  <script type="module" crossorigin src="./assets/index-DyGyMXdh.js"></script>
+</head>
+<body>
+  <div id="wrap"><canvas id="game"></canvas></div>
+</body>
+</html>

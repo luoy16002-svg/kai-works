@@ -1,0 +1,260 @@
+/* Sections below the project index: games, services and how to hire. Uses the index palette. */
+.hire {
+  display: flex;
+  flex-direction: column;
+  gap: 56px;
+  padding: 36px 0 24px;
+  border-top: 1px solid #e1e5dc;
+  margin-top: 8px;
+}
+.hire h2 {
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: -0.3px;
+  color: #25302a;
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+.hire h2 span {
+  font-size: 11px;
+  font-weight: 500;
+  color: #8b9684;
+  letter-spacing: 0.2px;
+}
+.hire-heading {
+  margin-bottom: 18px;
+}
+.hire h3 {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.2px;
+  color: #25302a;
+}
+.hire p {
+  color: #5f6d63;
+  line-height: 1.6;
+  font-size: 13px;
+}
+
+/* Games */
+.hire-games {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+.hire-game {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #dbe2d5;
+  border-radius: 10px;
+  background: #fff;
+  overflow: hidden;
+  color: inherit;
+  text-decoration: none;
+  transition:
+    transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.25s,
+    border-color 0.25s;
+}
+.hire-game:hover,
+.hire-game:focus-visible {
+  transform: translateY(-3px);
+  border-color: #c5d1bf;
+  box-shadow: 0 14px 30px -18px rgba(37, 48, 42, 0.35);
+}
+.hire-game-art {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: #e9ede4;
+}
+.hire-game-art img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.hire-game:hover .hire-game-art img {
+  transform: scale(1.035);
+}
+.hire-play {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 12px;
+  border-radius: 999px;
+  background: rgba(247, 247, 242, 0.94);
+  color: #25302a;
+  font-size: 12px;
+  font-weight: 600;
+  box-shadow: 0 6px 16px -8px rgba(0, 0, 0, 0.4);
+}
+.hire-game-body {
+  padding: 16px 18px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+.hire-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: auto;
+  padding-top: 6px;
+}
+.hire-tags span {
+  font-family: 'DM Mono', ui-monospace, monospace;
+  font-size: 10.5px;
+  color: #47715a;
+  background: #eef3ea;
+  border-radius: 5px;
+  padding: 3px 7px;
+}
+
+/* Services */
+.hire-services {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
+}
+.hire-service {
+  border: 1px solid #dbe2d5;
+  border-radius: 10px;
+  background: #fbfbf8;
+  padding: 18px 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.hire-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  display: grid;
+  place-items: center;
+  background: #e8efe4;
+  color: #47715a;
+}
+
+/* How I work + contact */
+.hire-cta {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 18px;
+  align-items: stretch;
+}
+.hire-steps,
+.hire-contact {
+  border: 1px solid #dbe2d5;
+  border-radius: 10px;
+  background: #fff;
+  padding: 22px 22px 24px;
+}
+.hire-steps ol {
+  list-style: none;
+  margin: 18px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 16px;
+}
+.hire-steps li {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+.hire-step-n {
+  font-family: 'DM Mono', ui-monospace, monospace;
+  font-size: 11px;
+  color: #9aa592;
+  padding-top: 2px;
+  min-width: 18px;
+}
+.hire-steps h3 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+  font-size: 14px;
+}
+.hire-steps h3 svg {
+  color: #47715a;
+}
+.hire-contact {
+  background: #25302a;
+  border-color: #25302a;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 16px;
+}
+.hire-contact p {
+  color: #d9e1d4;
+  font-size: 15px;
+  line-height: 1.55;
+}
+.hire-primary,
+.hire-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-radius: 9px;
+  padding: 12px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  transition:
+    background 0.2s,
+    transform 0.2s;
+}
+.hire-primary {
+  background: #b9d6a8;
+  color: #1d2a22;
+}
+.hire-primary:hover {
+  background: #c9e2ba;
+  transform: translateY(-1px);
+}
+.hire-secondary {
+  color: #d9e1d4;
+  border: 1px solid #45524a;
+  font-weight: 500;
+}
+.hire-secondary:hover {
+  background: #2f3b34;
+}
+
+@media (max-width: 1200px) {
+  .hire-services {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 960px) {
+  .hire {
+    gap: 40px;
+    padding-top: 28px;
+  }
+  .hire-games,
+  .hire-cta {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 560px) {
+  .hire-services {
+    grid-template-columns: 1fr;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hire-game,
+  .hire-game-art img,
+  .hire-primary {
+    transition: none;
+  }
+}
