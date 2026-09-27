@@ -113,7 +113,8 @@
   min-height: 50px;
   margin-bottom: 24px;
 }
-.index-heading h1 {
+.index-heading h1,
+.index-heading h2 {
   font-size: 16px;
   letter-spacing: -0.3px;
   font-weight: 500;
@@ -122,7 +123,8 @@
   align-items: center;
   white-space: nowrap;
 }
-.index-heading h1 > span {
+.index-heading h1 > span,
+.index-heading h2 > span {
   font:
     10px 'DM Mono',
     monospace;
@@ -1114,11 +1116,13 @@
   .index-heading > p {
     display: none;
   }
-  .index-heading h1 {
+  .index-heading h1,
+  .index-heading h2 {
     font-size: 14px;
     gap: 14px;
   }
-  .index-heading h1 > span {
+  .index-heading h1 > span,
+  .index-heading h2 > span {
     font-size: 9px;
   }
   .index-mobile-tabs {
