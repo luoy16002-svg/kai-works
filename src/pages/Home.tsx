@@ -19,6 +19,8 @@ import CurrentPreview from '../components/CurrentPreview';
 import PreviewTabs from '../components/PreviewTabs';
 import InvoiceWorkspacePreview from '../components/InvoiceWorkspacePreview';
 import HireSections from '../components/HireSections';
+import Hero from '../components/Hero';
+import RecentBuilds from '../components/RecentBuilds';
 import { selectedWork, email, source, hireUrl } from '../content/work';
 import '../work-index.css';
 const ObjectPreview = lazy(() => import('../components/ObjectPreview'));
@@ -81,11 +83,15 @@ export default function Home() {
         </div>
       </aside>
       <main id="main-content" tabIndex={-1} className="index-main">
+        <Hero />
         <header className="index-heading">
-          <h1>
-            Selected work <span>2026</span>
-          </h1>
-          <p>Scrapers, automations, web tools and games. Written, async, fixed-price work.</p>
+          <h2>
+            Try it here <span>running live in your browser</span>
+          </h2>
+          <p>
+            Three working tools, not screenshots: filter the data, rotate the model, replay the
+            import.
+          </p>
           <div className="index-view-controls" aria-label="Display mode">
             <button
               aria-pressed={focus === -1}
@@ -187,11 +193,12 @@ export default function Home() {
             );
           })}
         </section>
+        <RecentBuilds />
         <HireSections />
         <footer className="index-footer">
           <span>
-            03 tools · 03 games<span className="index-footer-divider">/</span>Source & engineering
-            notes included
+            12 projects · 3 games<span className="index-footer-divider">/</span>Source code for
+            every one
           </span>
           {focus !== -1 ? (
             <div className="index-focus-navigation">
