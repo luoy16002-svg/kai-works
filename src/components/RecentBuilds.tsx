@@ -14,6 +14,26 @@ const builds: {
   links: Link[];
 }[] = [
   {
+    id: 'explainer-videos',
+    name: 'Animated explainers',
+    kind: 'Video production',
+    line: 'Scripted explainer videos built in code: illustrated scenes, log-scale camera moves, narration, captions and sound design, mixed to -14 LUFS.',
+    proof: 'Two finished 70-second videos · AI voice and AI illustrations, disclosed',
+    tags: ['Remotion', 'Motion graphics', 'Voice-over'],
+    links: [
+      {
+        label: 'Atom to universe',
+        href: import.meta.env.BASE_URL + 'video/atom-to-universe.mp4',
+        kind: 'demo',
+      },
+      {
+        label: 'Snail to light',
+        href: import.meta.env.BASE_URL + 'video/snail-to-light.mp4',
+        kind: 'demo',
+      },
+    ],
+  },
+  {
     id: 'zatca-pos',
     name: 'Qahwa POS',
     kind: 'Windows point of sale',
