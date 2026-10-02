@@ -14,6 +14,22 @@ const builds: {
   links: Link[];
 }[] = [
   {
+    id: 'tooth-contact-lab',
+    name: 'Tooth Contact Lab',
+    kind: '3D geometry in the browser',
+    line: 'Collision maps between tooth meshes, ICP registration of a noisy crown scan, and aligner staging that bends around the neighbouring tooth.',
+    proof: '7/7 tests · 31k-vertex contact check in about 20 ms',
+    tags: ['TypeScript', 'three.js', 'three-mesh-bvh'],
+    links: [
+      {
+        label: 'Live demo',
+        href: 'https://luoy16002-svg.github.io/tooth-contact-lab/',
+        kind: 'demo',
+      },
+      { label: 'Source', href: gh + 'tooth-contact-lab', kind: 'source' },
+    ],
+  },
+  {
     id: 'explainer-videos',
     name: 'Animated explainers',
     kind: 'Video production',
